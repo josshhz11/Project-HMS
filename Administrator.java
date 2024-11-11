@@ -3,6 +3,12 @@ public class Administrator extends User {
         super(userID, password, name, role);
     }
 
+    // IMPORTANT
+    public void viewAndManageHospitalStaff() {
+        // Can put the entire view and manage options menu within here
+        // Include addStaff(), updateStaff(), etc. here
+    }
+    
     public void addStaff(String staffID, String name, String role, String password) {
         System.out.println("Staff " + name + " with ID " + staffID + " added as " + role);
     }
@@ -15,6 +21,16 @@ public class Administrator extends User {
         System.out.println("Staff ID " + staffID + " has been removed.");
     }
 
+    public void viewAllAppointments(SchedulingSystem schedulingSystem) {
+        schedulingSystem.displayAvailableSlots();
+    }
+
+    // IMPORTANT
+    public void viewAndManageMedicationInventory() {
+        // Can put the entire view and manage options menu within here
+        // Include updateInventory() below
+    }
+    
     public void updateInventory(Inventory inventory, String medicationName, int newStock) {
         inventory.updateStock(medicationName, newStock);
         System.out.println("Inventory updated successfully.");
@@ -22,10 +38,6 @@ public class Administrator extends User {
 
     public void approveReplenishmentRequest(Inventory inventory, String medicationName) {
         System.out.println("Replenishment for " + medicationName + " approved.");
-    }
-
-    public void viewAllAppointments(SchedulingSystem schedulingSystem) {
-        schedulingSystem.displayAvailableSlots();
     }
 
     @Override
