@@ -46,8 +46,6 @@ public class Administrator extends User {
                 break;
         }
         
-        
-        
     }
     
     public void addStaff(String staffID, String name, String role, String password) {
@@ -84,6 +82,26 @@ public class Administrator extends User {
     public void viewAndManageMedicationInventory() {
         // Can put the entire view and manage options menu within here
         // Include updateInventory() below
+        System.out.println("""
+                Hospital Staff Menu: 
+                1. View Medication Inventory
+                2. Manage Medication Inventory
+                Choose options (1-2):
+                """);
+        int choice1 = sc.nextInt();
+
+        switch(choice1) {
+            case 1: // View Medication Inventory
+                // TODO
+                break;
+            case 2: // Manage Medication Inventory
+                System.out.print("Enter medication to update: ");
+                String medication = sc.nextLine();
+                System.out.print("Enter new stock quantity: ");
+                int stock = sc.nextInt();
+                updateInventory(); // CHECK THE BELOW FUNCTION
+                break;
+        }
     }
     
     public void updateInventory(Inventory inventory, String medicationName, int newStock) {
