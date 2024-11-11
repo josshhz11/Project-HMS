@@ -283,7 +283,7 @@ public class Main {
     // Handle Pharmacist options
     private static boolean handlePharmacistOptions(Pharmacist pharmacist, boolean loggedIn, int choice, Scanner scanner) {
         switch (choice) {
-            case 1 -> pharmacist.viewInventory(inventory);
+            case 1 -> pharmacist.viewAppointmentOutcomeRecord(); // TO FINISH
             case 2 -> {
                 System.out.print("Enter Prescription ID to update status: ");
                 String prescriptionID = scanner.nextLine();
@@ -291,7 +291,9 @@ public class Main {
                 String status = scanner.nextLine();
                 pharmacist.updatePrescriptionStatus(prescriptionID, status);
             }
-            case 3 -> {
+            case 3 -> pharmacist.viewInventory(inventory); // TO FINISH
+            case 4 -> pharmacist.submitReplenishmentRequest(); // TO FINISH
+            case 5 -> {
                 loggedIn = false;
                 System.out.println("Logging out.");
             } 
@@ -303,7 +305,7 @@ public class Main {
     // Handle Administrator options
     private static boolean handleAdminOptions(Administrator admin, boolean loggedIn, int choice, Scanner scanner) {
         switch (choice) {
-            case 1 -> {
+            case 1 -> { // VIEW AND MANAGE HOSPITAL STAFF
                 System.out.print("Enter action (add/update/remove) for staff: ");
                 String action = scanner.nextLine();
                 System.out.print("Enter Staff ID: ");
@@ -326,8 +328,8 @@ public class Main {
                     System.out.println("Invalid action. Use add/update/remove.");
                 }
             }
-            case 2 -> admin.viewAllAppointments(schedulingSystem);
-            case 3 -> {
+            case 2 -> admin.viewAllAppointments(schedulingSystem); // VIEW APPOINTMENT DETAILS
+            case 3 -> { // VIEW AND MANAGE MEDICATION INVENTORY
                 System.out.print("Enter medication to update: ");
                 String medication = scanner.nextLine();
                 System.out.print("Enter new stock quantity: ");
@@ -338,7 +340,7 @@ public class Main {
             case 4 -> {
                 System.out.print("Enter Medication to approve replenishment for: ");
                 String medication = scanner.nextLine();
-                admin.approveReplenishmentRequest(inventory, medication);
+                admin.approveReplenishmentRequest(inventory, medication); // TO CHECK
             }
             case 5 -> {
                 loggedIn = false;
