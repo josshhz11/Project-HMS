@@ -3,16 +3,24 @@ public class Pharmacist extends User {
         super(userID, password, name, role);
     }
 
-    // Method to view the current medication inventory
-    public void viewInventory(Inventory inventory) {
-        System.out.println("Viewing medication inventory:");
-        inventory.displayInventory();
+    public void viewAppointmentOutcomeRecord() {
+        
     }
 
     // Method to update the prescription status
     public void updatePrescriptionStatus(String prescriptionID, String status) {
         System.out.println("Updating prescription status for ID: " + prescriptionID);
         System.out.println("New status: " + status);
+    }
+    
+    // Method to view the current medication inventory
+    public void viewInventory(Inventory inventory) {
+        System.out.println("Viewing medication inventory:");
+        inventory.displayInventory();
+    }
+
+    public void submitReplenishmentRequest() {
+        
     }
 
     @Override
