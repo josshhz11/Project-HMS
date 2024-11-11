@@ -227,10 +227,11 @@ public class Main {
                     System.out.println("Doctor not found.");
                 }
             }
-            case 5 -> patient.viewScheduledAppointments();
-            case 6 -> patient.rescheduleAppointments(); // UPDATE
-            case 7 -> patient.cancelAppointment(); // UPDATE
-            case 8 -> {
+            case 5 -> patient.rescheduleAppointments(); // TO FINISH
+            case 6 -> patient.cancelAppointment(); // TO FINISH
+            case 7 -> patient.viewScheduledAppointments(); // TO FINISH
+            case 8 -> patient.viewPastAppointmentOutcomeRecords(); // TO FINISH
+            case 9 -> {
                 loggedIn = false;
                 System.out.println("Logging out.");
             }
@@ -265,9 +266,12 @@ public class Main {
                     System.out.println("Patient not found.");
                 }
             }
-            case 3 -> System.out.println("Accept/Decline appointment requests functionality here.");
-            case 4 -> doctor.viewPersonalSchedule();
-            case 5 -> {
+            case 3 -> doctor.viewPersonalSchedule(); // TO CHECK
+            case 4 -> doctor.setAvailability(); // TO FINISH
+            case 5 -> doctor.respondToAppointmentRequests(); // TO FINISH
+            case 6 -> doctor.viewUpcomingAppointments(); // TO FINISH
+            case 7 -> doctor.recordAppointmentOutcome(); // TO FINISH
+            case 8 -> {
                 loggedIn = false;
                 System.out.println("Logging out.");
             } 
