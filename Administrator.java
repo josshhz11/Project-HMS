@@ -49,12 +49,12 @@ public class Administrator extends User {
     }
     
     public void addStaff(String staffID, String name, String role, String password) {
-        System.out.print("Enter Staff ID: ");
-        System.out.print("Enter Staff Role (Doctor, Pharmacist, etc.): ");
+        System.out.println("Enter Staff ID: ");
+        System.out.println("Enter Staff Role (Doctor, Pharmacist, etc.): ");
         String role = sc.nextLine();
-        System.out.print("Enter Name: ");
+        System.out.println("Enter Name: ");
         String name = sc.nextLine();
-        System.out.print("Enter default Password: ");
+        System.out.println("Enter default Password: ");
         String password = sc.nextLine();
         System.out.println("Staff " + name + " with ID " + staffID + " added as " + role);
         // NEED TO ACTUALLY ADD TO STAFF LIST
@@ -128,5 +128,8 @@ public class Administrator extends User {
                 """);
     }
 
+    public static void closeScanner() {
+        sc.close(); // Close scanner when it’s no longer needed
+    }
     
 }

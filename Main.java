@@ -215,22 +215,11 @@ public class Main {
                 patient.updateContactInfo(newEmail, newContact);
             }
             case 3 -> patient.viewAvailableSlots(schedulingSystem);
-            case 4 -> {
-                System.out.print("Enter doctor ID for appointment: ");
-                String doctorID = scanner.nextLine();
-                Doctor selectedDoctor = schedulingSystem.getDoctorById(doctorID);
-                if (selectedDoctor != null) {
-                    LocalDateTime appointmentTime = LocalDateTime.of(2024, 11, 3, 9, 0);  // Placeholder date/time
-                    Appointment newAppointment = new Appointment("A002", patient.getPatientID(), doctorID, appointmentTime);
-                    patient.scheduleAppointment(newAppointment, schedulingSystem);
-                } else {
-                    System.out.println("Doctor not found.");
-                }
-            }
-            case 5 -> patient.rescheduleAppointments(); // TO FINISH
-            case 6 -> patient.cancelAppointment(); // TO FINISH
-            case 7 -> patient.viewScheduledAppointments(); // TO FINISH
-            case 8 -> patient.viewPastAppointmentOutcomeRecords(); // TO FINISH
+            case 4 -> patient.scheduleAppointment(schedulingSystem);
+            case 5 -> patient.rescheduleAppointment(schedulingSystem); 
+            case 6 -> patient.cancelAppointment();
+            case 7 -> patient.viewScheduledAppointments(); 
+            case 8 -> patient.viewPastAppointmentOutcomeRecords();
             case 9 -> {
                 loggedIn = false;
                 System.out.println("Logging out.");

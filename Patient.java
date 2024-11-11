@@ -1,5 +1,7 @@
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Patient extends User {
     private String patientID;
@@ -7,6 +9,7 @@ public class Patient extends User {
     private String contactNumber;
     private MedicalRecord medicalRecord;
     private List<Appointment> appointments;
+    private static Scanner sc = new Scanner(System.in);
 
     public Patient(String userID, String password, String name, String role, String patientID, String email, String contactNumber) {
         super(userID, password, name, role);
@@ -46,7 +49,17 @@ public class Patient extends User {
     }
 
     // Schedule a new appointment
-    public void scheduleAppointment(Appointment appointment, SchedulingSystem schedulingSystem) {
+    public void scheduleAppointment(SchedulingSystem schedulingSystem) {
+        Appointment appointment = null;
+        
+        System.out.println("Enter doctor ID for appointment: ");
+        String doctorID = sc.nextLine();
+        Doctor selectedDoctor = schedulingSystem.getDoctorById(doctorID);
+        if (selectedDoctor != null) {
+            LocalDateTime appointmentTime = LocalDateTime.of(2024, 11, 3, 9, 0);  // Placeholder date/time
+            appointment = new Appointment("A002", this.getPatientID(), doctorID, appointmentTime);
+        }
+
         if (schedulingSystem.bookSlot(this, appointment)) {
             appointments.add(appointment);
             System.out.println("Appointment scheduled successfully.");
@@ -56,7 +69,29 @@ public class Patient extends User {
     }
 
     // Reschedule an appointment
-    public void rescheduleAppointment(Appointment oldAppointment, Appointment newAppointment, SchedulingSystem schedulingSystem) {
+    public void rescheduleAppointment(SchedulingSystem schedulingSystem) {
+        Appointment oldAppointment = null, newAppointment = null;
+        
+        // Obtaining the old appointment
+        System.out.println("Enter appointment ID: ");
+        String oldAppointmentID = sc.nextLine();
+        
+        for (Appointment appointment : appointments) {
+            if (appointment.getAppointmentID() == oldAppointmentID) {
+                oldAppointment = appointment;
+            }
+        }
+
+        // Obtaining the new appointment -> since this code is repeated from the scheduleAppointment() function, see if can create a function to do this.
+        System.out.println("Enter doctor ID for appointment: ");
+        String doctorID = sc.nextLine();
+        Doctor selectedDoctor = schedulingSystem.getDoctorById(doctorID);
+        if (selectedDoctor != null) {
+            // see if can obtain new date then input the date below accordingly
+            LocalDateTime appointmentTime = LocalDateTime.of(2024, 11, 3, 9, 0);  // Placeholder date/time
+            newAppointment = new Appointment("A002", this.getPatientID(), doctorID, appointmentTime);
+        }
+
         if (appointments.contains(oldAppointment) && schedulingSystem.bookSlot(this, newAppointment)) {
             appointments.remove(oldAppointment);
             oldAppointment.cancel();  // Mark old appointment as canceled
@@ -68,11 +103,23 @@ public class Patient extends User {
     }
 
     // Cancel an appointment
-    public void cancelAppointment(Appointment appointment) {
-        if (appointments.contains(appointment)) {
-            appointment.cancel();
-            appointments.remove(appointment);
-            System.out.println("Appointment canceled successfully.");
+    public void cancelAppointment() {
+        Appointment oldAppointment = null;
+        
+        // Obtaining the appointment to cancel
+        System.out.println("Enter appointment ID: ");
+        String oldAppointmentID = sc.nextLine();
+        
+        for (Appointment appointment : appointments) {
+            if (appointment.getAppointmentID() == oldAppointmentID) {
+                oldAppointment = appointment;
+            }
+        }
+        
+        if (oldAppointment != null) {
+            oldAppointment.cancel();
+            appointments.remove(oldAppointment);
+            System.out.println("Appointment cancelled successfully.");
         } else {
             System.out.println("No matching appointment found to cancel.");
         }
@@ -90,7 +137,12 @@ public class Patient extends User {
 
     // View Past Appointment Outcome Records
     public void viewPastAppointmentOutcomeRecords() {
-        
+        System.out.println("Upcoming Appointments:");
+        for (Appointment appointment : appointments) {
+            if (appointment.getStatus().equals("Completed")) {
+                System.out.println(appointment);
+            }
+        }
     }
 
     @Override
@@ -108,5 +160,9 @@ public class Patient extends User {
                 9. Logout
                 Choose options (1-9):
                 """);
+    }
+
+    public static void closeScanner() {
+        sc.close(); // Close scanner when it’s no longer needed
     }
 }
