@@ -21,19 +21,19 @@ public class Doctor extends User {
         return specialty;
     }
 
-    // Method to view a patient's medical record
+    // View a patient's medical record
     public void viewPatientMedicalRecord(Patient patient) {
         System.out.println("Viewing medical record for Patient ID: " + patient.getPatientID());
         System.out.println(patient.getMedicalRecord());
     }
 
-    // Method to update a patient's medical record with a new diagnosis
+    // Update a patient's medical record with a new diagnosis
     public void updatePatientMedicalRecord(Patient patient, String diagnosis) {
         System.out.println("Updating medical record for Patient ID: " + patient.getPatientID());
         patient.getMedicalRecord().addDiagnosis(diagnosis);
         System.out.println("Diagnosis added successfully.");
     }
-
+    
     public void viewPersonalSchedule() {
         System.out.println("Doctor Schedule:");
         for (Appointment appointment : schedule) {
@@ -41,6 +41,23 @@ public class Doctor extends User {
         }
     }
 
+    public void setAvailability() {
+
+    }
+
+    public void respondToAppointmentRequests() {
+
+    }
+
+    public void viewUpcomingAppointments() {
+
+    }
+
+    public void recordAppointmentOutcome() {
+
+    }
+
+    // not in use rn
     public void addAppointment(Appointment appointment) {
         schedule.add(appointment);
     }
