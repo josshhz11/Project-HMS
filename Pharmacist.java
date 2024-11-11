@@ -7,7 +7,7 @@ public class Pharmacist extends User {
         
     }
 
-    // Method to update the prescription status
+    // CHANGE THIS TO REFLECT THE ACTUAL CHANGE RATHER THAN JUST PRINT
     public void updatePrescriptionStatus(String prescriptionID, String status) {
         System.out.println("Updating prescription status for ID: " + prescriptionID);
         System.out.println("New status: " + status);

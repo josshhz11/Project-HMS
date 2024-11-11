@@ -280,7 +280,7 @@ public class Main {
                 String status = sc.nextLine();
                 pharmacist.updatePrescriptionStatus(prescriptionID, status);
             }
-            case 3 -> pharmacist.viewInventory(inventory); // TO FINISH
+            case 3 -> pharmacist.viewInventory(inventory);
             case 4 -> pharmacist.submitReplenishmentRequest(); // TO FINISH
             case 5 -> {
                 loggedIn = false;
