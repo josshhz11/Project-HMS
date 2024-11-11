@@ -47,22 +47,17 @@ public class Doctor extends User {
 
     @Override
     public void displayMenu() {
-        System.out.println("Doctor Menu:");
-        System.out.println("1. View Patient Medical Records");
-        System.out.println("2. Update Patient Medical Records");
-        System.out.println("3. Accept/Decline Appointment Requests");
-        System.out.println("4. View Personal Schedule");
-        System.out.println("5. Logout");
-        
-        // mine
         System.out.println("""
                 Doctor Display Menu: 
-                1. View Patients
-                2. View Schedule
-                3. View Appointment Requests
-                4. View Appointment Outcome Records
-                5. Logout
-                Choose options (1-5):
+                1. View Patient Medical Records
+                2. Update Patient Medical Records
+                3. View Personal Schedule
+                4. Set Availability for Appointments
+                5. Accept or Decline Appointment Requests
+                6. View Upcoming Appointments
+                7. Record Appointment Outcome
+                8. Logout
+                Choose options (1-8):
                 """);
     }
 }
