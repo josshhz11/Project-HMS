@@ -16,7 +16,7 @@ public class Main {
 
     public static void main(String[] args) {
         loadCSVData();
-        Scanner scanner = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
 
         System.out.println("Welcome to the Hospital Management System!");
         User currentUser = null;
@@ -24,9 +24,9 @@ public class Main {
         // Login process
         while (true) {
             System.out.print("Enter User ID: ");
-            String userID = scanner.nextLine();
+            String userID = sc.nextLine();
             System.out.print("Enter Password: ");
-            String password = scanner.nextLine();
+            String password = sc.nextLine();
 
             currentUser = authenticateUser(userID, password);
 
@@ -41,16 +41,16 @@ public class Main {
         boolean loggedIn = true;
         while (loggedIn) {
             currentUser.displayMenu();
-            int choice = scanner.nextInt();
+            int choice = sc.nextInt();
 
             if (currentUser instanceof Patient) {
-                loggedIn = handlePatientOptions((Patient) currentUser, loggedIn, choice, scanner);
+                loggedIn = handlePatientOptions((Patient) currentUser, loggedIn, choice, sc);
             } else if (currentUser instanceof Doctor) {
-                loggedIn = handleDoctorOptions((Doctor) currentUser, loggedIn, choice, scanner);
+                loggedIn = handleDoctorOptions((Doctor) currentUser, loggedIn, choice, sc);
             } else if (currentUser instanceof Pharmacist) {
-                loggedIn = handlePharmacistOptions((Pharmacist) currentUser, loggedIn, choice, scanner);
+                loggedIn = handlePharmacistOptions((Pharmacist) currentUser, loggedIn, choice, sc);
             } else if (currentUser instanceof Administrator) {
-                loggedIn = handleAdminOptions((Administrator) currentUser, loggedIn, choice, scanner);
+                loggedIn = handleAdminOptions((Administrator) currentUser, loggedIn, choice, sc);
             }
         }
 
@@ -58,7 +58,7 @@ public class Main {
             System.out.println("Successfully logged out.");
         }
 
-        scanner.close();
+        sc.close();
     }
 
     // Load data from CSV files
@@ -204,14 +204,14 @@ public class Main {
     }
 
     // Handle Patient options
-    private static boolean handlePatientOptions(Patient patient, boolean loggedIn, int choice, Scanner scanner) {
+    private static boolean handlePatientOptions(Patient patient, boolean loggedIn, int choice, Scanner sc) {
         switch (choice) {
             case 1 -> patient.viewMedicalRecord();
             case 2 -> {
                 System.out.print("Enter new email: ");
-                String newEmail = scanner.nextLine();
+                String newEmail = sc.nextLine();
                 System.out.print("Enter new contact number: ");
-                String newContact = scanner.nextLine();
+                String newContact = sc.nextLine();
                 patient.updateContactInfo(newEmail, newContact);
             }
             case 3 -> patient.viewAvailableSlots(schedulingSystem);
@@ -231,11 +231,11 @@ public class Main {
     }
     
     // Handle Doctor options
-    private static boolean handleDoctorOptions(Doctor doctor, boolean loggedIn, int choice, Scanner scanner) {
+    private static boolean handleDoctorOptions(Doctor doctor, boolean loggedIn, int choice, Scanner sc) {
         switch (choice) {
             case 1 -> {
                 System.out.print("Enter patient ID to view medical record: ");
-                String patientID = scanner.nextLine();
+                String patientID = sc.nextLine();
                 Patient patient = findPatientByID(patientID);
                 if (patient != null) {
                     doctor.viewPatientMedicalRecord(patient);
@@ -245,11 +245,11 @@ public class Main {
             }
             case 2 -> {
                 System.out.print("Enter patient ID to update medical record: ");
-                String patientID = scanner.nextLine();
+                String patientID = sc.nextLine();
                 Patient patient = findPatientByID(patientID);
                 if (patient != null) {
                     System.out.print("Enter new diagnosis: ");
-                    String diagnosis = scanner.nextLine();
+                    String diagnosis = sc.nextLine();
                     doctor.updatePatientMedicalRecord(patient, diagnosis);
                 } else {
                     System.out.println("Patient not found.");
@@ -270,14 +270,14 @@ public class Main {
     }
 
     // Handle Pharmacist options
-    private static boolean handlePharmacistOptions(Pharmacist pharmacist, boolean loggedIn, int choice, Scanner scanner) {
+    private static boolean handlePharmacistOptions(Pharmacist pharmacist, boolean loggedIn, int choice, Scanner sc) {
         switch (choice) {
             case 1 -> pharmacist.viewAppointmentOutcomeRecord(); // TO FINISH
             case 2 -> {
                 System.out.print("Enter Prescription ID to update status: ");
-                String prescriptionID = scanner.nextLine();
+                String prescriptionID = sc.nextLine();
                 System.out.print("Enter new status (e.g., 'dispensed'): ");
-                String status = scanner.nextLine();
+                String status = sc.nextLine();
                 pharmacist.updatePrescriptionStatus(prescriptionID, status);
             }
             case 3 -> pharmacist.viewInventory(inventory); // TO FINISH
@@ -292,44 +292,16 @@ public class Main {
     }
 
     // Handle Administrator options
-    private static boolean handleAdminOptions(Administrator admin, boolean loggedIn, int choice, Scanner scanner) {
+    private static boolean handleAdminOptions(Administrator admin, boolean loggedIn, int choice, Scanner sc) {
         switch (choice) {
-            case 1 -> { // VIEW AND MANAGE HOSPITAL STAFF
-                System.out.print("Enter action (add/update/remove) for staff: ");
-                String action = scanner.nextLine();
-                System.out.print("Enter Staff ID: ");
-                String staffID = scanner.nextLine();
-                if (action.equalsIgnoreCase("add")) {
-                    System.out.print("Enter Staff Role (Doctor, Pharmacist, etc.): ");
-                    String role = scanner.nextLine();
-                    System.out.print("Enter Name: ");
-                    String name = scanner.nextLine();
-                    System.out.print("Enter default Password: ");
-                    String password = scanner.nextLine();
-                    admin.addStaff(staffID, name, role, password);
-                } else if (action.equalsIgnoreCase("update")) {
-                    System.out.print("Enter New Role (Doctor, Pharmacist, etc.): ");
-                    String role = scanner.nextLine();
-                    admin.updateStaffRole(staffID, role);
-                } else if (action.equalsIgnoreCase("remove")) {
-                    admin.removeStaff(staffID);
-                } else {
-                    System.out.println("Invalid action. Use add/update/remove.");
-                }
-            }
+            case 1 -> admin.viewAndManageHospitalStaff();
             case 2 -> admin.viewAllAppointments(schedulingSystem); // VIEW APPOINTMENT DETAILS
-            case 3 -> { // VIEW AND MANAGE MEDICATION INVENTORY
-                System.out.print("Enter medication to update: ");
-                String medication = scanner.nextLine();
-                System.out.print("Enter new stock quantity: ");
-                int stock = scanner.nextInt();
-                scanner.nextLine(); // Consume newline
-                admin.updateInventory(inventory, medication, stock);
-            }
+            case 3 -> admin.viewAndManageMedicationInventory(inventory);
             case 4 -> {
                 System.out.print("Enter Medication to approve replenishment for: ");
-                String medication = scanner.nextLine();
+                String medication = sc.nextLine();
                 admin.approveReplenishmentRequest(inventory, medication); // TO CHECK
+                // UPDATE THIS APPROVE FUNCTION, IT ONLY PRINTS AND DOES NOT UPDATE
             }
             case 5 -> {
                 loggedIn = false;

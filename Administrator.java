@@ -37,39 +37,48 @@ public class Administrator extends User {
                         addStaff(); // CHECK
                         break;
                     case 2: // Update Staff
-                        updateStaff(); // CHECK
+                        updateStaffRole(); // CHECK
                         break;
                     case 3: // Remove Staff
                         removeStaff(); // CHECK
                         break;
+                    default:
+                        System.out.println("Invalid action. Please try again.");
+                        break;
                 }
+                break;
+            default:
+                System.out.println("Invalid option. Please try again.");
                 break;
         }
         
     }
     
-    public void addStaff(String staffID, String name, String role, String password) {
+    public void addStaff() {
         System.out.println("Enter Staff ID: ");
-        System.out.println("Enter Staff Role (Doctor, Pharmacist, etc.): ");
-        String role = sc.nextLine();
+        String staffID = sc.nextLine();
         System.out.println("Enter Name: ");
         String name = sc.nextLine();
+        System.out.println("Enter Staff Role (Doctor, Pharmacist, etc.): ");
+        String role = sc.nextLine();
         System.out.println("Enter default Password: ");
         String password = sc.nextLine();
         System.out.println("Staff " + name + " with ID " + staffID + " added as " + role);
-        // NEED TO ACTUALLY ADD TO STAFF LIST
+        // NEED TO ACTUALLY ADD TO STAFF LIST -> get the list of staff then just 'put' or something
     }
 
-    public void updateStaffRole(String staffID, String newRole) {
+    public void updateStaffRole() {
         System.out.print("Enter Staff ID: ");
+        String staffID = sc.nextLine();
         System.out.print("Enter New Role (Doctor, Pharmacist, etc.): ");
-        String role = sc.nextLine();
+        String newRole = sc.nextLine();
         System.out.println("Staff ID " + staffID + " role updated to: " + newRole);
         // NEED TO ACTUALLY UPDATE STAFF LIST
     }
 
-    public void removeStaff(String staffID) {
+    public void removeStaff() {
         System.out.print("Enter Staff ID: ");
+        String staffID = sc.nextLine();
         System.out.println("Staff ID " + staffID + " has been removed.");
         // NEED TO ACTUALLY REMOVE FROM STAFF LIST
     }
@@ -79,7 +88,7 @@ public class Administrator extends User {
     }
 
     // IMPORTANT
-    public void viewAndManageMedicationInventory() {
+    public void viewAndManageMedicationInventory(Inventory inventory) {
         // Can put the entire view and manage options menu within here
         // Include updateInventory() below
         System.out.println("""
@@ -98,23 +107,29 @@ public class Administrator extends User {
                 System.out.print("Enter medication to update: ");
                 String medication = sc.nextLine();
                 System.out.print("Enter new stock quantity: ");
-                int stock = sc.nextInt();
-                updateInventory(); // CHECK THE BELOW FUNCTION
+                int newStock = sc.nextInt();
+                updateInventory(inventory, medication, newStock);
+                break;
+            default:
+                System.out.println("Invalid option. Please try again.");
                 break;
         }
     }
     
-    public void updateInventory(Inventory inventory, String medicationName, int newStock) {
-        inventory.updateStock(medicationName, newStock);
+    public void updateInventory(Inventory inventory, String medication, int newStock) {
+        inventory.updateStock(medication, newStock);
         System.out.println("Inventory updated successfully.");
     }
 
+    // UPDATE THIS APPROVE FUNCTION, ONLY PRINTS BUT DOES NOT UPDATE.
     public void approveReplenishmentRequest(Inventory inventory, String medicationName) {
         System.out.println("Replenishment for " + medicationName + " approved.");
     }
-
-    // I NEED A CLOSE SCANNER FUNCTION
     
+    public static void closeScanner() {
+        sc.close(); // Close scanner when it’s no longer needed
+    }
+
     @Override
     public void displayMenu() {
         System.out.println("""
@@ -127,9 +142,4 @@ public class Administrator extends User {
                 Choose options (1-5):
                 """);
     }
-
-    public static void closeScanner() {
-        sc.close(); // Close scanner when it’s no longer needed
-    }
-    
 }
