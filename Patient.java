@@ -55,16 +55,6 @@ public class Patient extends User {
         }
     }
 
-    // View scheduled appointments
-    public void viewScheduledAppointments() {
-        System.out.println("Upcoming Appointments:");
-        for (Appointment appointment : appointments) {
-            if (appointment.getStatus().equals("Confirmed")) {
-                System.out.println(appointment);
-            }
-        }
-    }
-
     // Reschedule an appointment
     public void rescheduleAppointment(Appointment oldAppointment, Appointment newAppointment, SchedulingSystem schedulingSystem) {
         if (appointments.contains(oldAppointment) && schedulingSystem.bookSlot(this, newAppointment)) {
@@ -86,6 +76,21 @@ public class Patient extends User {
         } else {
             System.out.println("No matching appointment found to cancel.");
         }
+    }
+    
+    // View scheduled appointments
+    public void viewScheduledAppointments() {
+        System.out.println("Upcoming Appointments:");
+        for (Appointment appointment : appointments) {
+            if (appointment.getStatus().equals("Confirmed")) {
+                System.out.println(appointment);
+            }
+        }
+    }
+
+    // View Past Appointment Outcome Records
+    public void viewPastAppointmentOutcomeRecords() {
+        
     }
 
     @Override
