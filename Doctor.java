@@ -1,10 +1,12 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Doctor extends User {
     private String doctorID;
     private String specialty;
     private List<Appointment> schedule;
+    private static Scanner sc = new Scanner(System.in);
 
     public Doctor(String userID, String password, String name, String role, String doctorID, String specialty) {
         super(userID, password, name, role);
@@ -25,6 +27,32 @@ public class Doctor extends User {
     public void viewPatientMedicalRecord(Patient patient) {
         System.out.println("Viewing medical record for Patient ID: " + patient.getPatientID());
         System.out.println(patient.getMedicalRecord());
+    }
+
+    public void updatePatientMedicalRecord(Patient patient) {
+        System.out.println("Updating medical record for Patient ID: " + patient.getPatientID());
+        System.out.println("""
+                1. Diagnosis
+                2. Treatment
+                Choose options (1-2) to update:
+                """);
+        int option = sc.nextInt();
+
+        switch (option) {
+            case 1:
+                System.out.println("Update diagnosis: ");
+                String newDiagnosis = sc.nextLine();
+                patient.getMedicalRecord().addDiagnosis(newDiagnosis);
+                break;
+            case 2:
+                System.out.println("Update treatment: ");
+                String newTreatment = sc.nextLine();
+                patient.getMedicalRecord().addTreatment(newTreatment);
+                break;
+            default:
+                System.out.println("Invalid option. Please try again.");
+                break;
+        }
     }
 
     // Update a patient's medical record with a new diagnosis
@@ -53,8 +81,14 @@ public class Doctor extends User {
 
     }
 
-    public void recordAppointmentOutcome() {
-
+    public void recordAppointmentOutcome(Inventory inventory) {
+        System.out.println("Enter Appointment ID to record outcome: ");
+        String appointmentID = sc.nextLine();
+        for (Appointment appointment : schedule) {
+            if (appointment.getAppointmentID() == appointmentID) {
+                appointment.complete(inventory, appointmentID);
+            }
+        }
     }
 
     // not in use rn
@@ -76,5 +110,9 @@ public class Doctor extends User {
                 8. Logout
                 Choose options (1-8):
                 """);
+    }
+
+    public static void closeScanner() {
+        sc.close(); // Close scanner when it’s no longer needed
     }
 }

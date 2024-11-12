@@ -18,6 +18,10 @@ public class MedicalRecord {
         diagnoses.add(diagnosis);
     }
 
+    public void addTreatment(String treatment) {
+        treatments.add(treatment);
+    }
+
     @Override
     public String toString() {
         return "MedicalRecord [Patient ID=" + patientID + ", Blood Type=" + bloodType + ", Diagnoses=" + diagnoses + ", Treatments=" + treatments + "]";

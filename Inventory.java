@@ -74,6 +74,15 @@ public class Inventory {
         }
     }
 
+    public Medication findMedicationByID(String medicationID) {
+        for (Medication medication : medications) {
+            if (medication.getMedicationID().equals(medicationID)) {
+                return medication;
+            }
+        }
+        return null;
+    }
+
     public static void closeScanner() {
         sc.close(); // Close scanner when it’s no longer needed
     }

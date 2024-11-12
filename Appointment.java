@@ -1,5 +1,7 @@
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 import java.util.Scanner;
 
@@ -9,7 +11,7 @@ public class Appointment {
     private String doctorID;
     private LocalDateTime dateTime;
     private String status;
-    private List<HashMap<Medication, String>> prescribedMedication; // medication map to status
+    private Map<Medication, Integer> prescribedMedication;
     private String medicationStatus;
     private String consultationNotes;
     private static Scanner sc = new Scanner(System.in);
@@ -21,7 +23,7 @@ public class Appointment {
         this.dateTime = dateTime;
         this.status = "Pending"; // Confirmed, Cancelled, Completed
         // to update only after status becomes "Completed"
-        this.prescribedMedication = null;
+        this.prescribedMedication = new HashMap<>();
         this.medicationStatus = null;
         this.consultationNotes = null;
     }
@@ -50,11 +52,33 @@ public class Appointment {
         this.status = "Cancelled";
     }
 
-    public void complete() {
+    public void complete(Inventory inventory, String appointmentID) {
         this.status = "Completed";
-        System.out.println("Prescribed Medication for Appointment (if any): ");
-        this.prescribedMedication = sc.nextLine(); // GO FIND OUT WHAT PRESCRIBED MEDICATION IS
-        this.medicationStatus = "Pending to Dispense";
+        System.out.println("""
+                Prescribe Medication for Appointment (if any): 
+                1. Yes
+                2. No
+                Choose options (1-2):
+                """);
+        int option = sc.nextInt();
+        
+        switch (option) {
+            case 1:
+                System.out.println("Medication ID: ");
+                String medicationID = sc.nextLine();
+                System.out.println("Quantity: ");
+                int quantity = sc.nextInt();
+                Medication medication = inventory.findMedicationByID(medicationID);
+                this.prescribedMedication.put(medication, quantity);
+                this.medicationStatus = "Pending to Dispense";
+                break;
+            case 2:
+                break;
+            default:
+                System.out.println("Invalid option. Please try again.");
+                break;
+        }
+
         System.out.println("Consultation Notes for Appointment (if any): ");
         this.consultationNotes = sc.nextLine();
     }

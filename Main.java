@@ -247,19 +247,13 @@ public class Main {
                 System.out.print("Enter patient ID to update medical record: ");
                 String patientID = sc.nextLine();
                 Patient patient = findPatientByID(patientID);
-                if (patient != null) {
-                    System.out.print("Enter new diagnosis: ");
-                    String diagnosis = sc.nextLine();
-                    doctor.updatePatientMedicalRecord(patient, diagnosis);
-                } else {
-                    System.out.println("Patient not found.");
-                }
+                doctor.updatePatientMedicalRecord(patient);
             }
             case 3 -> doctor.viewPersonalSchedule(); // TO CHECK
             case 4 -> doctor.setAvailability(); // TO FINISH
             case 5 -> doctor.respondToAppointmentRequests(); // TO FINISH
             case 6 -> doctor.viewUpcomingAppointments(); // TO FINISH
-            case 7 -> doctor.recordAppointmentOutcome(); // TO FINISH
+            case 7 -> doctor.recordAppointmentOutcome(inventory);
             case 8 -> {
                 loggedIn = false;
                 System.out.println("Logging out.");
@@ -321,6 +315,6 @@ public class Main {
         }
         return null;
     }
-    }
+}
     
 
