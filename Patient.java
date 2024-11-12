@@ -25,6 +25,10 @@ public class Patient extends User {
         return patientID;
     }
 
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
+
     // Getter for medical record
     public MedicalRecord getMedicalRecord() {
         return medicalRecord;
@@ -137,7 +141,7 @@ public class Patient extends User {
 
     // View Past Appointment Outcome Records
     public void viewPastAppointmentOutcomeRecords() {
-        System.out.println("Upcoming Appointments:");
+        System.out.println("Past Appointments:");
         for (Appointment appointment : appointments) {
             if (appointment.getStatus().equals("Completed")) {
                 System.out.println(appointment);

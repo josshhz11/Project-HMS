@@ -272,16 +272,21 @@ public class Main {
     // Handle Pharmacist options
     private static boolean handlePharmacistOptions(Pharmacist pharmacist, boolean loggedIn, int choice, Scanner sc) {
         switch (choice) {
-            case 1 -> pharmacist.viewAppointmentOutcomeRecord(); // TO FINISH
-            case 2 -> {
-                System.out.print("Enter Prescription ID to update status: ");
-                String prescriptionID = sc.nextLine();
-                System.out.print("Enter new status (e.g., 'dispensed'): ");
-                String status = sc.nextLine();
-                pharmacist.updatePrescriptionStatus(prescriptionID, status);
+            case 1 -> pharmacist.viewAppointmentOutcomeRecord(patients);
+            case 2 -> { // more or less done except menu and unavailable option
+                System.out.println("Enter Appointment ID to update status: ");
+                String appointmentID = sc.nextLine();
+                System.out.println("""
+                        Update Prescription Status:
+                        1. Complete
+                        2. Unavailable
+                        Choose action (1-2):
+                        """); // complete this menu
+                int status = sc.nextInt();
+                pharmacist.updatePrescriptionStatus(appointmentID, status, patients);
             }
             case 3 -> pharmacist.viewInventory(inventory);
-            case 4 -> pharmacist.submitReplenishmentRequest(); // TO FINISH
+            case 4 -> pharmacist.submitReplenishmentRequest(inventory);
             case 5 -> {
                 loggedIn = false;
                 System.out.println("Logging out.");
@@ -297,12 +302,7 @@ public class Main {
             case 1 -> admin.viewAndManageHospitalStaff();
             case 2 -> admin.viewAllAppointments(schedulingSystem); // VIEW APPOINTMENT DETAILS
             case 3 -> admin.viewAndManageMedicationInventory(inventory);
-            case 4 -> {
-                System.out.print("Enter Medication to approve replenishment for: ");
-                String medication = sc.nextLine();
-                admin.approveReplenishmentRequest(inventory, medication); // TO CHECK
-                // UPDATE THIS APPROVE FUNCTION, IT ONLY PRINTS AND DOES NOT UPDATE
-            }
+            case 4 -> admin.approveReplenishmentRequest(inventory);
             case 5 -> {
                 loggedIn = false;
                 System.out.println("Logging out.");

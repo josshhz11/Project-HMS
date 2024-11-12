@@ -10,6 +10,7 @@ public class Appointment {
     private LocalDateTime dateTime;
     private String status;
     private List<HashMap<Medication, String>> prescribedMedication; // medication map to status
+    private String medicationStatus;
     private String consultationNotes;
     private static Scanner sc = new Scanner(System.in);
 
@@ -21,22 +22,24 @@ public class Appointment {
         this.status = "Pending"; // Confirmed, Cancelled, Completed
         // to update only after status becomes "Completed"
         this.prescribedMedication = null;
+        this.medicationStatus = null;
         this.consultationNotes = null;
     }
 
-    // Getter for doctorID
     public String getAppointmentID() {
         return appointmentID;
     }
 
-    // Getter for doctorID
     public String getDoctorID() {
         return doctorID;
     }
 
-    // Getter for dateTime
     public LocalDateTime getDateTime() {
         return dateTime;
+    }
+
+    public String getMedicationStatus() {
+        return medicationStatus;
     }
 
     public void confirm() {
@@ -51,8 +54,13 @@ public class Appointment {
         this.status = "Completed";
         System.out.println("Prescribed Medication for Appointment (if any): ");
         this.prescribedMedication = sc.nextLine(); // GO FIND OUT WHAT PRESCRIBED MEDICATION IS
+        this.medicationStatus = "Pending to Dispense";
         System.out.println("Consultation Notes for Appointment (if any): ");
         this.consultationNotes = sc.nextLine();
+    }
+
+    public void completeDispense() {
+        this.medicationStatus = "Dispense Complete";
     }
 
     public String getStatus() {

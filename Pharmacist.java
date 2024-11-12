@@ -1,16 +1,50 @@
+import java.util.List;
+import java.util.Scanner;
+
 public class Pharmacist extends User {
+    private static Scanner sc = new Scanner(System.in);
+    
     public Pharmacist(String userID, String password, String name, String role) {
         super(userID, password, name, role);
     }
 
-    public void viewAppointmentOutcomeRecord() {
-        
+    public void viewAppointmentOutcomeRecord(List<Patient> patients) {
+        // I did this manually but see if can do it a different, more efficient way.
+        // Pringint out all completed appointments
+        for (Patient patient : patients) {
+            for (Appointment appointment : patient.getAppointments()) {
+                if (appointment.getStatus() == "Completed") {
+                    System.out.println(appointment.toString());
+                }
+            }
+        }
     }
 
-    // CHANGE THIS TO REFLECT THE ACTUAL CHANGE RATHER THAN JUST PRINT
-    public void updatePrescriptionStatus(String prescriptionID, String status) {
-        System.out.println("Updating prescription status for ID: " + prescriptionID);
-        System.out.println("New status: " + status);
+    public void updatePrescriptionStatus(String appointmentID, int status, List<Patient> patients) {
+        // I did this manually but see if can do it a different, more efficient way.
+        // this is more of printing out the medication that hasn't been dispensed yet.
+        for (Patient patient : patients) {
+            for (Appointment appointment : patient.getAppointments()) {
+                if (appointment.getAppointmentID() == appointmentID) {
+                    if (appointment.getMedicationStatus() == "Dispense Complete") {
+                        System.out.println("Medication already dispensed.");
+                        return;
+                    } else {
+                        switch (status) {
+                            case 1:
+                                appointment.complete();
+                                break;
+                            case 2:
+                                // TODO
+                                break;
+                            default:
+                                System.out.println("Invalid action. Please try again.");
+                                break;
+                        }
+                    }
+                }
+            }
+        }
     }
     
     // Method to view the current medication inventory
@@ -19,8 +53,14 @@ public class Pharmacist extends User {
         inventory.displayInventory();
     }
 
-    public void submitReplenishmentRequest() {
-        
+    public void submitReplenishmentRequest(Inventory inventory) {
+        inventory.displayInventory();
+        System.out.println("Submit Replenishment Request for Medication ID: ");
+        String medicationID = sc.nextLine();
+        System.out.println("Amount to replenish: ");
+        int replenishAmount = sc.nextInt();
+        inventory.newReplenishmentRequest(medicationID, replenishAmount);
+        System.out.println("Replenishment Request Submitted.");
     }
 
     @Override
@@ -35,5 +75,9 @@ public class Pharmacist extends User {
                 Choose options (1-5):
                 """);
 
+    }
+
+    public static void closeScanner() {
+        sc.close(); // Close scanner when it’s no longer needed
     }
 }

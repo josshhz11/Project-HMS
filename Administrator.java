@@ -104,11 +104,11 @@ public class Administrator extends User {
                 // TODO
                 break;
             case 2: // Manage Medication Inventory
-                System.out.print("Enter medication to update: ");
-                String medication = sc.nextLine();
+                System.out.print("Enter Medication ID to update stock: ");
+                String medicationID = sc.nextLine();
                 System.out.print("Enter new stock quantity: ");
-                int newStock = sc.nextInt();
-                updateInventory(inventory, medication, newStock);
+                int newQuantity = sc.nextInt();
+                updateInventory(inventory, medicationID, newQuantity);
                 break;
             default:
                 System.out.println("Invalid option. Please try again.");
@@ -116,14 +116,16 @@ public class Administrator extends User {
         }
     }
     
-    public void updateInventory(Inventory inventory, String medication, int newStock) {
-        inventory.updateStock(medication, newStock);
+    public void updateInventory(Inventory inventory, String medicationID, int newQuantity) {
+        inventory.updateStock(medicationID, newQuantity);
         System.out.println("Inventory updated successfully.");
     }
 
-    // UPDATE THIS APPROVE FUNCTION, ONLY PRINTS BUT DOES NOT UPDATE.
-    public void approveReplenishmentRequest(Inventory inventory, String medicationName) {
-        System.out.println("Replenishment for " + medicationName + " approved.");
+    public void approveReplenishmentRequest(Inventory inventory) {
+        inventory.viewReplenishmentRequests();
+        System.out.println("Medication ID to replenish: ");
+        String medicationID = sc.nextLine();
+        inventory.fulfillReplenishmentRequest(medicationID);
     }
     
     public static void closeScanner() {
