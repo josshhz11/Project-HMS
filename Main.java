@@ -207,13 +207,7 @@ public class Main {
     private static boolean handlePatientOptions(Patient patient, boolean loggedIn, int choice, Scanner sc) {
         switch (choice) {
             case 1 -> patient.viewMedicalRecord();
-            case 2 -> {
-                System.out.print("Enter new email: ");
-                String newEmail = sc.nextLine();
-                System.out.print("Enter new contact number: ");
-                String newContact = sc.nextLine();
-                patient.updateContactInfo(newEmail, newContact);
-            }
+            case 2 -> patient.updateContactInfo();
             case 3 -> patient.viewAvailableSlots(schedulingSystem);
             case 4 -> patient.scheduleAppointment(schedulingSystem);
             case 5 -> patient.rescheduleAppointment(schedulingSystem); 

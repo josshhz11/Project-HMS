@@ -41,9 +41,30 @@ public class Patient extends User {
     }
 
     // Update contact information
-    public void updateContactInfo(String newEmail, String newContactNumber) {
-        this.email = newEmail;
-        this.contactNumber = newContactNumber;
+    public void updateContactInfo() {
+        System.out.println("""
+                Update Contact Info: 
+                1. Email
+                2. Contact Number
+                Choose options (1-2) to update: 
+                """);
+        int option = sc.nextInt();
+        
+        switch (option) {
+            case 1:
+                System.out.println("Enter new email: ");
+                String newEmail = sc.nextLine();
+                this.email = newEmail;
+                break;
+            case 2:
+                System.out.println("Enter new contact number: ");
+                String newContactNumber = sc.nextLine();
+                this.contactNumber = newContactNumber;
+                break;
+            default:
+                System.out.println("Invalid option. Please try again.");
+                break;
+        }
         System.out.println("Contact information updated successfully.");
     }
 
