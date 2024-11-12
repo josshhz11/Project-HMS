@@ -81,7 +81,20 @@ public class Patient extends User {
         String doctorID = sc.nextLine();
         Doctor selectedDoctor = schedulingSystem.getDoctorById(doctorID);
         if (selectedDoctor != null) {
-            LocalDateTime appointmentTime = LocalDateTime.of(2024, 11, 3, 9, 0);  // Placeholder date/time
+            System.out.println("Set appointment time: ");
+            System.out.println("Year: ");
+            int year = sc.nextInt();
+            System.out.println("Month (1-12): ");
+            int month = sc.nextInt();
+            System.out.println("Day: ");
+            int day = sc.nextInt();
+            System.out.println("Hour (0-24): ");
+            int hour = sc.nextInt();
+            System.out.println("Minute (0/15/30/45): ");
+            int min = sc.nextInt();
+
+            LocalDateTime appointmentTime = LocalDateTime.of(year, month, day, hour, min);  // Placeholder date/time
+            // TO UPDATE APPOINTMENT ID AUTO INCREMENT
             appointment = new Appointment("A002", this.getPatientID(), doctorID, appointmentTime);
         }
 
