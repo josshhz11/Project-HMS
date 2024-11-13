@@ -2,6 +2,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Appointment {
     private String appointmentID;
@@ -40,6 +41,10 @@ public class Appointment {
 
     public String getMedicationStatus() {
         return medicationStatus;
+    }
+
+    public Map<Medication, Integer> getPrescribedMedication() {
+        return this.prescribedMedication;
     }
 
     public void confirm() {

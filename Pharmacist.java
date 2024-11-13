@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Pharmacist extends User {
@@ -48,6 +49,39 @@ public class Pharmacist extends User {
         }
     }
     
+    public void updatePrescriptionStatus(String appointmentID, List<Patient> patients) {
+        for (Patient patient : patients) {
+            for (Appointment appointment : patient.getAppointments()) {
+                if (appointment.getAppointmentID() == appointmentID) {
+                    if (appointment.getMedicationStatus() == "Dispense Complete") {
+                        System.out.println("Medication already dispensed.");
+                        return;
+                    } else {
+                        Map<Medication, Integer> medications = appointment.getPrescribedMedication();
+                        
+                        if (medications.isEmpty()) {
+                            System.out.println("No medications prescribed for this appointment.");
+                            return;
+                        }
+
+                        for (Map.Entry<Medication, Integer> entry: medications.entrySet()) {
+                            Medication medication = entry.getKey();
+                            int quantity = entry.getValue();
+
+                            if (quantity > medication.getQuantity()) {
+                                System.out.println("Insufficient Medication " + medication.getName() + " in Inventory");
+                            } else {
+                                System.out.println("Dispensing Medication " + medication.getName());
+                                medication.updateQuantity(medication.getQuantity() - quantity);
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
     // Method to view the current medication inventory
     public void viewInventory(Inventory inventory) {
         System.out.println("Viewing medication inventory:");

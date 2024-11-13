@@ -196,15 +196,16 @@ public class Main {
             case 2 -> {
                 System.out.println("Enter Appointment ID to update status: ");
                 String appointmentID = sc.nextLine();
+                pharmacist.updatePrescriptionStatus(appointmentID, patients);
+                
                 System.out.println("""
                         Update Prescription Status:
                         1. Complete
                         2. Unavailable
                         Choose action (1-2):
                         """);
-                int status = sc.nextInt();
+                int action = sc.nextInt();
                 sc.nextLine(); // consume newline
-                pharmacist.updatePrescriptionStatus(appointmentID, status, patients);
             }
             case 3 -> pharmacist.viewInventory(inventory);
             case 4 -> pharmacist.submitReplenishmentRequest(inventory);
@@ -243,5 +244,3 @@ public class Main {
         return null;
     }
 }
-
-
