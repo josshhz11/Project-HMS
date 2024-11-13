@@ -2,10 +2,12 @@ import java.util.Scanner;
 
 public class Administrator extends User {
     private static Scanner sc = new Scanner(System.in);
-    
-    public Administrator(String userID, String password, String name, String role) {
-        super(userID, password, name, role);
+
+    public Administrator(String userID, String name, String gender) {
+        super(userID, null, name, gender, "Administrator"); // Default password is null
     }
+
+
 
     // IMPORTANT
     public void viewAndManageHospitalStaff() {
@@ -145,3 +147,4 @@ public class Administrator extends User {
                 """);
     }
 }
+
