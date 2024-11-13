@@ -73,8 +73,17 @@ public class Doctor extends User {
 
     }
 
-    public void respondToAppointmentRequests() {
+    public void viewAppointmentRequests() {
+        for (Appointment appointment : schedule) {
+            if (appointment.getStatus() == "Pending") {
+                System.out.println(appointment.toString());
+            }
+        }
+    }
 
+    public void respondToAppointmentRequests() {
+        viewAppointmentRequests();
+        
     }
 
     public void viewUpcomingAppointments() {
