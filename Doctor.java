@@ -89,7 +89,35 @@ public class Doctor extends User {
 
     public void respondToAppointmentRequests() {
         viewAppointmentRequests();
-        
+        System.out.println("Enter Appointment ID to Respond to Request");
+        String appointmentID = sc.nextLine();
+        for (Appointment appointment : schedule) {
+            if (appointment.getAppointmentID() == appointmentID) {
+                if (appointment.getStatus() == "Pending") {
+                    System.out.println("Respond to Appointment ID: " + appointmentID);
+                    System.out.println("""
+                            1. Accept
+                            2. Reject
+                            Choose options (1-2):
+                            """);
+                    int option = sc.nextInt();
+                    
+                    switch (option) {
+                        case 1:
+                            appointment.confirm();
+                            System.out.println("Appointment confirmed.");
+                            break;
+                        case 2: 
+                            appointment.cancel();
+                            System.out.println("Appointment cancelled.");
+                            break;
+                        default:
+                            System.out.println("Invalid option. Please try again.");
+                            break;
+                    }
+                }
+            }
+        }
     }
 
     public void viewUpcomingAppointments() {
