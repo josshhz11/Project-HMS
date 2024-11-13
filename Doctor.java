@@ -8,10 +8,11 @@ public class Doctor extends User {
     private List<Appointment> schedule;
     private static Scanner sc = new Scanner(System.in);
 
-    public Doctor(String userID, String password, String name, String role, String doctorID, String specialty) {
-        super(userID, password, name, role);
+    // Constructor updated to exclude password
+    public Doctor(String userID, String name, String gender, String doctorID) {
+        super(userID, null, name, gender, "Doctor"); // Default password is null
         this.doctorID = doctorID;
-        this.specialty = specialty;
+        this.specialty = null; // Specialty could be set later if needed
         this.schedule = new ArrayList<>();
     }
 
@@ -23,14 +24,19 @@ public class Doctor extends User {
         return specialty;
     }
 
+    public void setSpecialty(String specialty) {
+        this.specialty = specialty;
+    }
+
+
     // View a patient's medical record
     public void viewPatientMedicalRecord(Patient patient) {
-        System.out.println("Viewing medical record for Patient ID: " + patient.getPatientID());
+        System.out.println("Viewing medical record for Patient ID: " + patient.getuserID());
         System.out.println(patient.getMedicalRecord());
     }
 
     public void updatePatientMedicalRecord(Patient patient) {
-        System.out.println("Updating medical record for Patient ID: " + patient.getPatientID());
+        System.out.println("Updating medical record for Patient ID: " + patient.getuserID());
         System.out.println("""
                 1. Diagnosis
                 2. Treatment
@@ -57,7 +63,7 @@ public class Doctor extends User {
 
     // Update a patient's medical record with a new diagnosis
     public void updatePatientMedicalRecord(Patient patient, String diagnosis) {
-        System.out.println("Updating medical record for Patient ID: " + patient.getPatientID());
+        System.out.println("Updating medical record for Patient ID: " + patient.getuserID());
         patient.getMedicalRecord().addDiagnosis(diagnosis);
         System.out.println("Diagnosis added successfully.");
     }
