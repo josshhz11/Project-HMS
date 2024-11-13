@@ -3,10 +3,11 @@ import java.util.Scanner;
 
 public class Pharmacist extends User {
     private static Scanner sc = new Scanner(System.in);
-    
-    public Pharmacist(String userID, String password, String name, String role) {
-        super(userID, password, name, role);
+
+    public Pharmacist(String userID, String name, String gender) {
+        super(userID, null, name, gender, "Pharmacist"); // Default password is null
     }
+
 
     public void viewAppointmentOutcomeRecord(List<Patient> patients) {
         // I did this manually but see if can do it a different, more efficient way.

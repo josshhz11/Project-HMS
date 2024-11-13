@@ -4,27 +4,26 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Patient extends User {
-    private String patientID;
     private String email;
     private String contactNumber;
-    private MedicalRecord medicalRecord;
+    private String dateOfBirth;
+    private String bloodType;
     private List<Appointment> appointments;
+    private MedicalRecord medicalRecord;
     private static Scanner sc = new Scanner(System.in);
 
-    public Patient(String userID, String password, String name, String role, String patientID, String email, String contactNumber) {
-        super(userID, password, name, role);
-        this.patientID = patientID;
+    // Updated constructor based on CSV data and no initial password setup
+    public Patient(String patientID, String name, String gender, String dateOfBirth, String bloodType, String email, String contactNumber) {
+        super(patientID, null, name, gender, "Patient");
+        this.dateOfBirth = dateOfBirth;
+        this.bloodType = bloodType;
         this.email = email;
         this.contactNumber = contactNumber;
-        this.medicalRecord = new MedicalRecord(patientID);
-        this.appointments = new ArrayList<>();
+        this.medicalRecord = new MedicalRecord(patientID);  // Assuming a new medical record with the patient ID
+        this.appointments = new ArrayList<>(); // Initialize empty list for appointments
     }
 
-    // Getter for patient ID
-    public String getPatientID() {
-        return patientID;
-    }
-
+    // Getter for appointments
     public List<Appointment> getAppointments() {
         return appointments;
     }
@@ -36,7 +35,7 @@ public class Patient extends User {
 
     // View medical record
     public void viewMedicalRecord() {
-        System.out.println("Medical Record for Patient ID: " + patientID);
+        System.out.println("Medical Record for Patient ID: " + userID);
         System.out.println(medicalRecord);
     }
 
@@ -46,24 +45,23 @@ public class Patient extends User {
                 Update Contact Info: 
                 1. Email
                 2. Contact Number
-                Choose options (1-2) to update: 
+                Choose option (1-2) to update: 
                 """);
         int option = sc.nextInt();
-        
+        sc.nextLine();  // Clear the newline
+
         switch (option) {
             case 1:
-                System.out.println("Enter new email: ");
-                String newEmail = sc.nextLine();
-                this.email = newEmail;
+                System.out.print("Enter new email: ");
+                this.email = sc.nextLine();
                 break;
             case 2:
-                System.out.println("Enter new contact number: ");
-                String newContactNumber = sc.nextLine();
-                this.contactNumber = newContactNumber;
+                System.out.print("Enter new contact number: ");
+                this.contactNumber = sc.nextLine();
                 break;
             default:
                 System.out.println("Invalid option. Please try again.");
-                break;
+                return;
         }
         System.out.println("Contact information updated successfully.");
     }
@@ -95,7 +93,7 @@ public class Patient extends User {
 
             LocalDateTime appointmentTime = LocalDateTime.of(year, month, day, hour, min);  // Placeholder date/time
             // TO UPDATE APPOINTMENT ID AUTO INCREMENT
-            appointment = new Appointment("A002", this.getPatientID(), doctorID, appointmentTime);
+            appointment = new Appointment("A002", this.getuserID(), doctorID, appointmentTime);
         }
 
         if (schedulingSystem.bookSlot(this, appointment)) {
@@ -127,7 +125,7 @@ public class Patient extends User {
         if (selectedDoctor != null) {
             // see if can obtain new date then input the date below accordingly
             LocalDateTime appointmentTime = LocalDateTime.of(2024, 11, 3, 9, 0);  // Placeholder date/time
-            newAppointment = new Appointment("A002", this.getPatientID(), doctorID, appointmentTime);
+            newAppointment = new Appointment("A002", this.getuserID(), doctorID, appointmentTime);
         }
 
         if (appointments.contains(oldAppointment) && schedulingSystem.bookSlot(this, newAppointment)) {

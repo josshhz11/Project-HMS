@@ -1,193 +1,126 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.time.LocalDateTime;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    private static List<Patient> patients = new ArrayList<>();
-    private static List<Doctor> doctors = new ArrayList<>();
-    private static List<Pharmacist> pharmacists = new ArrayList<>();
-    private static List<Administrator> administrators = new ArrayList<>();
-    private static Inventory inventory = new Inventory();
-    private static SchedulingSystem schedulingSystem = new SchedulingSystem();
+    private static final String USER_DATA_FILE = "user_data.ser";
+
+    public List<Patient> patients = new ArrayList<>();
+    public List<Doctor> doctors = new ArrayList<>();
+    public List<Pharmacist> pharmacists = new ArrayList<>();
+    public List<Administrator> administrators = new ArrayList<>();
+    private Inventory inventory = new Inventory();
+    private SchedulingSystem schedulingSystem = new SchedulingSystem();
 
     public static void main(String[] args) {
-        loadCSVData();
+        Main mainInstance = new Main();
+
+        // Load serialized users if available, otherwise load from CSV
+        mainInstance.loadUserData();
+
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("Welcome to the Hospital Management System!");
+        // Login and authentication process
         User currentUser = null;
-
-        // Login process
         while (true) {
             System.out.print("Enter User ID: ");
             String userID = sc.nextLine();
             System.out.print("Enter Password: ");
             String password = sc.nextLine();
 
-            currentUser = authenticateUser(userID, password);
+            currentUser = mainInstance.authenticateUser(userID, password);
 
             if (currentUser != null) {
-                System.out.println("Login successful. Welcome, " + currentUser.name + "!");
+                System.out.println("Login successful. Welcome, " + currentUser.getName() + "!");
                 break;
             } else {
                 System.out.println("Invalid credentials. Please try again.");
             }
         }
 
+        // Example menu handling
         boolean loggedIn = true;
         while (loggedIn) {
             currentUser.displayMenu();
             int choice = sc.nextInt();
+            sc.nextLine(); // consume newline
 
             if (currentUser instanceof Patient) {
-                loggedIn = handlePatientOptions((Patient) currentUser, loggedIn, choice, sc);
+                loggedIn = mainInstance.handlePatientOptions((Patient) currentUser, loggedIn, choice, sc);
             } else if (currentUser instanceof Doctor) {
-                loggedIn = handleDoctorOptions((Doctor) currentUser, loggedIn, choice, sc);
+                loggedIn = mainInstance.handleDoctorOptions((Doctor) currentUser, loggedIn, choice, sc);
             } else if (currentUser instanceof Pharmacist) {
-                loggedIn = handlePharmacistOptions((Pharmacist) currentUser, loggedIn, choice, sc);
+                loggedIn = mainInstance.handlePharmacistOptions((Pharmacist) currentUser, loggedIn, choice, sc);
             } else if (currentUser instanceof Administrator) {
-                loggedIn = handleAdminOptions((Administrator) currentUser, loggedIn, choice, sc);
+                loggedIn = mainInstance.handleAdminOptions((Administrator) currentUser, loggedIn, choice, sc);
             }
         }
 
-        if (loggedIn == false) {
+        if (!loggedIn) {
             System.out.println("Successfully logged out.");
         }
 
         sc.close();
+        mainInstance.saveUserData(); // Save user data before exiting
     }
 
-    // Load data from CSV files
-    private static void loadCSVData() {
-        try {
-            loadPatientsFromCSV("Patient_List.csv");
-            loadDoctorsFromCSV("Staff_List.csv");
-            loadPharmacistsFromCSV("Pharmacist_List.csv");
-            loadAdministratorsFromCSV("Admin_List.csv");
-            loadInventoryFromCSV("Medicine_List.csv");
+    // Static method to save data immediately after a change
+    public static void saveDataOnChange() {
+        Main mainInstance = new Main(); // Create a temporary instance to access saveUserData()
+        mainInstance.saveUserData();
+    }
+
+    // Rest of your methods in Main remain unchanged
+
+    // Load user data from a serialized file or, if not found, load from CSV
+    @SuppressWarnings("unchecked")
+    private void loadUserData() {
+        File file = new File(USER_DATA_FILE);
+        if (file.exists()) {
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+                List<User> allUsers = (List<User>) ois.readObject();
+                for (User user : allUsers) {
+                    if (user instanceof Patient) patients.add((Patient) user);
+                    else if (user instanceof Doctor) doctors.add((Doctor) user);
+                    else if (user instanceof Pharmacist) pharmacists.add((Pharmacist) user);
+                    else if (user instanceof Administrator) administrators.add((Administrator) user);
+                }
+                System.out.println("User data loaded successfully from file.");
+            } catch (IOException | ClassNotFoundException e) {
+                System.err.println("Error loading user data: " + e.getMessage());
+            }
+        } else {
+            // Load from CSV if no serialized data file exists
+            try {
+                CSVLoader.loadPatientsFromCSV("Patient_List.csv", this);
+                CSVLoader.loadStaffFromCSV("Staff_List.csv", this);
+                System.out.println("User data loaded from CSV files.");
+                saveUserData(); // Save to serialized file for future runs
+            } catch (IOException e) {
+                System.err.println("Error loading data from CSV files: " + e.getMessage());
+            }
+        }
+    }
+
+    // Save user data to a serialized file
+    private void saveUserData() {
+        List<User> allUsers = new ArrayList<>();
+        allUsers.addAll(patients);
+        allUsers.addAll(doctors);
+        allUsers.addAll(pharmacists);
+        allUsers.addAll(administrators);
+
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(USER_DATA_FILE))) {
+            oos.writeObject(allUsers);
+            System.out.println("User data saved successfully.");
         } catch (IOException e) {
-            System.out.println("Error loading data from CSV files: " + e.getMessage());
+            System.err.println("Error saving user data: " + e.getMessage());
         }
-    }
-
-    // Load patients from CSV
-    private static void loadPatientsFromCSV(String filePath) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(filePath));
-        String line;
-        boolean header = true;
-
-        while ((line = br.readLine()) != null) {
-            if (header) {
-                header = false; // Skip header line
-                continue;
-            }
-
-            String[] values = line.split(",");
-            String patientID = values[0];  // Assuming patient ID is in the first column
-            String password = values[1];
-            String name = values[2];
-            String email = values[3];
-            String contactNumber = values[4];
-
-            patients.add(new Patient(patientID, password, name, "Patient", patientID, email, contactNumber));
-        }
-        br.close();
-    }
-
-    // Load doctors from CSV
-    private static void loadDoctorsFromCSV(String filePath) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(filePath));
-        String line;
-        boolean header = true;
-
-        while ((line = br.readLine()) != null) {
-            if (header) {
-                header = false; // Skip header line
-                continue;
-            }
-
-            String[] values = line.split(",");
-            String doctorID = values[0];  // Assuming doctor ID is in the first column
-            String password = values[1];
-            String name = values[2];
-            String specialty = values[3];
-
-            Doctor doctor = new Doctor(doctorID, password, name, "Doctor", doctorID, specialty);
-            doctors.add(doctor);
-            schedulingSystem.addDoctor(doctor);
-        }
-        br.close();
-    }
-
-    // Similar methods for loading pharmacists and administrators
-    private static void loadPharmacistsFromCSV(String filePath) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(filePath));
-        String line;
-        boolean header = true;
-
-        while ((line = br.readLine()) != null) {
-            if (header) {
-                header = false; // Skip header line
-                continue;
-            }
-
-            String[] values = line.split(",");
-            String pharmacistID = values[0];
-            String password = values[1];
-            String name = values[2];
-
-            pharmacists.add(new Pharmacist(pharmacistID, password, name, "Pharmacist"));
-        }
-        br.close();
-    }
-
-    private static void loadAdministratorsFromCSV(String filePath) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(filePath));
-        String line;
-        boolean header = true;
-
-        while ((line = br.readLine()) != null) {
-            if (header) {
-                header = false; // Skip header line
-                continue;
-            }
-
-            String[] values = line.split(",");
-            String adminID = values[0];
-            String password = values[1];
-            String name = values[2];
-
-            administrators.add(new Administrator(adminID, password, name, "Administrator"));
-        }
-        br.close();
-    }
-
-    private static void loadInventoryFromCSV(String filePath) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(filePath));
-        String line;
-        boolean header = true;
-
-        while ((line = br.readLine()) != null) {
-            if (header) {
-                header = false; // Skip header line
-                continue;
-            }
-
-            String[] values = line.split(",");
-            String medicationName = values[0];
-            int quantity = Integer.parseInt(values[1]);
-
-            inventory.addMedication(medicationName, quantity);
-        }
-        br.close();
     }
 
     // Authentication process
-    private static User authenticateUser(String userID, String password) {
+    private User authenticateUser(String userID, String password) {
         for (Patient patient : patients) {
             if (patient.login(userID, password)) return patient;
         }
@@ -204,15 +137,15 @@ public class Main {
     }
 
     // Handle Patient options
-    private static boolean handlePatientOptions(Patient patient, boolean loggedIn, int choice, Scanner sc) {
+    private boolean handlePatientOptions(Patient patient, boolean loggedIn, int choice, Scanner sc) {
         switch (choice) {
             case 1 -> patient.viewMedicalRecord();
             case 2 -> patient.updateContactInfo();
             case 3 -> patient.viewAvailableSlots(schedulingSystem);
             case 4 -> patient.scheduleAppointment(schedulingSystem);
-            case 5 -> patient.rescheduleAppointment(schedulingSystem); 
+            case 5 -> patient.rescheduleAppointment(schedulingSystem);
             case 6 -> patient.cancelAppointment();
-            case 7 -> patient.viewScheduledAppointments(); 
+            case 7 -> patient.viewScheduledAppointments();
             case 8 -> patient.viewPastAppointmentOutcomeRecords();
             case 9 -> {
                 loggedIn = false;
@@ -220,12 +153,11 @@ public class Main {
             }
             default -> System.out.println("Invalid option. Please try again.");
         }
-
         return loggedIn;
     }
-    
+
     // Handle Doctor options
-    private static boolean handleDoctorOptions(Doctor doctor, boolean loggedIn, int choice, Scanner sc) {
+    private boolean handleDoctorOptions(Doctor doctor, boolean loggedIn, int choice, Scanner sc) {
         switch (choice) {
             case 1 -> {
                 System.out.print("Enter patient ID to view medical record: ");
@@ -243,25 +175,25 @@ public class Main {
                 Patient patient = findPatientByID(patientID);
                 doctor.updatePatientMedicalRecord(patient);
             }
-            case 3 -> doctor.viewPersonalSchedule(); // TO CHECK
-            case 4 -> doctor.setAvailability(); // TO FINISH
-            case 5 -> doctor.respondToAppointmentRequests(); // TO FINISH
-            case 6 -> doctor.viewUpcomingAppointments(); // TO FINISH
+            case 3 -> doctor.viewPersonalSchedule();
+            case 4 -> doctor.setAvailability();
+            case 5 -> doctor.respondToAppointmentRequests();
+            case 6 -> doctor.viewUpcomingAppointments();
             case 7 -> doctor.recordAppointmentOutcome(inventory);
             case 8 -> {
                 loggedIn = false;
                 System.out.println("Logging out.");
-            } 
+            }
             default -> System.out.println("Invalid option. Please try again.");
         }
         return loggedIn;
     }
 
     // Handle Pharmacist options
-    private static boolean handlePharmacistOptions(Pharmacist pharmacist, boolean loggedIn, int choice, Scanner sc) {
+    private boolean handlePharmacistOptions(Pharmacist pharmacist, boolean loggedIn, int choice, Scanner sc) {
         switch (choice) {
             case 1 -> pharmacist.viewAppointmentOutcomeRecord(patients);
-            case 2 -> { // more or less done except menu and unavailable option
+            case 2 -> {
                 System.out.println("Enter Appointment ID to update status: ");
                 String appointmentID = sc.nextLine();
                 System.out.println("""
@@ -269,8 +201,9 @@ public class Main {
                         1. Complete
                         2. Unavailable
                         Choose action (1-2):
-                        """); // complete this menu
+                        """);
                 int status = sc.nextInt();
+                sc.nextLine(); // consume newline
                 pharmacist.updatePrescriptionStatus(appointmentID, status, patients);
             }
             case 3 -> pharmacist.viewInventory(inventory);
@@ -278,37 +211,37 @@ public class Main {
             case 5 -> {
                 loggedIn = false;
                 System.out.println("Logging out.");
-            } 
+            }
             default -> System.out.println("Invalid option. Please try again.");
         }
         return loggedIn;
     }
 
     // Handle Administrator options
-    private static boolean handleAdminOptions(Administrator admin, boolean loggedIn, int choice, Scanner sc) {
+    private boolean handleAdminOptions(Administrator admin, boolean loggedIn, int choice, Scanner sc) {
         switch (choice) {
             case 1 -> admin.viewAndManageHospitalStaff();
-            case 2 -> admin.viewAllAppointments(schedulingSystem); // VIEW APPOINTMENT DETAILS
+            case 2 -> admin.viewAllAppointments(schedulingSystem);
             case 3 -> admin.viewAndManageMedicationInventory(inventory);
             case 4 -> admin.approveReplenishmentRequest(inventory);
             case 5 -> {
                 loggedIn = false;
                 System.out.println("Logging out.");
-            } 
+            }
             default -> System.out.println("Invalid option. Please try again.");
         }
         return loggedIn;
     }
-    
+
     // Find Patient by ID
-    private static Patient findPatientByID(String patientID) {
+    private Patient findPatientByID(String patientID) {
         for (Patient patient : patients) {
-            if (patient.getPatientID().equals(patientID)) {
+            if (patient.getuserID().equals(patientID)) {
                 return patient;
             }
         }
         return null;
     }
 }
-    
+
 
