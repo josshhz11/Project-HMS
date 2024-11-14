@@ -8,9 +8,9 @@ public class MedicalRecord {
     private List<String> diagnoses;
     private List<String> treatments;
 
-    public MedicalRecord(String patientID) {
+    public MedicalRecord(String patientID, String bloodType) {
         this.patientID = patientID;
-        this.bloodType = "Unknown";
+        this.bloodType = bloodType;
         this.diagnoses = new ArrayList<>();
         this.treatments = new ArrayList<>();
     }

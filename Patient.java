@@ -13,13 +13,12 @@ public class Patient extends User {
     private static Scanner sc = new Scanner(System.in);
 
     // Updated constructor based on CSV data and no initial password setup
-    public Patient(String patientID, String name, String gender, String dateOfBirth, String bloodType, String email, String contactNumber) {
+    public Patient(String patientID, String name, String gender, String dateOfBirth, String email, String contactNumber, String bloodType) {
         super(patientID, null, name, gender, "Patient");
         this.dateOfBirth = dateOfBirth;
-        this.bloodType = bloodType;
         this.email = email;
         this.contactNumber = contactNumber;
-        this.medicalRecord = new MedicalRecord(patientID);  // Assuming a new medical record with the patient ID
+        this.medicalRecord = new MedicalRecord(patientID, bloodType);  // Assuming a new medical record with the patient ID
         this.appointments = new ArrayList<>(); // Initialize empty list for appointments
     }
 

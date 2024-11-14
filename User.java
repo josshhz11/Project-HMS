@@ -24,15 +24,13 @@ public abstract class User implements Serializable {
         this.isFirstLogin = password == null || password.equals(DEFAULT_PASSWORD);
     }
 
-        // Getter for user ID
-        public String getuserID(){
-            return userID;
-        }
-    
-        // Getter for name
-        public String getName(){
-            return name;
-        }
+    public String getuserID(){
+        return userID;
+    }
+
+    public String getName(){
+        return name;
+    }
 
     // Hash the password
     private String hashPassword(String password) {
@@ -66,16 +64,17 @@ public abstract class User implements Serializable {
 
     // Change password method
     public boolean changePassword() {
-        Scanner scanner = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
         System.out.print("Enter new password: ");
-        String newPassword = scanner.nextLine();
+        String newPassword = sc.nextLine();
         while (newPassword.equals("password") || newPassword.length() < 6) {
             System.out.println("Password must be different from 'password' and at least 6 characters long.");
             System.out.print("Enter new password: ");
-            newPassword = scanner.nextLine();
+            newPassword = sc.nextLine();
         }
         this.passwordHash = hashPassword(newPassword);
         System.out.println("Password successfully changed!");
+        sc.close();
         return true;  // Indicate password was changed
     }
 

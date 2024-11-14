@@ -60,13 +60,6 @@ public class Doctor extends User {
                 break;
         }
     }
-
-    // Update a patient's medical record with a new diagnosis
-    public void updatePatientMedicalRecord(Patient patient, String diagnosis) {
-        System.out.println("Updating medical record for Patient ID: " + patient.getuserID());
-        patient.getMedicalRecord().addDiagnosis(diagnosis);
-        System.out.println("Diagnosis added successfully.");
-    }
     
     public void viewPersonalSchedule() {
         System.out.println("Doctor Schedule:");
