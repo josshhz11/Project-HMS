@@ -21,33 +21,6 @@ public class Pharmacist extends User {
             }
         }
     }
-
-    public void updatePrescriptionStatus(String appointmentID, int status, List<Patient> patients) {
-        // I did this manually but see if can do it a different, more efficient way.
-        // this is more of printing out the medication that hasn't been dispensed yet.
-        for (Patient patient : patients) {
-            for (Appointment appointment : patient.getAppointments()) {
-                if (appointment.getAppointmentID() == appointmentID) {
-                    if (appointment.getMedicationStatus() == "Dispense Complete") {
-                        System.out.println("Medication already dispensed.");
-                        return;
-                    } else {
-                        switch (status) {
-                            case 1:
-                                appointment.complete();
-                                break;
-                            case 2:
-                                // TODO
-                                break;
-                            default:
-                                System.out.println("Invalid action. Please try again.");
-                                break;
-                        }
-                    }
-                }
-            }
-        }
-    }
     
     public void updatePrescriptionStatus(String appointmentID, List<Patient> patients) {
         for (Patient patient : patients) {
