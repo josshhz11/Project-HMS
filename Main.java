@@ -44,7 +44,6 @@ public class Main {
         while (loggedIn) {
             currentUser.displayMenu();
             int choice = sc.nextInt();
-            sc.nextLine(); // consume newline
 
             if (currentUser instanceof Patient) {
                 loggedIn = mainInstance.handlePatientOptions((Patient) currentUser, loggedIn, choice, sc);

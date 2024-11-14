@@ -52,7 +52,7 @@ public class CSVLoader {
             String email = values[5];
 
             // Create a new Patient object and add it to Main's patients list
-            Patient patient = new Patient(patientID, name, gender, dateOfBirth, email, null, bloodType);
+            Patient patient = new Patient(patientID, name, gender, dateOfBirth, email, bloodType);
             mainInstance.patients.add(patient); // Populate Main's patients list directly
         }
         br.close();
