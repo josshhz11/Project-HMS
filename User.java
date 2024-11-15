@@ -74,7 +74,6 @@ public abstract class User implements Serializable {
         }
         this.passwordHash = hashPassword(newPassword);
         System.out.println("Password successfully changed!");
-        sc.close();
         return true;  // Indicate password was changed
     }
 

@@ -147,8 +147,4 @@ public class Doctor extends User {
                 Choose options (1-8):
                 """);
     }
-
-    public static void closeScanner() {
-        sc.close(); // Close scanner when it’s no longer needed
-    }
 }

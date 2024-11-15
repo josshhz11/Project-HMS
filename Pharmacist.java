@@ -84,8 +84,4 @@ public class Pharmacist extends User {
                 """);
 
     }
-
-    public static void closeScanner() {
-        sc.close(); // Close scanner when it’s no longer needed
-    }
 }

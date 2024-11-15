@@ -197,7 +197,7 @@ public class Patient extends User {
                 """);
     }
 
-    public static void closeScanner() {
-        sc.close(); // Close scanner when it’s no longer needed
-    }
+    // public static void closeScanner() {
+    //     sc.close(); // Close scanner when it’s no longer needed
+    // }
 }

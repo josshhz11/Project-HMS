@@ -129,10 +129,6 @@ public class Administrator extends User {
         String medicationID = sc.nextLine();
         inventory.fulfillReplenishmentRequest(medicationID);
     }
-    
-    public static void closeScanner() {
-        sc.close(); // Close scanner when it’s no longer needed
-    }
 
     @Override
     public void displayMenu() {
