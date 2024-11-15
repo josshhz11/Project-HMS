@@ -12,6 +12,7 @@ public class Main {
     public List<Administrator> administrators = new ArrayList<>();
     private Inventory inventory = new Inventory();
     private SchedulingSystem schedulingSystem = new SchedulingSystem();
+    private String[] roles = {"Patient", "Doctor", "Pharmacist", "Administrator"};
 
     public static void main(String[] args) {
         Main mainInstance = new Main();
@@ -230,7 +231,7 @@ public class Main {
     // Handle Administrator options
     private boolean handleAdminOptions(Administrator admin, boolean loggedIn, int choice, Scanner sc) {
         switch (choice) {
-            case 1 -> admin.viewAndManageHospitalStaff();
+            case 1 -> admin.viewAndManageHospitalStaff(doctors, pharmacists, administrators, roles);
             case 2 -> admin.viewAllAppointments(schedulingSystem);
             case 3 -> admin.viewAndManageMedicationInventory(inventory);
             case 4 -> admin.approveReplenishmentRequest(inventory);

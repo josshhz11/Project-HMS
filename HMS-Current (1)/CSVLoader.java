@@ -79,7 +79,7 @@ public static void loadStaffFromCSV(String filePath, Main mainInstance) throws I
 
         switch (role) {
             case "Doctor":
-                Doctor doctor = new Doctor(staffID, name, gender, staffID);
+                Doctor doctor = new Doctor(staffID, name, gender);
                 mainInstance.doctors.add(doctor); // Add doctor to Main's doctors list
                 break;
             case "Pharmacist":

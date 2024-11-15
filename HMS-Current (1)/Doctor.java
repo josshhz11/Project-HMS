@@ -3,21 +3,19 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Doctor extends User {
-    private String doctorID;
     private String specialty;
     private List<Appointment> schedule;
     private static Scanner sc = new Scanner(System.in);
 
     // Constructor updated to exclude password
-    public Doctor(String userID, String name, String gender, String doctorID) {
+    public Doctor(String userID, String name, String gender) {
         super(userID, null, name, gender, "Doctor"); // Default password is null
-        this.doctorID = doctorID;
         this.specialty = null; // Specialty could be set later if needed
         this.schedule = new ArrayList<>();
     }
 
     public String getDoctorID() {
-        return doctorID;
+        return userID;
     }
 
     public String getSpecialty() {
