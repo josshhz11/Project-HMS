@@ -23,41 +23,60 @@ public class Main {
 
         // Login and authentication process
         User currentUser = null;
-        while (true) {
-            System.out.print("Enter User ID: ");
-            String userID = sc.nextLine();
-            System.out.print("Enter Password: ");
-            String password = sc.nextLine();
+        int option = 0;
 
-            currentUser = mainInstance.authenticateUser(userID, password);
+        while (option != 2) {
+                System.out.println("""
+                    Welcome to HMS,
+                    1. Login
+                    2. Exit """);
+            option = sc.nextInt();
 
-            if (currentUser != null) {
-                System.out.println("Login successful. Welcome, " + currentUser.getName() + "!");
-                break;
-            } else {
-                System.out.println("Invalid credentials. Please try again.");
+            switch (option) {
+                case 1: // Login
+                    while (true) {
+                        System.out.println("Enter User ID: ");
+                        String userID = sc.next();
+                        System.out.println("Enter Password: ");
+                        String password = sc.next();
+
+                        currentUser = mainInstance.authenticateUser(userID, password);
+
+                        if (currentUser != null) {
+                            System.out.println("Login successful. Welcome, " + currentUser.getName() + "!");
+                            break;
+                        } else {
+                            System.out.println("Invalid credentials. Please try again.");
+                        }
+                    }
+                    break;
+                case 2:
+                    return;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+                    break;
             }
-        }
 
-        // Example menu handling
-        boolean loggedIn = true;
-        while (loggedIn) {
-            currentUser.displayMenu();
-            int choice = sc.nextInt();
+            // Example menu handling
+            boolean loggedIn = true;
+            while (loggedIn) {
+                currentUser.displayMenu();
+                int choice = sc.nextInt();
 
-            if (currentUser instanceof Patient) {
-                loggedIn = mainInstance.handlePatientOptions((Patient) currentUser, loggedIn, choice, sc);
-            } else if (currentUser instanceof Doctor) {
-                loggedIn = mainInstance.handleDoctorOptions((Doctor) currentUser, loggedIn, choice, sc);
-            } else if (currentUser instanceof Pharmacist) {
-                loggedIn = mainInstance.handlePharmacistOptions((Pharmacist) currentUser, loggedIn, choice, sc);
-            } else if (currentUser instanceof Administrator) {
-                loggedIn = mainInstance.handleAdminOptions((Administrator) currentUser, loggedIn, choice, sc);
+                if (currentUser instanceof Patient) {
+                    loggedIn = mainInstance.handlePatientOptions((Patient) currentUser, loggedIn, choice, sc);
+                } else if (currentUser instanceof Doctor) {
+                    loggedIn = mainInstance.handleDoctorOptions((Doctor) currentUser, loggedIn, choice, sc);
+                } else if (currentUser instanceof Pharmacist) {
+                    loggedIn = mainInstance.handlePharmacistOptions((Pharmacist) currentUser, loggedIn, choice, sc);
+                } else if (currentUser instanceof Administrator) {
+                    loggedIn = mainInstance.handleAdminOptions((Administrator) currentUser, loggedIn, choice, sc);
+                }
             }
-        }
 
-        if (!loggedIn) {
-            System.out.println("Successfully logged out.");
+            if (!loggedIn) {
+                System.out.println("Successfully logged out.");
+            }        
         }
 
         sc.close();
