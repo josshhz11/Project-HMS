@@ -37,18 +37,30 @@ public class Administrator extends User {
                 switch (choice2) {
                     case 1:
                         i = 1;
+                        if (doctors.isEmpty()) {
+                            System.out.println("No doctors in the system.");
+                            break;
+                        }
                         for (Doctor doctor : doctors) {
                             System.out.println(i++ + ". Doctor ID: " + doctor.getuserID() + ", Name: " + doctor.getName());
                         }
                         break;
                     case 2:
                         i = 1;
+                        if (pharmacists.isEmpty()) {
+                            System.out.println("No pharmacists in the system.");
+                            break;
+                        }
                         for (Pharmacist pharmacist : pharmacists) {
                             System.out.println(i++ + ". Pharmacist ID: " + pharmacist.getuserID() + ", Name: " + pharmacist.getName());
                         }
                         break;
                     case 3:
                         i = 1;
+                        if (administrators.isEmpty()) {
+                            System.out.println("No administrators in the system.");
+                            break;
+                        }
                         for (Administrator administrator : administrators) {
                             System.out.println(i++ + ". Administrator ID: " + administrator.getuserID() + ", Name: " + administrator.getName());
                         }
@@ -74,7 +86,7 @@ public class Administrator extends User {
                         updateStaffRole(doctors, pharmacists, administrators, roles);
                         break;
                     case 3: // Remove Staff
-                        removeStaff(); // CHECK
+                        removeStaff(doctors, pharmacists, administrators);
                         break;
                     default:
                         System.out.println("Invalid action. Please try again.");
@@ -150,16 +162,34 @@ public class Administrator extends User {
             switch (role) {
                 case 1:
                     Doctor doctor = Doctor.findDoctorByID(staffID, doctors);
+                    
+                    if (doctor == null) {
+                        System.out.println("Doctor not found");
+                        return;
+                    }
+
                     doctor.updateRole(doctor, newRole, pharmacists, administrators);
                     doctors.remove(doctor);
                     break;
                 case 2:
                     Pharmacist pharmacist = Pharmacist.findPharmacistByID(staffID, pharmacists);
+                    
+                    if (pharmacist == null) {
+                        System.out.println("Pharmacist not found");
+                        return;
+                    }
+                    
                     pharmacist.updateRole(pharmacist, newRole, doctors, administrators);
                     pharmacists.remove(pharmacist);
                     break;
                 case 3:
                     Administrator administrator = Administrator.findAdministratorByID(staffID, administrators);
+                    
+                    if (administrator == null) {
+                        System.out.println("Administrator not found");
+                        return;
+                    }
+                    
                     administrator.updateRole(administrator, newRole, doctors, pharmacists);
                     administrators.remove(administrator);
                     break;
@@ -172,11 +202,54 @@ public class Administrator extends User {
         }
     }
 
-    public void removeStaff() {
+    public void removeStaff(List<Doctor> doctors, List<Pharmacist> pharmacists, List<Administrator> administrators) {
         System.out.println("Enter Staff ID: ");
         String staffID = sc.next();
+        System.out.println("""
+                Enter Staff Role:
+                1. Doctor
+                2. Pharmacist
+                3. Administrator
+                Choose options (1-3): """);
+        int role = sc.nextInt();
+
+        switch (role) {
+            case 1:
+                Doctor doctor = Doctor.findDoctorByID(staffID, doctors);
+                
+                if (doctor == null) {
+                    System.out.println("Doctor not found");
+                    return;
+                }
+                
+                doctors.remove(doctor);
+                break;
+            case 2:
+                Pharmacist pharmacist = Pharmacist.findPharmacistByID(staffID, pharmacists);
+                
+                if (pharmacist == null) {
+                    System.out.println("Pharmacist not found");
+                    return;
+                }
+                
+                pharmacists.remove(pharmacist);
+                break;
+            case 3:
+                Administrator administrator = Administrator.findAdministratorByID(staffID, administrators);
+                
+                if (administrator == null) {
+                    System.out.println("Administrator not found");
+                    return;
+                }
+                
+                administrators.remove(administrator);
+                break;
+            default:
+                System.out.println("Invalid option. Please try again.");
+                break;
+        }
+
         System.out.println("Staff ID " + staffID + " has been removed.");
-        // NEED TO ACTUALLY REMOVE FROM STAFF LIST
     }
 
     public void viewAllAppointments(SchedulingSystem schedulingSystem) {
@@ -265,4 +338,3 @@ public class Administrator extends User {
                 Choose options (1-5): """);
     }
 }
-

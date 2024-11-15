@@ -40,12 +40,14 @@ public class Doctor extends User {
         switch (option) {
             case 1:
                 System.out.println("Update diagnosis: ");
-                String newDiagnosis = sc.next();
+                sc.nextLine();
+                String newDiagnosis = sc.nextLine();
                 patient.getMedicalRecord().addDiagnosis(newDiagnosis);
                 break;
             case 2:
                 System.out.println("Update treatment: ");
-                String newTreatment = sc.next();
+                sc.nextLine();
+                String newTreatment = sc.nextLine();
                 patient.getMedicalRecord().addTreatment(newTreatment);
                 break;
             default:
