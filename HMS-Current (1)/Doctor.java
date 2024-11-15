@@ -32,7 +32,7 @@ public class Doctor extends User {
     // View a patient's medical record
     public void viewPatientMedicalRecord(Patient patient) {
         System.out.println("Viewing medical record for Patient ID: " + patient.getuserID());
-        System.out.println(patient.getMedicalRecord());
+        System.out.println(patient.getMedicalRecord().toString());
     }
 
     public void updatePatientMedicalRecord(Patient patient) {
@@ -46,12 +46,12 @@ public class Doctor extends User {
         switch (option) {
             case 1:
                 System.out.println("Update diagnosis: ");
-                String newDiagnosis = sc.nextLine();
+                String newDiagnosis = sc.next();
                 patient.getMedicalRecord().addDiagnosis(newDiagnosis);
                 break;
             case 2:
                 System.out.println("Update treatment: ");
-                String newTreatment = sc.nextLine();
+                String newTreatment = sc.next();
                 patient.getMedicalRecord().addTreatment(newTreatment);
                 break;
             default:
@@ -79,10 +79,11 @@ public class Doctor extends User {
         }
     }
 
+    // THIS ONE MIGHT BE WRONG BECAUSE APPOINTMENT REQUESTS MAY NOT FALL UNDER SCHEDULE
     public void respondToAppointmentRequests() {
         viewAppointmentRequests();
         System.out.println("Enter Appointment ID to Respond to Request");
-        String appointmentID = sc.nextLine();
+        String appointmentID = sc.next();
         for (Appointment appointment : schedule) {
             if (appointment.getAppointmentID() == appointmentID) {
                 if (appointment.getStatus() == "Pending") {
@@ -117,7 +118,7 @@ public class Doctor extends User {
 
     public void recordAppointmentOutcome(Inventory inventory) {
         System.out.println("Enter Appointment ID to record outcome: ");
-        String appointmentID = sc.nextLine();
+        String appointmentID = sc.next();
         for (Appointment appointment : schedule) {
             if (appointment.getAppointmentID() == appointmentID) {
                 appointment.complete(inventory, appointmentID);

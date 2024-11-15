@@ -17,7 +17,7 @@ public class Patient extends User {
         super(patientID, null, name, gender, "Patient");
         this.dateOfBirth = dateOfBirth;
         this.email = email;
-        this.contactNumber = null;
+        this.contactNumber = "Unknown";
         this.medicalRecord = new MedicalRecord(patientID, bloodType);  // Assuming a new medical record with the patient ID
         this.appointments = new ArrayList<>(); // Initialize empty list for appointments
     }
@@ -42,7 +42,7 @@ public class Patient extends User {
 
         switch (option) {
             case 1:
-                System.out.println(medicalRecord.toString());
+                System.out.println(medicalRecord);
                 break;
             case 2:
                 viewPersonalInformation();
@@ -99,7 +99,7 @@ public class Patient extends User {
         Appointment appointment = null;
         
         System.out.println("Enter doctor ID for appointment: ");
-        String doctorID = sc.nextLine();
+        String doctorID = sc.next();
         Doctor selectedDoctor = schedulingSystem.getDoctorById(doctorID);
         if (selectedDoctor != null) {
             System.out.println("Set appointment time: ");
@@ -133,7 +133,7 @@ public class Patient extends User {
         
         // Obtaining the old appointment
         System.out.println("Enter appointment ID: ");
-        String oldAppointmentID = sc.nextLine();
+        String oldAppointmentID = sc.next();
         
         for (Appointment appointment : appointments) {
             if (appointment.getAppointmentID() == oldAppointmentID) {
@@ -143,7 +143,7 @@ public class Patient extends User {
 
         // Obtaining the new appointment -> since this code is repeated from the scheduleAppointment() function, see if can create a function to do this.
         System.out.println("Enter doctor ID for appointment: ");
-        String doctorID = sc.nextLine();
+        String doctorID = sc.next();
         Doctor selectedDoctor = schedulingSystem.getDoctorById(doctorID);
         if (selectedDoctor != null) {
             // see if can obtain new date then input the date below accordingly
@@ -167,7 +167,7 @@ public class Patient extends User {
         
         // Obtaining the appointment to cancel
         System.out.println("Enter appointment ID: ");
-        String oldAppointmentID = sc.nextLine();
+        String oldAppointmentID = sc.next();
         
         for (Appointment appointment : appointments) {
             if (appointment.getAppointmentID() == oldAppointmentID) {

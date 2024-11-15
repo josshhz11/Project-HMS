@@ -159,8 +159,8 @@ public class Main {
     private boolean handleDoctorOptions(Doctor doctor, boolean loggedIn, int choice, Scanner sc) {
         switch (choice) {
             case 1 -> {
-                System.out.print("Enter patient ID to view medical record: ");
-                String patientID = sc.nextLine();
+                System.out.println("Enter patient ID to view medical record: ");
+                String patientID = sc.next();
                 Patient patient = findPatientByID(patientID);
                 if (patient != null) {
                     doctor.viewPatientMedicalRecord(patient);
@@ -169,8 +169,8 @@ public class Main {
                 }
             }
             case 2 -> {
-                System.out.print("Enter patient ID to update medical record: ");
-                String patientID = sc.nextLine();
+                System.out.println("Enter patient ID to update medical record: ");
+                String patientID = sc.next();
                 Patient patient = findPatientByID(patientID);
                 doctor.updatePatientMedicalRecord(patient);
             }
@@ -194,7 +194,7 @@ public class Main {
             case 1 -> pharmacist.viewAppointmentOutcomeRecord(patients);
             case 2 -> {
                 System.out.println("Enter Appointment ID to update status: ");
-                String appointmentID = sc.nextLine();
+                String appointmentID = sc.next();
                 pharmacist.updatePrescriptionStatus(appointmentID, patients);
             }
             case 3 -> pharmacist.viewInventory(inventory);
