@@ -2,11 +2,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import javax.print.Doc;
+
 public class Pharmacist extends User {
     private static Scanner sc = new Scanner(System.in);
 
     public Pharmacist(String userID, String name, String gender) {
         super(userID, null, name, gender, "Pharmacist"); // Default password is null
+    }
+
+    public String getUserID() {
+        return userID;
     }
 
 
@@ -69,6 +75,35 @@ public class Pharmacist extends User {
         int replenishAmount = sc.nextInt();
         inventory.newReplenishmentRequest(medicationID, replenishAmount);
         System.out.println("Replenishment Request Submitted.");
+    }
+
+    // for the administrator function
+    public void updateRole(Pharmacist pharmacist, int newRole, List<Doctor> doctors, List<Administrator> administrators) {
+        switch (newRole) {
+            case 1:
+                this.role = "Doctor";
+                Doctor doctor = new Doctor(pharmacist.getuserID(), pharmacist.getName(), pharmacist.getGender());
+                doctors.add(doctor);
+                break;
+            case 3:
+                this.role = "Administrator";
+                Administrator administrator = new Administrator(pharmacist.getuserID(), pharmacist.getName(), pharmacist.getGender());
+                administrators.add(administrator);
+                break;
+            default:
+                System.out.println("Invalid option. Please try again.");
+                return;
+        }
+    }
+
+    // Find Pharmacist by ID
+    public static Pharmacist findPharmacistByID(String pharmacistID, List<Pharmacist> pharmacists) {
+        for (Pharmacist pharmacist : pharmacists) {
+            if (pharmacist.getuserID().equals(pharmacistID)) {
+                return pharmacist;
+            }
+        }
+        return null;
     }
 
     @Override

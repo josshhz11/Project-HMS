@@ -8,6 +8,10 @@ public class Administrator extends User {
         super(userID, null, name, gender, "Administrator"); // Default password is null
     }
 
+    public String getUserID() {
+        return userID;
+    }
+
     // IMPORTANT
     public void viewAndManageHospitalStaff(List<Doctor> doctors, List<Pharmacist> pharmacists, List<Administrator> administrators, String[] roles) {
         // Can put the entire view and manage options menu within here
@@ -67,7 +71,7 @@ public class Administrator extends User {
                         addStaff(doctors, pharmacists, administrators, roles);
                         break;
                     case 2: // Update Staff
-                        updateStaffRole(); // CHECK
+                        updateStaffRole(doctors, pharmacists, administrators, roles);
                         break;
                     case 3: // Remove Staff
                         removeStaff(); // CHECK
@@ -121,18 +125,56 @@ public class Administrator extends User {
         System.out.println("Staff " + name + " with ID " + staffID + " added as " + roles[role]);
     }
 
-    public void updateStaffRole() {
-        System.out.print("Enter Staff ID: ");
-        String staffID = sc.nextLine();
-        System.out.print("Enter New Role (Doctor, Pharmacist, etc.): ");
-        String newRole = sc.nextLine();
-        System.out.println("Staff ID " + staffID + " role updated to: " + newRole);
-        // NEED TO ACTUALLY UPDATE STAFF LIST
+    public void updateStaffRole(List<Doctor> doctors, List<Pharmacist> pharmacists, List<Administrator> administrators, String[] roles) {
+        System.out.println("Enter Staff ID: ");
+        String staffID = sc.next();
+        System.out.println("""
+                Enter Original Staff Role:
+                1. Doctor
+                2. Pharmacist
+                3. Administrator
+                Choose options (1-3): """);
+        int role = sc.nextInt();
+
+        System.out.println("""
+                Enter New Staff Role:
+                1. Doctor
+                2. Pharmacist
+                3. Administrator
+                Choose options (1-3): """);
+        int newRole = sc.nextInt();
+        
+        if (role == newRole) {
+            System.out.println("Staff is already of role " + roles[role]);
+        } else {
+            switch (role) {
+                case 1:
+                    Doctor doctor = Doctor.findDoctorByID(staffID, doctors);
+                    doctor.updateRole(doctor, newRole, pharmacists, administrators);
+                    doctors.remove(doctor);
+                    break;
+                case 2:
+                    Pharmacist pharmacist = Pharmacist.findPharmacistByID(staffID, pharmacists);
+                    pharmacist.updateRole(pharmacist, newRole, doctors, administrators);
+                    pharmacists.remove(pharmacist);
+                    break;
+                case 3:
+                    Administrator administrator = Administrator.findAdministratorByID(staffID, administrators);
+                    administrator.updateRole(administrator, newRole, doctors, pharmacists);
+                    administrators.remove(administrator);
+                    break;
+                default:
+                    System.out.println("Invalid Option. Please try again.");
+                    break;
+            }
+
+            System.out.println("Staff ID " + staffID + " role updated to: " + roles[newRole]);
+        }
     }
 
     public void removeStaff() {
-        System.out.print("Enter Staff ID: ");
-        String staffID = sc.nextLine();
+        System.out.println("Enter Staff ID: ");
+        String staffID = sc.next();
         System.out.println("Staff ID " + staffID + " has been removed.");
         // NEED TO ACTUALLY REMOVE FROM STAFF LIST
     }
@@ -179,6 +221,35 @@ public class Administrator extends User {
         System.out.println("Medication ID to replenish: ");
         String medicationID = sc.nextLine();
         inventory.fulfillReplenishmentRequest(medicationID);
+    }
+
+    // for the administrator function
+    public void updateRole(Administrator administrator, int newRole, List<Doctor> doctors, List<Pharmacist> pharmacists) {
+        switch (newRole) {
+            case 1:
+                this.role = "Doctor";
+                Doctor doctor = new Doctor(administrator.getuserID(), administrator.getName(), administrator.getGender());
+                doctors.add(doctor);
+                break;
+            case 2:
+                this.role = "Pharmacist";
+                Pharmacist pharmacist = new Pharmacist(administrator.getuserID(), administrator.getName(), administrator.getGender());
+                pharmacists.add(pharmacist);
+                break;
+            default:
+                System.out.println("Invalid option. Please try again.");
+                return;
+        }
+    }
+
+    // Find Administrator by ID
+    public static Administrator findAdministratorByID(String administratorID, List<Administrator> administrators) {
+        for (Administrator administrator : administrators) {
+            if (administrator.getuserID().equals(administratorID)) {
+                return administrator;
+            }
+        }
+        return null;
     }
 
     @Override

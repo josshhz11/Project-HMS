@@ -14,10 +14,6 @@ public class Doctor extends User {
         this.schedule = new ArrayList<>();
     }
 
-    public String getDoctorID() {
-        return userID;
-    }
-
     public String getSpecialty() {
         return specialty;
     }
@@ -127,6 +123,35 @@ public class Doctor extends User {
     // not in use rn
     public void addAppointment(Appointment appointment) {
         schedule.add(appointment);
+    }
+
+    // for the administrator function
+    public void updateRole(Doctor doctor, int newRole, List<Pharmacist> pharmacists, List<Administrator> administrators) {
+        switch (newRole) {
+            case 2:
+                this.role = "Pharmacist";
+                Pharmacist pharmacist = new Pharmacist(doctor.getuserID(), doctor.getName(), doctor.getGender());
+                pharmacists.add(pharmacist);
+                break;
+            case 3:
+                this.role = "Administrator";
+                Administrator administrator = new Administrator(doctor.getuserID(), doctor.getName(), doctor.getGender());
+                administrators.add(administrator);
+                break;
+            default:
+                System.out.println("Invalid option. Please try again.");
+                return;
+        }
+    }
+
+    // Find Doctor by ID
+    public static Doctor findDoctorByID(String doctorID, List<Doctor> doctors) {
+        for (Doctor doctor : doctors) {
+            if (doctor.getuserID().equals(doctorID)) {
+                return doctor;
+            }
+        }
+        return null;
     }
 
     @Override

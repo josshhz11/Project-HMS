@@ -32,6 +32,10 @@ public abstract class User implements Serializable {
         return name;
     }
 
+    public String getGender(){
+        return gender;
+    }
+
     // Hash the password
     private String hashPassword(String password) {
         try {

@@ -7,7 +7,6 @@ public class Patient extends User {
     private String email;
     private String contactNumber;
     private String dateOfBirth;
-    private String bloodType;
     private List<Appointment> appointments;
     private MedicalRecord medicalRecord;
     private static Scanner sc = new Scanner(System.in);
