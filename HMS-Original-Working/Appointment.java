@@ -61,8 +61,7 @@ public class Appointment {
                 Prescribe Medication for Appointment (if any): 
                 1. Yes
                 2. No
-                Choose options (1-2):
-                """);
+                Choose options (1-2): """);
         int option = sc.nextInt();
         
         switch (option) {
@@ -98,9 +97,5 @@ public class Appointment {
     public String toString() {
         return "Appointment [Appointment ID=" + appointmentID + ", Patient ID=" + patientID + ", Doctor ID=" + doctorID
                 + ", Date and Time=" + dateTime + ", Status=" + status + "]";
-    }
-
-    public static void closeScanner() {
-        sc.close(); // Close scanner when it’s no longer needed
     }
 }

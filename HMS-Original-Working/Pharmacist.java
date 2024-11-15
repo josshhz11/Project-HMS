@@ -74,14 +74,14 @@ public class Pharmacist extends User {
     @Override
     public void displayMenu() {
         System.out.println("""
+                
                 Pharmacist Display Menu: 
                 1. View Appointment Outcome Record
                 2. Update Prescription Status
                 3. View Medication Inventory
                 4. Submit Replenishment Request
                 5. Logout
-                Choose options (1-5):
-                """);
+                Choose options (1-5): """);
 
     }
 }

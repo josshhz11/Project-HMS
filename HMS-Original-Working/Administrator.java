@@ -30,8 +30,7 @@ public class Administrator extends User {
                         1. Add Staff
                         2. Update Staff
                         3. Remove Staff
-                        Enter action (1-3):
-                    """);
+                        Enter action (1-3): """);
                 int choice2 = sc.nextInt();
 
                 switch(choice2) {
@@ -97,8 +96,7 @@ public class Administrator extends User {
                 Hospital Staff Menu: 
                 1. View Medication Inventory
                 2. Manage Medication Inventory
-                Choose options (1-2):
-                """);
+                Choose options (1-2): """);
         int choice1 = sc.nextInt();
 
         switch(choice1) {
@@ -133,14 +131,14 @@ public class Administrator extends User {
     @Override
     public void displayMenu() {
         System.out.println("""
+                
                 Administrator Display Menu: 
                 1. View and Manage Hospital Staff
                 2. View Appointment Details
                 3. View and Manage Medication Inventory
                 4. Approve Replenishment Requests
                 5. Logout
-                Choose options (1-5):
-                """);
+                Choose options (1-5): """);
     }
 }
 

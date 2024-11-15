@@ -25,6 +25,9 @@ public class MedicalRecord {
 
     @Override
     public String toString() {
-        return "MedicalRecord [Patient ID=" + patientID + ", Blood Type=" + bloodType + ", Diagnoses=" + diagnoses + ", Treatments=" + treatments + "]";
+        return "Patient ID: " + patientID + 
+        "\nBlood Type: " + bloodType + 
+        "\nDiagnoses: " + diagnoses + 
+        "\nTreatments: " + treatments;
     }
 }

@@ -138,7 +138,7 @@ public class Main {
     // Handle Patient options
     private boolean handlePatientOptions(Patient patient, boolean loggedIn, int choice, Scanner sc) {
         switch (choice) {
-            case 1 -> patient.viewMedicalRecord();
+            case 1 -> patient.viewPatientInformation();
             case 2 -> patient.updateContactInfo();
             case 3 -> patient.viewAvailableSlots(schedulingSystem);
             case 4 -> patient.scheduleAppointment(schedulingSystem);

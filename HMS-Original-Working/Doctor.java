@@ -40,8 +40,7 @@ public class Doctor extends User {
         System.out.println("""
                 1. Diagnosis
                 2. Treatment
-                Choose options (1-2) to update:
-                """);
+                Choose options (1-2) to update: """);
         int option = sc.nextInt();
 
         switch (option) {
@@ -91,8 +90,7 @@ public class Doctor extends User {
                     System.out.println("""
                             1. Accept
                             2. Reject
-                            Choose options (1-2):
-                            """);
+                            Choose options (1-2): """);
                     int option = sc.nextInt();
                     
                     switch (option) {
@@ -135,6 +133,7 @@ public class Doctor extends User {
     @Override
     public void displayMenu() {
         System.out.println("""
+                
                 Doctor Display Menu: 
                 1. View Patient Medical Records
                 2. Update Patient Medical Records
@@ -144,7 +143,6 @@ public class Doctor extends User {
                 6. View Upcoming Appointments
                 7. Record Appointment Outcome
                 8. Logout
-                Choose options (1-8):
-                """);
+                Choose options (1-8): """);
     }
 }
