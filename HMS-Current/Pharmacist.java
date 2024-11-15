@@ -80,8 +80,7 @@ public class Pharmacist extends User {
                 3. View Medication Inventory
                 4. Submit Replenishment Request
                 5. Logout
-                Choose options (1-5):
-                """);
+                Choose options (1-5): """);
 
     }
 }

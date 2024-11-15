@@ -81,8 +81,4 @@ public class Inventory {
         }
         return null;
     }
-
-    public static void closeScanner() {
-        sc.close(); // Close scanner when it’s no longer needed
-    }
 }

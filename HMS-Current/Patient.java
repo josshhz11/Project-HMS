@@ -44,8 +44,7 @@ public class Patient extends User {
                 Update Contact Info: 
                 1. Email
                 2. Contact Number
-                Choose option (1-2) to update: 
-                """);
+                Choose option (1-2) to update:  """);
         int option = sc.nextInt();
         sc.nextLine();  // Clear the newline
 
@@ -193,8 +192,7 @@ public class Patient extends User {
                 7. View Scheduled Appointments
                 8. View Past Appointment Outcome Records
                 9. Logout
-                Choose options (1-9):
-                """);
+                Choose options (1-9): """);
     }
 
     // public static void closeScanner() {
