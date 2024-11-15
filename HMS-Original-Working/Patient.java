@@ -42,7 +42,7 @@ public class Patient extends User {
 
         switch (option) {
             case 1:
-                System.out.println(medicalRecord);
+                System.out.println(medicalRecord.toString());
                 break;
             case 2:
                 viewPersonalInformation();

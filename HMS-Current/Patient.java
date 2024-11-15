@@ -42,7 +42,7 @@ public class Patient extends User {
 
         switch (option) {
             case 1:
-                System.out.println(medicalRecord);
+                System.out.println(medicalRecord.toString());
                 break;
             case 2:
                 viewPersonalInformation();
@@ -51,12 +51,6 @@ public class Patient extends User {
                 System.out.println("Invalid option. Please try again.");
                 return;
         }
-    }
-
-    // View medical record
-    public void viewMedicalRecord() {
-        System.out.println("Medical Record for Patient ID: " + userID);
-        System.out.println(medicalRecord);
     }
 
     public void viewPersonalInformation() {
