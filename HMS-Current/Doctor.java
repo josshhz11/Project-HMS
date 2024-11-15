@@ -133,6 +133,7 @@ public class Doctor extends User {
     @Override
     public void displayMenu() {
         System.out.println("""
+                
                 Doctor Display Menu: 
                 1. View Patient Medical Records
                 2. Update Patient Medical Records

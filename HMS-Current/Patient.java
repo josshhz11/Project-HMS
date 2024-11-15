@@ -32,10 +32,41 @@ public class Patient extends User {
         return medicalRecord;
     }
 
+    public void viewPatientInformation() {
+        System.out.println("""
+                Which information would you like to view?
+                1. Medical Record
+                2. Personal Information
+                Choose options (1-2): """);
+        int option = sc.nextInt();
+
+        switch (option) {
+            case 1:
+                System.out.println(medicalRecord);
+                break;
+            case 2:
+                viewPersonalInformation();
+                break;
+            default:
+                System.out.println("Invalid option. Please try again.");
+                return;
+        }
+    }
+
     // View medical record
     public void viewMedicalRecord() {
         System.out.println("Medical Record for Patient ID: " + userID);
         System.out.println(medicalRecord);
+    }
+
+    public void viewPersonalInformation() {
+        System.out.println("Personal Information for Patient ID: " + userID);
+        System.out.println("Patient Name: " + name);
+        System.out.println("Date of Birth: " + dateOfBirth);
+        System.out.println("Gender: " + gender);
+        System.out.println("Contact Number: " + contactNumber);
+        System.out.println("Email Address: " + email);
+        System.out.println();
     }
 
     // Update contact information
@@ -46,7 +77,7 @@ public class Patient extends User {
                 2. Contact Number
                 Choose option (1-2) to update:  """);
         int option = sc.nextInt();
-        sc.nextLine();  // Clear the newline
+        sc.nextLine();
 
         switch (option) {
             case 1:
@@ -182,8 +213,9 @@ public class Patient extends User {
     @Override
     public void displayMenu() {
         System.out.println("""
+                
                 Patient Display Menu: 
-                1. View Medical Record
+                1. View Patient Information
                 2. Update Personal Information
                 3. View Available Appointment Slots
                 4. Schedule an Appointment

@@ -131,6 +131,7 @@ public class Administrator extends User {
     @Override
     public void displayMenu() {
         System.out.println("""
+                
                 Administrator Display Menu: 
                 1. View and Manage Hospital Staff
                 2. View Appointment Details
