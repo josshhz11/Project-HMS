@@ -26,15 +26,23 @@ public class Billing{
       return (totalAmount+CONST_CONSUL) * (1 + CONST_TAX/100.0);
     }
 
+    //print final bill
     public void displayPrintingSummary(){//print final bill
-      System.out.println("Invoice for ID: " + patientID);
+      System.out.println("Invoice for Patient ID: " + patientID);
       System.out.println("------------------------------");
       for (BillingItem item : billingItems){
         System.out.println(item);
       }
-      System.out.println("Total (excluding GST): $" + totalAmount + CONST_CONSUL);
+      System.out.println("Consultation Fee: $" + CONST_CONSUL);
+      System.out.println("Total (excluding GST): $" + (totalAmount + CONST_CONSUL));
       System.out.println("Total (including GST): $" + calculatetotalAmount());
     }
+
+    //add new billing item
+    public void addBillingItem(String description, double cost){
+      BillingItem item = new BillingItem(description, cost);
+      billingItems.add(item);
+      totalAmount += cost;
 
     private class BillingItem{
     	private String description;
@@ -52,10 +60,7 @@ public class Billing{
     }
     
 
-    public void addBillingItem(String description, double cost){
-      BillingItem item = new BillingItem(description, cost);
-      billingItems.add(item);
-      totalAmount += cost;
+
     
 
 }
