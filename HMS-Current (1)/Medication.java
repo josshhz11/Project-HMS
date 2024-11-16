@@ -43,8 +43,8 @@ public class Medication {
         this.lowStockAlert = newQuantity;
     }
 
-    public void updateReplenishmentRequest(int newQuantity) {
-        this.replenishmentRequest = newQuantity;
+    public void updateReplenishmentRequest(int replenishmentAmount) {
+        this.replenishmentRequest = replenishmentAmount;
     }
 
     public boolean getLevelAlert() {

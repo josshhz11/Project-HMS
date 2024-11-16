@@ -140,24 +140,28 @@ public class Inventory {
         displayInventory(true);
     }
 
-    public void fulfillReplenishmentRequest(String medicationID) {
-        for (Medication medication : medications) {
-            if (medication.getMedicationID() == medicationID) {
-                if (medication.getReplenishmentRequest() != 0) {
-                    medication.updateQuantity(medication.getQuantity() + medication.getReplenishmentRequest());
-                    medication.updateReplenishmentRequest(0);
-                    System.out.println("Replenishment for Medication " + medication.getName() + " successful.");
-                } else {
-                    System.out.println("Error: No replenishment request.");
-                }
-            }
+    public void newReplenishmentRequest(String medicationID, int replenishAmount) {
+        Medication medication = findMedicationByID(medicationID);
+
+        if (medication != null) {
+            medication.updateReplenishmentRequest(medication.getReplenishmentRequest() + replenishAmount);
+            System.out.println("Replenishment Request Submitted.");
+        } else {
+            System.out.println("Medication not found.");
+            return;
         }
     }
 
-    public void newReplenishmentRequest(String medicationID, int quantity) {
-        for (Medication medication : medications) {
-            if (medication.getMedicationID() == medicationID) {
-                medication.updateReplenishmentRequest(medication.getReplenishmentRequest() + quantity);
+    public void fulfillReplenishmentRequest(String medicationID) {
+        Medication medication = findMedicationByID(medicationID);
+
+        if (medication != null) {
+            if (medication.getReplenishmentRequest() != 0) {
+                medication.updateQuantity(medication.getQuantity() + medication.getReplenishmentRequest());
+                medication.updateReplenishmentRequest(0);
+                System.out.println("Replenishment for Medication " + medication.getName() + " successful.");
+            } else {
+                System.out.println("Error: No replenishment request.");
             }
         }
     }

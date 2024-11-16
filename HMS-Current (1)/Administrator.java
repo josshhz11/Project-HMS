@@ -286,14 +286,17 @@ public class Administrator extends User {
                         break;
                     case 2: // Remove Existing Medication from Inventory
                         System.out.println("Remove Existing Medication from Inventory: ");
+                        inventory.displayInventory(false);
                         inventory.removeMedication();
                         break;
                     case 3: // Update Existing Inventory Stock
                         System.out.println("Update Existing Inventory Stock: ");
+                        inventory.displayInventory(false);
                         inventory.updateStock();
                         break;
                     case 4: // Update Low Stock Levels
-                        System.out.println("Update Existing Inventory Stock: ");
+                        System.out.println("Update Low Stock Levels: ");
+                        inventory.displayInventory(false);
                         inventory.updateLowStockAlert();
                     default:
                         break;
@@ -307,10 +310,9 @@ public class Administrator extends User {
 
     public void approveReplenishmentRequest(Inventory inventory) {
         inventory.viewReplenishmentRequests();
-        System.out.println("Medication Name to Replenish: ");
-        sc.nextLine();
-        String name = sc.nextLine();
-        inventory.fulfillReplenishmentRequest(name);
+        System.out.println("Medication ID to Replenish: ");
+        String medicationID = sc.next();
+        inventory.fulfillReplenishmentRequest(medicationID);
     }
 
     // for the administrator function

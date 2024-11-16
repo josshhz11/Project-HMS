@@ -70,11 +70,10 @@ public class Pharmacist extends User {
     public void submitReplenishmentRequest(Inventory inventory) {
         inventory.displayInventory(false);
         System.out.println("Submit Replenishment Request for Medication ID: ");
-        String medicationID = sc.nextLine();
+        String medicationID = sc.next();
         System.out.println("Amount to replenish: ");
         int replenishAmount = sc.nextInt();
         inventory.newReplenishmentRequest(medicationID, replenishAmount);
-        System.out.println("Replenishment Request Submitted.");
     }
 
     // for the administrator function
