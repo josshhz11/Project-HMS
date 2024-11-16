@@ -28,6 +28,10 @@ public abstract class User implements Serializable {
         return userID;
     }
 
+    public String getPassword(){
+        return passwordHash;
+    }
+
     public String getName(){
         return name;
     }

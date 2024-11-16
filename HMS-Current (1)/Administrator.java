@@ -278,7 +278,6 @@ public class Administrator extends User {
                     4. Update Low Stock Levels
                     Enter action (1-4): """);
                 choice2 = sc.nextInt();
-                String medID, medName; 
 
                 switch (choice2) {
                     case 1: // Add New Medication to Inventory
@@ -299,6 +298,10 @@ public class Administrator extends User {
                     default:
                         break;
                 }
+                break;
+            default:
+                System.out.println("Invalid Option. Please try again.");
+                break;
         }
     }
 

@@ -67,7 +67,7 @@ public class Appointment {
         switch (option) {
             case 1:
                 System.out.println("Medication ID: ");
-                String medicationID = sc.nextLine();
+                String medicationID = sc.next();
                 System.out.println("Quantity: ");
                 int quantity = sc.nextInt();
                 Medication medication = inventory.findMedicationByID(medicationID);
@@ -82,6 +82,7 @@ public class Appointment {
         }
 
         System.out.println("Consultation Notes for Appointment (if any): ");
+        sc.nextLine();
         this.consultationNotes = sc.nextLine();
     }
 
