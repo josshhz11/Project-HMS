@@ -268,7 +268,7 @@ public class Administrator extends User {
 
         switch(choice1) {
             case 1: // View Medication Inventory
-                inventory.displayInventory();
+                inventory.displayInventory(false);
                 break;
             case 2: // Manage Medication Inventory
                 System.out.println(""" 
@@ -307,7 +307,7 @@ public class Administrator extends User {
 
     public void approveReplenishmentRequest(Inventory inventory) {
         inventory.viewReplenishmentRequests();
-        System.out.println("Medication Name to replenish: ");
+        System.out.println("Medication Name to Replenish: ");
         sc.nextLine();
         String name = sc.nextLine();
         inventory.fulfillReplenishmentRequest(name);

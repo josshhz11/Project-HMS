@@ -92,13 +92,15 @@ public class Inventory {
         }
     }
 
-    public void displayInventory() {
+    public void displayInventory(boolean replenishmentRequest) {
         System.out.println("===============================================================================");
-        System.out.println("                             Current Inventory                                 ");
+        if (replenishmentRequest) {
+            System.out.println("                          Replenishment Requests                               ");
+        } else {
+            System.out.println("                             Current Inventory                                 ");
+        }
         System.out.println("===============================================================================");
         
-        // Updated header to include "Low Stock Alert"
-        // Adjusted column widths to fit the new column
         System.out.printf(
             "%-15s %-20s %-10s %-15s %-15s%n",
             "Medication ID",
@@ -111,6 +113,12 @@ public class Inventory {
         System.out.println("-------------------------------------------------------------------------------");
         
         for (Medication medication : medications) {
+            if (replenishmentRequest) {
+                if (medication.getReplenishmentRequest() == 0) {
+                    continue;
+                }
+            }
+            
             System.out.printf(
                 "%-15s %-20s %-10d %-15d %-15s%n",
                 medication.getMedicationID(),
@@ -129,15 +137,7 @@ public class Inventory {
     }
 
     public void viewReplenishmentRequests() {
-        for (Medication medication : medications) {
-            if (medication.getReplenishmentRequest() != 0) {
-                System.out.println("Medication ID: " + medication.getMedicationID());
-                System.out.println("Medication Name: " + medication.getName());
-                System.out.println("Quantity: " + medication.getQuantity());
-                System.out.println("Replenishment Request: " + medication.getReplenishmentRequest());
-                System.out.println("-----------------------------------------------------------");
-            }
-        }
+        displayInventory(true);
     }
 
     public void fulfillReplenishmentRequest(String medicationID) {

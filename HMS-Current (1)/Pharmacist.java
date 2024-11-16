@@ -64,11 +64,11 @@ public class Pharmacist extends User {
     // Method to view the current medication inventory
     public void viewInventory(Inventory inventory) {
         System.out.println("Viewing medication inventory:");
-        inventory.displayInventory();
+        inventory.displayInventory(false);
     }
 
     public void submitReplenishmentRequest(Inventory inventory) {
-        inventory.displayInventory();
+        inventory.displayInventory(false);
         System.out.println("Submit Replenishment Request for Medication ID: ");
         String medicationID = sc.nextLine();
         System.out.println("Amount to replenish: ");

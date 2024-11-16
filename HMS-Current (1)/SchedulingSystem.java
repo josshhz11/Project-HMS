@@ -45,7 +45,7 @@ public class SchedulingSystem {
     // Method to find a doctor by ID
     public Doctor getDoctorById(String doctorID) {
         for (Doctor doctor : doctorAvailability.keySet()) {
-            if (doctor.getDoctorID().equals(doctorID)) {
+            if (doctor.getuserID().equals(doctorID)) {
                 return doctor;
             }
         }
@@ -54,7 +54,7 @@ public class SchedulingSystem {
 
     private Doctor findDoctorById(String doctorID) {
         for (Doctor doctor : doctorAvailability.keySet()) {
-            if (doctor.getDoctorID().equals(doctorID)) {
+            if (doctor.getuserID().equals(doctorID)) {
                 return doctor;
             }
         }
