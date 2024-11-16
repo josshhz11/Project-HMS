@@ -1,5 +1,3 @@
-package sce.sc2002.ccjy.groupassignment;
-
 import java.util.ArrayList;
 import java.util.List;
 
