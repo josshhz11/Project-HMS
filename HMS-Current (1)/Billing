@@ -11,6 +11,9 @@ public class Billing{
     //GST percentage
     private static final int CONST_TAX = 9;
 
+    //consultation fee
+    private static final int CONST_CONSUL = 10;
+
     //constructor
     public Billing(int patientID){
       this.patientID = patientID;
@@ -20,7 +23,7 @@ public class Billing{
 
     //include 9% gst
     public double calculatetotalAmount(){
-      return totalAmount * (1 + CONST_TAX/100.0);
+      return (totalAmount+CONST_CONSUL) * (1 + CONST_TAX/100.0);
     }
 
     public void displayPrintingSummary(){//print final bill
@@ -29,7 +32,7 @@ public class Billing{
       for (BillingItem item : billingItems){
         System.out.println(item);
       }
-      System.out.println("Total (excluding GST): $" + totalAmount);
+      System.out.println("Total (excluding GST): $" + totalAmount + CONST_CONSUL);
       System.out.println("Total (including GST): $" + calculatetotalAmount());
     }
 
