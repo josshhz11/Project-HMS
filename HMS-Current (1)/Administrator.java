@@ -8,14 +8,8 @@ public class Administrator extends User {
         super(userID, null, name, gender, "Administrator"); // Default password is null
     }
 
-    public String getUserID() {
-        return userID;
-    }
-
     // IMPORTANT
     public void viewAndManageHospitalStaff(List<Doctor> doctors, List<Pharmacist> pharmacists, List<Administrator> administrators, String[] roles) {
-        // Can put the entire view and manage options menu within here
-        // Include addStaff(), updateStaff(), etc. here
         System.out.println("""
                 Hospital Staff Menu: 
                 1. View Hospital Staff
@@ -269,7 +263,7 @@ public class Administrator extends User {
 
         switch(choice1) {
             case 1: // View Medication Inventory
-                // TODO
+                inventory.displayInventory();
                 break;
             case 2: // Manage Medication Inventory
                 System.out.print("Enter Medication ID to update stock: ");
@@ -278,6 +272,21 @@ public class Administrator extends User {
                 int newQuantity = sc.nextInt();
                 updateInventory(inventory, medicationID, newQuantity);
                 break;
+
+                // NEW UPDATED ONE
+                System.out.print("Enter Medication name to update stock: ");
+                String name = sc.nextLine(); // Read medication name
+            
+                System.out.print("Enter new stock quantity: ");
+                while (!sc.hasNextInt()) { // Validate input is an integer
+                    System.out.println("Invalid input. Please enter a valid integer:");
+                    sc.next(); // Clear invalid input
+                }
+                int newQuantity = sc.nextInt(); // Read the quantity
+                
+                sc.nextLine(); // Explicitly consume the leftover newline character
+            
+                updateInventory(inventory, name, newQuantity); // Update inventory
             default:
                 System.out.println("Invalid option. Please try again.");
                 break;
@@ -291,9 +300,10 @@ public class Administrator extends User {
 
     public void approveReplenishmentRequest(Inventory inventory) {
         inventory.viewReplenishmentRequests();
-        System.out.println("Medication ID to replenish: ");
-        String medicationID = sc.nextLine();
-        inventory.fulfillReplenishmentRequest(medicationID);
+        System.out.println("Medication Name to replenish: ");
+        sc.nextLine();
+        String name = sc.nextLine();
+        inventory.fulfillReplenishmentRequest(name);
     }
 
     // for the administrator function
