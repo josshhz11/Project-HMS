@@ -1,18 +1,18 @@
+import java.util.List;
+
 public class Medication {
     private String medicationID;
     private String name;
     private int quantity;
     private int replenishmentRequest;
     private int lowStockAlert;
-    private int levelAlert;
 
-    public Medication(String medicationID, String name, int quantity, int lowStockAlert, int levelAlert) {
+    public Medication(String medicationID, String name, int quantity, int lowStockAlert) {
         this.medicationID = medicationID;
         this.name = name;
         this.quantity = quantity;
-        this.replenishmentRequest = 0;
+        this.replenishmentRequest = 0; // default
         this.lowStockAlert = lowStockAlert;
-        this.levelAlert = levelAlert;
     }
 
     public String getName() {
@@ -43,8 +43,28 @@ public class Medication {
         return this.lowStockAlert;
     }
 
-    public int getLevelAlert() {
-        return this.levelAlert;
+
+    // for the administrator
+    public void updateLowStockAlert() {
+
+    }
+
+    public boolean getLevelAlert() {
+        if (this.quantity < this.getLowStockAlert()) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    // Find Medication by ID
+    public static Medication findMedicationByID(String medicationID, List<Medication> medications) {
+        for (Medication medication : medications) {
+            if (medication.getMedicationID().equals(medicationID)) {
+                return medication;
+            }
+        }
+        return null;
     }
 
 }

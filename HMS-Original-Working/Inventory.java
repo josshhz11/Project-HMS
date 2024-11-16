@@ -81,4 +81,9 @@ public class Inventory {
         }
         return null;
     }
+
+    public void removeMedication() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removeMedication'");
+    }
 }

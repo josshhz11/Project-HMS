@@ -10,7 +10,7 @@ public class Main {
     public List<Doctor> doctors = new ArrayList<>();
     public List<Pharmacist> pharmacists = new ArrayList<>();
     public List<Administrator> administrators = new ArrayList<>();
-    private Inventory inventory = new Inventory();
+    public Inventory inventory = new Inventory();
     private SchedulingSystem schedulingSystem = new SchedulingSystem();
     private String[] roles = {"Patient", "Doctor", "Pharmacist", "Administrator"};
 
@@ -114,6 +114,7 @@ public class Main {
             try {
                 CSVLoader.loadPatientsFromCSV("Patient_List.csv", this);
                 CSVLoader.loadStaffFromCSV("Staff_List.csv", this);
+                CSVLoader.loadMedicineFromCSV("Medicine_List.csv", this);
                 System.out.println("User data loaded from CSV files.");
                 saveUserData(); // Save to serialized file for future runs
             } catch (IOException e) {

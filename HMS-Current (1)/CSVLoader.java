@@ -79,7 +79,8 @@ public static void loadStaffFromCSV(String filePath, Main mainInstance) throws I
 
         switch (role) {
             case "Doctor":
-                Doctor doctor = new Doctor(staffID, name, gender);
+                String specialty = values[5];
+                Doctor doctor = new Doctor(staffID, name, gender, specialty);
                 mainInstance.doctors.add(doctor); // Add doctor to Main's doctors list
                 break;
             case "Pharmacist":
@@ -96,4 +97,30 @@ public static void loadStaffFromCSV(String filePath, Main mainInstance) throws I
         }
     }
     br.close();
-}}
+}
+
+public static void loadMedicineFromCSV(String filePath, Main mainInstance) throws IOException {
+    BufferedReader br = new BufferedReader(new FileReader(filePath));
+    String line;
+    boolean header = true;
+
+    while ((line = br.readLine()) != null) {
+        if (header) {
+            header = false; // Skip header line
+            continue;
+        }
+        
+        String[] values = line.split(",");
+        String medicationID = values[0];
+        String name = values[1]; // Medicine Name
+        int quantity = Integer.parseInt(values[2].trim());
+        int lowStockAlert = Integer.parseInt(values[3].trim());
+
+        // Create a new Medication object and add it to Main's inventory list
+        Medication medication = new Medication(medicationID, name, quantity, lowStockAlert);
+        mainInstance.inventory.updateInventory(medication); // Populate Main's Inventory list directly
+    }
+    br.close();
+}
+
+}

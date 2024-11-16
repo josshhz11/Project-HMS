@@ -82,7 +82,10 @@ public class Pharmacist extends User {
         switch (newRole) {
             case 1:
                 this.role = "Doctor";
-                Doctor doctor = new Doctor(pharmacist.getuserID(), pharmacist.getName(), pharmacist.getGender());
+                System.out.println("Enter Doctor Specialty: ");
+                sc.nextLine();
+                String specialty = sc.nextLine();
+                Doctor doctor = new Doctor(pharmacist.getuserID(), pharmacist.getName(), pharmacist.getGender(), specialty);
                 doctors.add(doctor);
                 break;
             case 3:

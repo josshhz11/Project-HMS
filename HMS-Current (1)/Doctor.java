@@ -8,9 +8,9 @@ public class Doctor extends User {
     private static Scanner sc = new Scanner(System.in);
 
     // Constructor updated to exclude password
-    public Doctor(String userID, String name, String gender) {
+    public Doctor(String userID, String name, String gender, String specialty) {
         super(userID, null, name, gender, "Doctor"); // Default password is null
-        this.specialty = null; // Specialty could be set later if needed
+        this.specialty = specialty; // Cardiology, Psychiatry, Radiology, Infectious Diseases
         this.schedule = new ArrayList<>();
     }
 

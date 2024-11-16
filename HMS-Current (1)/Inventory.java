@@ -12,14 +12,28 @@ public class Inventory {
 
     public void addMedication() {
         System.out.println("Enter Medication ID: ");
-        String medicationID = sc.nextLine();
+        String medicationID = sc.next();
         System.out.println("Enter Medication Name: ");
+        sc.nextLine();
         String name = sc.nextLine();
         System.out.println("Enter Medication Quantity: ");
         int quantity = sc.nextInt();
 
-        Medication newMedication = new Medication(medicationID, name, quantity);
+        Medication newMedication = new Medication(medicationID, name, quantity, 5); // lowStockAlert as 5 as the default
         medications.add(newMedication);
+        System.out.println("Medication " + newMedication.getName() + " successfully added to inventory.");
+    }
+
+    public void removeMedication() {
+        System.out.println("Enter Medication ID: ");
+        String medicationID = sc.next();
+        System.out.println("Enter Medication Name: ");
+        sc.nextLine();
+        String name = sc.nextLine();
+
+        Medication medication = findMedicationByID(medicationID);
+        medications.remove(medication);
+        System.out.println("Medication " + medication.getName() + " successfully removed from inventory.");
     }
 
     public void updateStock(String medicationID, int newQuantity) {
@@ -31,12 +45,26 @@ public class Inventory {
     }
 
     public void displayInventory() {
-        System.out.println("Current Inventory:");
+        System.out.println("=====================================================");
+        System.out.println("                  Current Inventory                  ");
+        System.out.println("=====================================================");
+        System.out.printf("%-15s %-20s %-10s %-15s%n", "Medication ID", "Name", "Quantity", "Replenishment");
+        System.out.println("-----------------------------------------------------");
+        
         for (Medication medication : medications) {
-            System.out.println("Medication ID: " + medication.getMedicationID());
-            System.out.println("Medication: " + medication.getName());
-            System.out.println("Quantity: " + medication.getQuantity());
+            System.out.printf(
+                "%-15s %-20s %-10d %-15d%n",
+                medication.getMedicationID(),
+                medication.getName(),
+                medication.getQuantity(),
+                medication.getReplenishmentRequest()
+            );
         }
+        System.out.println("=====================================================");
+    }
+
+    public void updateInventory(Medication medication) {
+        this.medications.add(medication);
     }
 
     public void viewReplenishmentRequests() {

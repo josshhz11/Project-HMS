@@ -102,6 +102,7 @@ public class Administrator extends User {
         String name = sc.nextLine();
         System.out.println("Enter Gender: ");
         String gender = sc.next();
+
         System.out.println("""
                 Enter Staff Role:
                 1. Doctor
@@ -112,7 +113,10 @@ public class Administrator extends User {
 
         switch (role) {
             case 1:
-                Doctor doctor = new Doctor(staffID, name, gender);
+                System.out.println("Enter Specialty: ");
+                sc.nextLine();
+                String specialty = sc.nextLine();
+                Doctor doctor = new Doctor(staffID, name, gender, specialty);
                 doctors.add(doctor);
                 break;
             case 2:
@@ -260,36 +264,50 @@ public class Administrator extends User {
                 2. Manage Medication Inventory
                 Choose options (1-2): """);
         int choice1 = sc.nextInt();
+        int choice2;
 
         switch(choice1) {
             case 1: // View Medication Inventory
                 inventory.displayInventory();
                 break;
             case 2: // Manage Medication Inventory
-                System.out.print("Enter Medication ID to update stock: ");
-                String medicationID = sc.nextLine();
-                System.out.print("Enter new stock quantity: ");
-                int newQuantity = sc.nextInt();
-                updateInventory(inventory, medicationID, newQuantity);
-                break;
+                System.out.println(""" 
+                    1. Add New Medication to Inventory
+                    2. Remove Existing Medication from Inventory
+                    3. Update Existing Inventory Stock
+                    4. Update Low Stock Levels
+                    Enter action (1-4): """);
+                choice2 = sc.nextInt();
+                String medID, medName; 
 
-                // NEW UPDATED ONE
-                System.out.print("Enter Medication name to update stock: ");
-                String name = sc.nextLine(); // Read medication name
-            
-                System.out.print("Enter new stock quantity: ");
-                while (!sc.hasNextInt()) { // Validate input is an integer
-                    System.out.println("Invalid input. Please enter a valid integer:");
-                    sc.next(); // Clear invalid input
+                switch (choice2) {
+                    case 1: // Add New Medication to Inventory
+                        System.out.println("Add New Medication to Inventory: ");
+                        inventory.addMedication();
+                        break;
+                    case 2: // Remove Existing Medication from Inventory
+                        System.out.println("Remove Existing Medication from Inventory: ");
+                        inventory.removeMedication();
+                        break;
+                    case 3: // Update Existing Inventory Stock
+                        System.out.println("Update Existing Inventory Stock: ");
+                        System.out.println("Enter Medication ID: ");
+                        medID = sc.next();
+                        System.out.println("New Quantity: ");
+                        int newQuantity = sc.nextInt();
+                        updateInventory(inventory, medID, newQuantity);
+                        break;
+                    case 4: // Update Low Stock Levels
+                        // System.out.println("Update Existing Inventory Stock: ");
+                        // System.out.println("Enter Medication ID: ");
+                        // medID = sc.next();
+                        // Medication medication = Medication.findMedicationByID(medID, inventory);
+                        // System.out.println("New Stock Level: ");
+                        // int newStockLevel = sc.nextInt();
+                        
+                    default:
+                        break;
                 }
-                int newQuantity = sc.nextInt(); // Read the quantity
-                
-                sc.nextLine(); // Explicitly consume the leftover newline character
-            
-                updateInventory(inventory, name, newQuantity); // Update inventory
-            default:
-                System.out.println("Invalid option. Please try again.");
-                break;
         }
     }
     
@@ -311,7 +329,10 @@ public class Administrator extends User {
         switch (newRole) {
             case 1:
                 this.role = "Doctor";
-                Doctor doctor = new Doctor(administrator.getuserID(), administrator.getName(), administrator.getGender());
+                System.out.println("Enter Doctor Specialty: ");
+                sc.nextLine();
+                String specialty = sc.nextLine();
+                Doctor doctor = new Doctor(administrator.getuserID(), administrator.getName(), administrator.getGender(), specialty);
                 doctors.add(doctor);
                 break;
             case 2:
