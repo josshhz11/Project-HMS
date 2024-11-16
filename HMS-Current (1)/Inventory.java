@@ -36,20 +36,26 @@ public class Inventory {
         System.out.println("Medication " + medication.getName() + " successfully removed from inventory.");
     }
 
-    public void updateStock(String medicationID, int newQuantity) {
-        for (Medication medication : medications) {
-            if (medication.getMedicationID() == medicationID) {
-                medication.updateQuantity(newQuantity);
-            }
-        }
+    public void updateStock() {
+        System.out.println("Enter Medication ID: ");
+        String medicationID = sc.next();
+        System.out.println("Enter Medication Name: ");
+        sc.nextLine();
+        String name = sc.nextLine();
+        System.out.println("New Quantity: ");
+        int newQuantity = sc.nextInt();
+
+        Medication medication = findMedicationByID(medicationID);
+        medication.updateQuantity(newQuantity);
+        System.out.println("Inventory updated successfully.");
     }
 
     public void displayInventory() {
-        System.out.println("=====================================================");
-        System.out.println("                  Current Inventory                  ");
-        System.out.println("=====================================================");
+        System.out.println("=============================================================");
+        System.out.println("                      Current Inventory                      ");
+        System.out.println("=============================================================");
         System.out.printf("%-15s %-20s %-10s %-15s%n", "Medication ID", "Name", "Quantity", "Replenishment");
-        System.out.println("-----------------------------------------------------");
+        System.out.println("-------------------------------------------------------------");
         
         for (Medication medication : medications) {
             System.out.printf(
@@ -60,7 +66,7 @@ public class Inventory {
                 medication.getReplenishmentRequest()
             );
         }
-        System.out.println("=====================================================");
+        System.out.println("=============================================================");
     }
 
     public void updateInventory(Medication medication) {

@@ -291,11 +291,7 @@ public class Administrator extends User {
                         break;
                     case 3: // Update Existing Inventory Stock
                         System.out.println("Update Existing Inventory Stock: ");
-                        System.out.println("Enter Medication ID: ");
-                        medID = sc.next();
-                        System.out.println("New Quantity: ");
-                        int newQuantity = sc.nextInt();
-                        updateInventory(inventory, medID, newQuantity);
+                        inventory.updateStock();
                         break;
                     case 4: // Update Low Stock Levels
                         // System.out.println("Update Existing Inventory Stock: ");
@@ -309,11 +305,6 @@ public class Administrator extends User {
                         break;
                 }
         }
-    }
-    
-    public void updateInventory(Inventory inventory, String medicationID, int newQuantity) {
-        inventory.updateStock(medicationID, newQuantity);
-        System.out.println("Inventory updated successfully.");
     }
 
     public void approveReplenishmentRequest(Inventory inventory) {
