@@ -255,7 +255,7 @@ public class Administrator extends User {
         // Can put the entire view and manage options menu within here
         // Include updateInventory() below
         System.out.println("""
-                Hospital Staff Menu: 
+                Medication Inventory Menu: 
                 1. View Medication Inventory
                 2. Manage Medication Inventory
                 Choose options (1-2): """);
