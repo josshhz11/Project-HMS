@@ -31,22 +31,20 @@ public class Medication {
         return this.replenishmentRequest;
     }
 
-    public void updateQuantity(int newQuantity) {
-        this.quantity = newQuantity;
-    }
-
-    public void updateReplenishmentRequest(int newQuantity) {
-        this.replenishmentRequest = newQuantity;
-    }
-
     public int getLowStockAlert() {
         return this.lowStockAlert;
     }
 
+    public void updateQuantity(int newQuantity) {
+        this.quantity = newQuantity;
+    }
 
-    // for the administrator
-    public void updateLowStockAlert() {
+    public void updateLowStockAlert(int newQuantity) {
+        this.lowStockAlert = newQuantity;
+    }
 
+    public void updateReplenishmentRequest(int newQuantity) {
+        this.replenishmentRequest = newQuantity;
     }
 
     public boolean getLevelAlert() {

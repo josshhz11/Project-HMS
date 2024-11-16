@@ -294,13 +294,8 @@ public class Administrator extends User {
                         inventory.updateStock();
                         break;
                     case 4: // Update Low Stock Levels
-                        // System.out.println("Update Existing Inventory Stock: ");
-                        // System.out.println("Enter Medication ID: ");
-                        // medID = sc.next();
-                        // Medication medication = Medication.findMedicationByID(medID, inventory);
-                        // System.out.println("New Stock Level: ");
-                        // int newStockLevel = sc.nextInt();
-                        
+                        System.out.println("Update Existing Inventory Stock: ");
+                        inventory.updateLowStockAlert();
                     default:
                         break;
                 }

@@ -10,6 +10,7 @@ public class Inventory {
         this.medications = new ArrayList<>();
     }
 
+    // for the administrator
     public void addMedication() {
         System.out.println("Enter Medication ID: ");
         String medicationID = sc.next();
@@ -23,51 +24,76 @@ public class Inventory {
         medications.add(newMedication);
         System.out.println("Medication " + newMedication.getName() + " successfully added to inventory.");
     }
-
+    
+    // for the administrator
     public void removeMedication() {
         System.out.println("Enter Medication ID: ");
         String medicationID = sc.next();
-        System.out.println("Enter Medication Name: ");
-        sc.nextLine();
-        String name = sc.nextLine();
 
         Medication medication = findMedicationByID(medicationID);
         medications.remove(medication);
         System.out.println("Medication " + medication.getName() + " successfully removed from inventory.");
     }
 
+    // for the administrator
     public void updateStock() {
         System.out.println("Enter Medication ID: ");
         String medicationID = sc.next();
-        System.out.println("Enter Medication Name: ");
-        sc.nextLine();
-        String name = sc.nextLine();
+        Medication medication = findMedicationByID(medicationID);
+        System.out.println("Current Quantity for Medication " + medication.getName() + ": " + medication.getQuantity());
+
         System.out.println("New Quantity: ");
         int newQuantity = sc.nextInt();
 
-        Medication medication = findMedicationByID(medicationID);
         medication.updateQuantity(newQuantity);
         System.out.println("Inventory updated successfully.");
     }
 
+    // for the administrator
+    public void updateLowStockAlert() {
+        System.out.println("Enter Medication ID: ");
+        String medicationID = sc.next();
+        Medication medication = findMedicationByID(medicationID);
+        System.out.println("Current Low Stock Alert Level for Medication " + medication.getName() + ": " + medication.getLowStockAlert());
+        
+        System.out.println("New Low Stock Alert Level: ");
+        int newQuantity = sc.nextInt();
+
+        medication.updateLowStockAlert(newQuantity);
+        System.out.println("Low Stock Alert updated successfully.");
+    }
+
     public void displayInventory() {
-        System.out.println("=============================================================");
-        System.out.println("                      Current Inventory                      ");
-        System.out.println("=============================================================");
-        System.out.printf("%-15s %-20s %-10s %-15s%n", "Medication ID", "Name", "Quantity", "Replenishment");
-        System.out.println("-------------------------------------------------------------");
+        System.out.println("===============================================================================");
+        System.out.println("                             Current Inventory                                 ");
+        System.out.println("===============================================================================");
+        
+        // Updated header to include "Low Stock Alert"
+        // Adjusted column widths to fit the new column
+        System.out.printf(
+            "%-15s %-20s %-10s %-15s %-15s%n",
+            "Medication ID",
+            "Name",
+            "Quantity",
+            "Replenishment",
+            "Low Stock Alert"
+        );
+    
+        System.out.println("-------------------------------------------------------------------------------");
         
         for (Medication medication : medications) {
             System.out.printf(
-                "%-15s %-20s %-10d %-15d%n",
+                "%-15s %-20s %-10d %-15d %-15s%n",
                 medication.getMedicationID(),
                 medication.getName(),
                 medication.getQuantity(),
-                medication.getReplenishmentRequest()
+                medication.getReplenishmentRequest(),
+                medication.getLowStockAlert()
             );
         }
-        System.out.println("=============================================================");
+        System.out.println("===============================================================================");
     }
+        
 
     public void updateInventory(Medication medication) {
         this.medications.add(medication);
