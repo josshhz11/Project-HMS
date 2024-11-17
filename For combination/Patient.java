@@ -164,43 +164,120 @@ public class Patient extends User {
     }
     
     public void cancelAppointment(SchedulingSystem schedulingSystem) {
-        Appointment appointmentToCancel = selectAppointment("cancel");
+        Appointment appointmentToCancel = selectConfirmedAppointment("cancel", schedulingSystem);
         if (appointmentToCancel == null) {
             return; // If no valid appointment is selected, exit
         }
         schedulingSystem.cancelAppointment(appointmentToCancel);
     }
     
+    
     public void rescheduleAppointment(SchedulingSystem schedulingSystem) {
-        Appointment appointmentToReschedule = selectAppointment("reschedule");
+        // Step 1: Select an appointment to reschedule
+        Appointment appointmentToReschedule = selectConfirmedAppointment("reschedule", schedulingSystem);
         if (appointmentToReschedule == null) {
             return; // If no valid appointment is selected, exit
         }
-        System.out.println("Canceling the selected appointment...");
-        schedulingSystem.cancelAppointment(appointmentToReschedule);
     
-        System.out.println("Proceeding to reschedule the appointment...");
-        scheduleAppointment(schedulingSystem);
+        Doctor doctor = schedulingSystem.getDoctorById(appointmentToReschedule.getDoctorID());
+        if (doctor == null) {
+            System.out.println("Doctor not found. Cannot proceed with rescheduling.");
+            return;
+        }
+    
+        System.out.println("Selected appointment to reschedule:");
+        System.out.printf("Date: %s, Time: %s, Patient: %s, Doctor: Dr. %s, Appointment ID: %s%n",
+            appointmentToReschedule.getDateTime().toLocalDate(),
+            appointmentToReschedule.getDateTime().toLocalTime(),
+            appointmentToReschedule.getPatientID(),
+            doctor.getName(),
+            appointmentToReschedule.getAppointmentID());
+    
+        // Step 2: Display available slots for the doctor
+        boolean hasSlots = schedulingSystem.displayAvailableSlotsForDoctor(doctor);
+        if (!hasSlots) {
+            System.out.println("No available slots for Dr. " + doctor.getName() + ". Returning to menu.");
+            return;
+        }
+    
+        // Step 3: Let the user choose a new date and time
+        System.out.println("Enter your preferred date (yyyy-MM-dd):");
+        LocalDate preferredDate = LocalDate.parse(sc.nextLine());
+    
+        System.out.println("Enter your preferred time (HH:mm):");
+        LocalTime preferredTime = LocalTime.parse(sc.nextLine());
+    
+        LocalDateTime newSlot = LocalDateTime.of(preferredDate, preferredTime);
+    
+        // Step 4: Check if the new slot is available and reschedule
+        Appointment newAppointment = schedulingSystem.bookSlot(
+            schedulingSystem.getPatientById(appointmentToReschedule.getPatientID()),
+            doctor,
+            newSlot,
+            "Rescheduled"
+        );
+    
+        if (newAppointment != null) {
+            // Cancel the old appointment
+            schedulingSystem.cancelAppointment(appointmentToReschedule);
+            System.out.println("Your old appointment has been canceled.");
+            System.out.printf("A new request for an appointment on %s at %s has been made with Dr. %s.%n",
+                newSlot.toLocalDate(), newSlot.toLocalTime(), doctor.getName());
+        } else {
+            System.out.println("Unable to reschedule. Would you like to cancel the appointment instead?");
+            System.out.println("1: Yes\n2: No");
+            int choice = sc.nextInt();
+            sc.nextLine(); // Clear the buffer
+    
+            if (choice == 1) {
+                schedulingSystem.cancelAppointment(appointmentToReschedule);
+                System.out.println("Your appointment has been canceled.");
+            } else {
+                System.out.println("No changes were made to your appointment.");
+            }
+        }
     }
     
-    private Appointment selectAppointment(String action) {
-        if (appointments.isEmpty()) {
-            System.out.println("You have no appointments to " + action + ".");
+    
+    private Appointment selectConfirmedAppointment(String action, SchedulingSystem schedulingSystem) {
+        LocalDateTime now = LocalDateTime.now(); // Current time
+        List<Appointment> confirmedAppointments = new ArrayList<>();
+    
+        // Filter for future confirmed appointments
+        for (Appointment appointment : appointments) {
+            if (appointment.getDateTime().isAfter(now) && "Confirmed".equals(appointment.getStatus())) {
+                confirmedAppointments.add(appointment);
+            }
+        }
+    
+        if (confirmedAppointments.isEmpty()) {
+            System.out.println("You have no confirmed appointments to " + action + ".");
             return null;
         }
     
-        System.out.println("Your Appointments:");
-        for (int i = 0; i < appointments.size(); i++) {
-            System.out.println((i + 1) + ". " + appointments.get(i));
+        // Display confirmed appointments
+        System.out.println("\nYour Confirmed Appointments:");
+        for (int i = 0; i < confirmedAppointments.size(); i++) {
+            Appointment appointment = confirmedAppointments.get(i);
+            Doctor doctor = schedulingSystem.getDoctorById(appointment.getDoctorID());
+            System.out.printf("%d. Date: %s, Time: %s, Patient: %s, Doctor: Dr. %s, Appointment ID: %s%n",
+                i + 1,
+                appointment.getDateTime().toLocalDate(),
+                appointment.getDateTime().toLocalTime(),
+                appointment.getPatientID(),
+                doctor != null ? doctor.getName() : "Unknown",
+                appointment.getAppointmentID()
+            );
         }
     
+        // Let the user select an appointment
         System.out.print("Enter the number of the appointment to " + action + ": ");
         int appointmentIndex = getIntInput() - 1;
     
-        if (appointmentIndex >= 0 && appointmentIndex < appointments.size()) {
-            return appointments.get(appointmentIndex);
+        if (appointmentIndex >= 0 && appointmentIndex < confirmedAppointments.size()) {
+            return confirmedAppointments.get(appointmentIndex);
         } else {
-            System.out.println("Invalid selection. No appointment was " + action + "d.");
+            System.out.println("Invalid selection. No appointment was " + action + "ed.");
             return null;
         }
     }
