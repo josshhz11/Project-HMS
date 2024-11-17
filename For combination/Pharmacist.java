@@ -42,7 +42,7 @@ public void viewAppointmentOutcomeRecord(List<Patient> patients) {
     }
 }
 
-    public void updatePrescriptionStatus(String appointmentID, List<Patient> patients) {
+    public void updatePrescriptionStatus(String appointmentID, List<Patient> patients, Inventory inventory) {
         for (Patient patient : patients) {
             for (Appointment appointment : patient.getAppointments()) {
                 if (appointment.getAppointmentID() == appointmentID) {

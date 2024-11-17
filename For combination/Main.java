@@ -212,7 +212,11 @@ public class Main {
                 System.out.println("Enter patient ID to update medical record: ");
                 String patientID = sc.next();
                 Patient patient = findPatientByID(patientID);
-                doctor.updatePatientMedicalRecord(patient);
+                if (patient == null) {
+                    System.out.println("Patient Not Found. Please Try Again.");
+                } else {
+                    doctor.updatePatientMedicalRecord(patient);
+                }
             }
             case 3 -> doctor.viewPersonalSchedule();
             case 4 -> doctor.setAvailability();
@@ -300,7 +304,7 @@ public class Main {
         return null;
     }
 
-    //getter for scheduling system
+    // Getter for scheduling system
     public static SchedulingSystem getSchedulingSystem(){
         return schedulingSystem;
     }
