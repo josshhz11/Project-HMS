@@ -281,40 +281,14 @@ public class Patient extends User {
             return null;
         }
     }
+
+    public void viewScheduledAppointments(SchedulingSystem schedulingSystem){
+        schedulingSystem.viewScheduledAppointmentsForPatient(this);
+        }
+    
     
 
-public void viewScheduledAppointments() {
-    System.out.println("\nScheduled Appointments for Patient: " + name + ", Patient ID: " + getuserID());
-
-    List<Appointment> confirmedAppointments = new ArrayList<>();
-
-    // Filter for confirmed appointments
-    for (Appointment appointment : appointments) {
-        if ("Confirmed".equalsIgnoreCase(appointment.getStatus())) {
-            confirmedAppointments.add(appointment);
-        }
-    }
-
-    // Sort appointments by date and time
-    confirmedAppointments.sort(Comparator.comparing(Appointment::getDateTime));
-
-    if (confirmedAppointments.isEmpty()) {
-        System.out.println("You have no scheduled appointments.");
-    } else {
-        System.out.println("--- Appointments ---");
-        for (Appointment appointment : confirmedAppointments) {
-            System.out.println(
-                "Date: " + appointment.getDateTime().toLocalDate() +
-                ", Time: " + appointment.getDateTime().toLocalTime() +
-                ", Doctor: " + appointment.getDoctorID() +
-                ", Appointment ID: " + appointment.getAppointmentID() 
-            );
-        }
-    }
-
-    System.out.println("--------------------");
-}
-
+    
 public void viewPastAppointmentOutcomeRecords() {
     System.out.println("\nPast Completed Appointments for " + getName() + " (Patient ID: " + getuserID() + "):");
 
