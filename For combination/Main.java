@@ -186,7 +186,7 @@ public class Main {
             case 3 -> patient.scheduleAppointment(schedulingSystem);
             case 4 -> patient.rescheduleAppointment(schedulingSystem);
             case 5 -> patient.cancelAppointment(schedulingSystem);
-            case 6 -> patient.viewScheduledAppointments();
+            case 6 -> patient.viewScheduledAppointments(schedulingSystem);
             case 7 -> patient.viewPastAppointmentOutcomeRecords();
             case 8 -> {
                 loggedIn = false;
