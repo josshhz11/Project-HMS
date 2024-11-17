@@ -195,12 +195,31 @@ public boolean isSlotAvailable(Doctor doctor, LocalDateTime slot) {
 
 
 
-// Display available slots for a specific doctor
-public boolean displayAvailableSlotsForDoctor(Doctor doctor) {
+
+    public boolean displayAvailableSlotsForDoctor(Doctor doctor) {
+    System.out.println("""
+        Choose a time range for available appointments:
+        1: This week's available appointments
+        2: This month's available appointments (next 30 days)
+        """);
+
+    int choice = getIntInput(); // Helper method to handle input validation
+    LocalDateTime now = LocalDateTime.now(); // Current date and time
+    LocalDate endDate; // Define the end date based on the choice
+
+    switch (choice) {
+        case 1 -> endDate = now.toLocalDate().plusDays(7); // End of the current week
+        case 2 -> endDate = now.toLocalDate().plusDays(30); // Next 30 days
+        default -> {
+            System.out.println("Invalid choice. Returning to the main menu.");
+            return false;
+        }
+    }
+
     Map<LocalDateTime, Boolean> availability = doctorAvailability.get(doctor);
     if (availability == null || availability.isEmpty()) {
         System.out.println("No available slots for Dr. " + doctor.getName());
-        return false; // No slots available
+        return false;
     }
 
     boolean hasSlots = false;
@@ -208,10 +227,11 @@ public boolean displayAvailableSlotsForDoctor(Doctor doctor) {
 
     // Organize slots by date for cleaner display
     for (Map.Entry<LocalDateTime, Boolean> entry : availability.entrySet()) {
-        if (entry.getValue()) {
+        LocalDateTime slot = entry.getKey();
+        if (entry.getValue() && slot.isAfter(now) && slot.toLocalDate().isBefore(endDate.plusDays(1))) {
             hasSlots = true;
-            LocalDate date = entry.getKey().toLocalDate();
-            LocalTime time = entry.getKey().toLocalTime();
+            LocalDate date = slot.toLocalDate();
+            LocalTime time = slot.toLocalTime();
             formattedAvailability.computeIfAbsent(date, k -> new ArrayList<>()).add(time);
         }
     }
@@ -239,6 +259,29 @@ public boolean displayAvailableSlotsForDoctor(Doctor doctor) {
 
     return true; // Slots are available
 }
+
+    // Declare Scanner globally at the top of your class
+private static Scanner sc = new Scanner(System.in);
+
+// Helper method for input validation
+private int getIntInput() {
+    int input = -1; // Default to an invalid number
+    boolean valid = false;
+
+    while (!valid) {
+        System.out.print("Enter your choice: ");
+        if (sc.hasNextInt()) {
+            input = sc.nextInt();
+            sc.nextLine(); // Clear the buffer
+            valid = true; // Valid integer input
+        } else {
+            System.out.println("Invalid input. Please enter a valid number.");
+            sc.next(); // Clear the invalid input
+        }
+    }
+    return input;
+}
+
 
 
     // Get doctors by specialty
