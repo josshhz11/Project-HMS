@@ -287,9 +287,10 @@ public class Main {
             case 2 -> admin.viewAllAppointments(schedulingSystem);
             case 3-> admin.viewAllUpcomingConfirmedAppointments(schedulingSystem);
             case 4->admin.viewPendingAppointments(schedulingSystem);
-            case 5 -> admin.viewAndManageMedicationInventory(inventory);
-            case 6 -> admin.approveReplenishmentRequest(inventory);
-            case 7 -> {
+            case 5->admin.displayCompletedAppointments(schedulingSystem);    
+            case 6 -> admin.viewAndManageMedicationInventory(inventory);
+            case 7 -> admin.approveReplenishmentRequest(inventory);
+            case 8 -> {
                 loggedIn = false;
                 System.out.println("Logging out.");
             }
