@@ -26,8 +26,8 @@ public class MedicalRecord implements Serializable{
 
     @Override
     public String toString() {
-        return "Patient ID: " + patientID + 
-        "\nBlood Type: " + bloodType + 
+        return "Patient ID: " + this.patientID + 
+        "\nBlood Type: " + this.bloodType + 
         "\nDiagnoses: " + diagnoses + 
         "\nTreatments: " + treatments;
     }

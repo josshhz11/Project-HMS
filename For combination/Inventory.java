@@ -22,10 +22,11 @@ public class Inventory {
 
         if (findMedicationByID(medicationID) != null) {
             System.out.println("Medication ID already exists. Please try again.");
+            return;
         }
 
         for (Medication medication : medications) {
-            if (medication.getName() == name) {
+            if (medication.getName().trim() == name.trim()) {
                 System.out.println("Medication Name already exists. Please try again.");
                 return;
             }
@@ -92,7 +93,9 @@ public class Inventory {
         }
     }
 
-    public void displayInventory(boolean replenishmentRequest) {
+    public boolean displayInventory(boolean replenishmentRequest) {
+        boolean empty = true;
+
         System.out.println("===============================================================================");
         if (replenishmentRequest) {
             System.out.println("                          Replenishment Requests                               ");
@@ -119,6 +122,10 @@ public class Inventory {
                 }
             }
             
+            if (empty == true) {
+                empty = false;
+            }
+
             System.out.printf(
                 "%-15s %-20s %-10d %-15d %-15s%n",
                 medication.getMedicationID(),
@@ -129,15 +136,16 @@ public class Inventory {
             );
         }
         System.out.println("===============================================================================");
+
+        return empty;
     }
-        
 
     public void updateInventory(Medication medication) {
         this.medications.add(medication);
     }
 
-    public void viewReplenishmentRequests() {
-        displayInventory(true);
+    public boolean viewReplenishmentRequests() {
+        return displayInventory(true);
     }
 
     public void newReplenishmentRequest(String medicationID, int replenishAmount) {

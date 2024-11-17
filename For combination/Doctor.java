@@ -53,6 +53,28 @@ public class Doctor extends User {
             return availability;
         }
 
+    public void viewAllPatients(List<Patient> patients) {
+        System.out.println("=======================================");
+        System.out.println("             All Patients              ");
+        System.out.println("=======================================");
+        
+        System.out.printf(
+            "%-15s %-20s%n",
+            "Patient ID",
+            "Name"
+        );
+    
+        System.out.println("---------------------------------------");
+        
+        for (Patient patient : patients) {
+            System.out.printf(
+                "%-15s %-20s%n",
+                patient.getuserID(),
+                patient.getName()
+            );
+        }
+        System.out.println("=======================================");
+    }
 
     // View a patient's medical record
     public void viewPatientMedicalRecord(Patient patient) {
@@ -74,12 +96,14 @@ public class Doctor extends User {
                 sc.nextLine();
                 String newDiagnosis = sc.nextLine();
                 patient.getMedicalRecord().addDiagnosis(newDiagnosis);
+                System.out.println("Diagnosis successfully added for patient " + patient.getName());
                 break;
             case 2:
                 System.out.println("Update treatment: ");
                 sc.nextLine();
                 String newTreatment = sc.nextLine();
                 patient.getMedicalRecord().addTreatment(newTreatment);
+                System.out.println("Treatment successfully added for patient " + patient.getName());
                 break;
             default:
                 System.out.println("Invalid option. Please try again.");
@@ -110,63 +134,63 @@ public class Doctor extends User {
         SchedulingSystem schedulingSystem = Main.getSchedulingSystem();
         schedulingSystem.updateDoctorAvailability(this);
     }
+
     // Method to check for conflicts
-public boolean hasConflict(LocalDateTime start, LocalDateTime end) {
-    // Check for conflicts with scheduled appointments
-    for (Appointment appointment : schedule) {
-        LocalDateTime apptStart = appointment.getDateTime();
-        LocalDateTime apptEnd = apptStart.plusMinutes(30); // Assuming 30-minute slots
-        if (!(end.isBefore(apptStart) || start.isAfter(apptEnd))) {
-            return true; // Conflict with an appointment
-        }
-    }
-
-    // Check for conflicts with blocked slots
-    List<TimeRange> blocked = blockedSlots.getOrDefault(start.toLocalDate(), new ArrayList<>());
-    for (TimeRange block : blocked) {
-        if (!(end.toLocalTime().isBefore(block.getStart()) || start.toLocalTime().isAfter(block.getEnd()))) {
-            return true; // Conflict with a blocked slot
-        }
-    }
-
-    return false; // No conflict
-}
-
-
-private void handleCustomBlockedTimes() {
-    System.out.println("Enter the number of custom blocks:");
-    int numBlocks = getIntInput();
-
-    for (int i = 0; i < numBlocks; i++) {
-        System.out.println("Enter the date to block (yyyy-MM-dd):");
-        LocalDate blockDate = LocalDate.parse(sc.nextLine());
-
-        System.out.println("Enter the start time to block (HH:mm):");
-        LocalTime blockStart = LocalTime.parse(sc.nextLine());
-
-        System.out.println("Enter the end time to block (HH:mm):");
-        LocalTime blockEnd = LocalTime.parse(sc.nextLine());
-
-        System.out.println("Enter the event name (if any):");
-        String eventName = sc.nextLine();
-
-        LocalDateTime blockStartDateTime = blockDate.atTime(blockStart);
-        LocalDateTime blockEndDateTime = blockDate.atTime(blockEnd);
-
-        // Use the conflict checking method
-        if (hasConflict(blockStartDateTime, blockEndDateTime)) {
-            System.out.println("Conflict detected. Unable to block the time slot.");
-            continue; // Skip this block
+    public boolean hasConflict(LocalDateTime start, LocalDateTime end) {
+        // Check for conflicts with scheduled appointments
+        for (Appointment appointment : schedule) {
+            LocalDateTime apptStart = appointment.getDateTime();
+            LocalDateTime apptEnd = apptStart.plusMinutes(30); // Assuming 30-minute slots
+            if (!(end.isBefore(apptStart) || start.isAfter(apptEnd))) {
+                return true; // Conflict with an appointment
+            }
         }
 
-        // Add block to the blockedSlots map
-        blockedSlots.computeIfAbsent(blockDate, k -> new ArrayList<>())
-            .add(new TimeRange(blockStart, blockEnd, eventName));
-        System.out.println("Blocked: " + blockDate + " from " + blockStart + " to " + blockEnd +
-            (eventName.isEmpty() ? "" : " (" + eventName + ")"));
-    }
-}
+        // Check for conflicts with blocked slots
+        List<TimeRange> blocked = blockedSlots.getOrDefault(start.toLocalDate(), new ArrayList<>());
+        for (TimeRange block : blocked) {
+            if (!(end.toLocalTime().isBefore(block.getStart()) || start.toLocalTime().isAfter(block.getEnd()))) {
+                return true; // Conflict with a blocked slot
+            }
+        }
 
+        return false; // No conflict
+    }
+
+
+    private void handleCustomBlockedTimes() {
+        System.out.println("Enter the number of custom blocks:");
+        int numBlocks = getIntInput();
+
+        for (int i = 0; i < numBlocks; i++) {
+            System.out.println("Enter the date to block (yyyy-MM-dd):");
+            LocalDate blockDate = LocalDate.parse(sc.nextLine());
+
+            System.out.println("Enter the start time to block (HH:mm):");
+            LocalTime blockStart = LocalTime.parse(sc.nextLine());
+
+            System.out.println("Enter the end time to block (HH:mm):");
+            LocalTime blockEnd = LocalTime.parse(sc.nextLine());
+
+            System.out.println("Enter the event name (if any):");
+            String eventName = sc.nextLine();
+
+            LocalDateTime blockStartDateTime = blockDate.atTime(blockStart);
+            LocalDateTime blockEndDateTime = blockDate.atTime(blockEnd);
+
+            // Use the conflict checking method
+            if (hasConflict(blockStartDateTime, blockEndDateTime)) {
+                System.out.println("Conflict detected. Unable to block the time slot.");
+                continue; // Skip this block
+            }
+
+            // Add block to the blockedSlots map
+            blockedSlots.computeIfAbsent(blockDate, k -> new ArrayList<>())
+                .add(new TimeRange(blockStart, blockEnd, eventName));
+            System.out.println("Blocked: " + blockDate + " from " + blockStart + " to " + blockEnd +
+                (eventName.isEmpty() ? "" : " (" + eventName + ")"));
+        }
+    }
 
     private void generateStandardAvailability() {
         LocalDate startDate = LocalDate.now();
@@ -197,72 +221,71 @@ private void handleCustomBlockedTimes() {
     }
 
     public void viewPersonalSchedule() {
-    System.out.println("\nPersonal Schedule for Dr. " + name + ", Doctor ID: " + doctorID);
+        System.out.println("\nPersonal Schedule for Dr. " + name + ", Doctor ID: " + doctorID);
 
-    List<ScheduledEvent> events = new ArrayList<>();
+        List<ScheduledEvent> events = new ArrayList<>();
 
-    // Add upcoming appointments to events
-    for (Appointment appointment : schedule) {
-        LocalDateTime start = appointment.getDateTime();
-        LocalDateTime end = start.plusMinutes(30); // Assume appointments are 30 minutes long
-        events.add(new ScheduledEvent(start, end, "Appointment with Patient: " + appointment.getPatientID() +
-                ", Appointment ID: " + appointment.getAppointmentID()));
-    }
+        // Add upcoming appointments to events
+        for (Appointment appointment : schedule) {
+            LocalDateTime start = appointment.getDateTime();
+            LocalDateTime end = start.plusMinutes(30); // Assume appointments are 30 minutes long
+            events.add(new ScheduledEvent(start, end, "Appointment with Patient: " + appointment.getPatientID() +
+                    ", Appointment ID: " + appointment.getAppointmentID()));
+        }
 
-    // Add blocked slots to events
-    for (Map.Entry<LocalDate, List<TimeRange>> entry : blockedSlots.entrySet()) {
-        LocalDate date = entry.getKey();
-        for (TimeRange range : entry.getValue()) {
-            LocalDateTime start = date.atTime(range.getStart());
-            LocalDateTime end = date.atTime(range.getEnd());
-            events.add(new ScheduledEvent(start, end, "Blocked Time: " + range.getStart() + " to " + range.getEnd() +
-                    (range.getEventName() != null && !range.getEventName().isEmpty() ? ", Event: " + range.getEventName() : "")));
+        // Add blocked slots to events
+        for (Map.Entry<LocalDate, List<TimeRange>> entry : blockedSlots.entrySet()) {
+            LocalDate date = entry.getKey();
+            for (TimeRange range : entry.getValue()) {
+                LocalDateTime start = date.atTime(range.getStart());
+                LocalDateTime end = date.atTime(range.getEnd());
+                events.add(new ScheduledEvent(start, end, "Blocked Time: " + range.getStart() + " to " + range.getEnd() +
+                        (range.getEventName() != null && !range.getEventName().isEmpty() ? ", Event: " + range.getEventName() : "")));
+            }
+        }
+
+        // Sort events by start time
+        events.sort(Comparator.comparing(ScheduledEvent::getStart));
+
+        // Print events
+        if (events.isEmpty()) {
+            System.out.println("No events scheduled.");
+        } else {
+            System.out.println("--- Schedule ---");
+            for (ScheduledEvent event : events) {
+                System.out.println("Date: " + event.getStart().toLocalDate() +
+                        ", Time: " + event.getStart().toLocalTime() + " to " + event.getEnd().toLocalTime() +
+                        " - " + event.getDescription());
+            }
+            System.out.println("----------------");
         }
     }
 
-    // Sort events by start time
-    events.sort(Comparator.comparing(ScheduledEvent::getStart));
+    // Helper class for sorting events
+    private static class ScheduledEvent {
+        private LocalDateTime start;
+        private LocalDateTime end;
+        private String description;
 
-    // Print events
-    if (events.isEmpty()) {
-        System.out.println("No events scheduled.");
-    } else {
-        System.out.println("--- Schedule ---");
-        for (ScheduledEvent event : events) {
-            System.out.println("Date: " + event.getStart().toLocalDate() +
-                    ", Time: " + event.getStart().toLocalTime() + " to " + event.getEnd().toLocalTime() +
-                    " - " + event.getDescription());
+        public ScheduledEvent(LocalDateTime start, LocalDateTime end, String description) {
+            this.start = start;
+            this.end = end;
+            this.description = description;
         }
-        System.out.println("----------------");
-    }
-}
 
-// Helper class for sorting events
-private static class ScheduledEvent {
-    private LocalDateTime start;
-    private LocalDateTime end;
-    private String description;
+        public LocalDateTime getStart() {
+            return start;
+        }
 
-    public ScheduledEvent(LocalDateTime start, LocalDateTime end, String description) {
-        this.start = start;
-        this.end = end;
-        this.description = description;
+        public LocalDateTime getEnd() {
+            return end;
+        }
+
+        public String getDescription() {
+            return description;
+        }
     }
 
-    public LocalDateTime getStart() {
-        return start;
-    }
-
-    public LocalDateTime getEnd() {
-        return end;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-}
-
-    
     private int getIntInput() {
         while (!sc.hasNextInt()) {
             System.out.println("Invalid input. Please enter a number.");
@@ -313,72 +336,72 @@ private static class ScheduledEvent {
     }
 
     // Doctor: Add an appointment
-public void addAppointment(Appointment appointment) {
-    schedule.add(appointment);
+    public void addAppointment(Appointment appointment) {
+        schedule.add(appointment);
 
-    // Remove the time slot from availability
-    LocalDate date = appointment.getDateTime().toLocalDate();
-    LocalTime time = appointment.getDateTime().toLocalTime();
-
-    List<TimeRange> ranges = availability.get(date);
-    if (ranges != null) {
-        ranges.removeIf(range -> !time.isBefore(range.getStart()) && !time.isAfter(range.getEnd()));
-    }
-}
-
-// Doctor: Cancel an appointment
-public void cancelAppointment(Appointment appointment) {
-    if (schedule.remove(appointment)) {
+        // Remove the time slot from availability
         LocalDate date = appointment.getDateTime().toLocalDate();
         LocalTime time = appointment.getDateTime().toLocalTime();
 
-        // Restore the time slot to availability
-        availability.computeIfAbsent(date, k -> new ArrayList<>())
-            .add(new TimeRange(time, time.plusMinutes(30))); // Adjust time range if needed
-
-        System.out.println("Appointment removed from schedule and availability updated.");
-    } else {
-        System.out.println("Appointment not found in schedule.");
-    }
-}
-
-
-public void viewUpcomingAppointments() {
-    System.out.println("\nUpcoming Appointments for Dr. " + name + ", Doctor ID: " + doctorID);
-
-    LocalDateTime now = LocalDateTime.now(); // Current time
-    List<Appointment> upcomingAppointments = new ArrayList<>();
-
-    // Filter for future appointments for this doctor
-    for (Appointment appointment : schedule) {
-        if (appointment.getDateTime().isAfter(now)) {
-            upcomingAppointments.add(appointment);
+        List<TimeRange> ranges = availability.get(date);
+        if (ranges != null) {
+            ranges.removeIf(range -> !time.isBefore(range.getStart()) && !time.isAfter(range.getEnd()));
         }
     }
 
-    // Sort appointments by date and time
-    upcomingAppointments.sort(Comparator.comparing(Appointment::getDateTime));
+    // Doctor: Cancel an appointment
+    public void cancelAppointment(Appointment appointment) {
+        if (schedule.remove(appointment)) {
+            LocalDate date = appointment.getDateTime().toLocalDate();
+            LocalTime time = appointment.getDateTime().toLocalTime();
 
-    if (upcomingAppointments.isEmpty()) {
-        System.out.println("No upcoming appointments.");
-    } else {
-        System.out.println("--- Appointments ---");
-        for (Appointment appointment : upcomingAppointments) {
-            System.out.println(
-                "Date: " + appointment.getDateTime().toLocalDate() + 
-                ", Time: " + appointment.getDateTime().toLocalTime() +
-                ", Patient: " + appointment.getPatientID() +
-                ", Appointment ID: " + appointment.getAppointmentID()
-            );
+            // Restore the time slot to availability
+            availability.computeIfAbsent(date, k -> new ArrayList<>())
+                .add(new TimeRange(time, time.plusMinutes(30))); // Adjust time range if needed
+
+            System.out.println("Appointment removed from schedule and availability updated.");
+        } else {
+            System.out.println("Appointment not found in schedule.");
         }
     }
 
-    System.out.println("--------------------");
-}
+
+    public void viewUpcomingAppointments() {
+        System.out.println("\nUpcoming Appointments for Dr. " + name + ", Doctor ID: " + doctorID);
+
+        LocalDateTime now = LocalDateTime.now(); // Current time
+        List<Appointment> upcomingAppointments = new ArrayList<>();
+
+        // Filter for future appointments for this doctor
+        for (Appointment appointment : schedule) {
+            if (appointment.getDateTime().isAfter(now)) {
+                upcomingAppointments.add(appointment);
+            }
+        }
+
+        // Sort appointments by date and time
+        upcomingAppointments.sort(Comparator.comparing(Appointment::getDateTime));
+
+        if (upcomingAppointments.isEmpty()) {
+            System.out.println("No upcoming appointments.");
+        } else {
+            System.out.println("--- Appointments ---");
+            for (Appointment appointment : upcomingAppointments) {
+                System.out.println(
+                    "Date: " + appointment.getDateTime().toLocalDate() + 
+                    ", Time: " + appointment.getDateTime().toLocalTime() +
+                    ", Patient: " + appointment.getPatientID() +
+                    ", Appointment ID: " + appointment.getAppointmentID()
+                );
+            }
+        }
+
+        System.out.println("--------------------");
+    }
 
     
 
-//LEFT W THIS NEED UPDATE!!
+    //LEFT W THIS NEED UPDATE!!
     public void recordAppointmentOutcome(Inventory inventory) {
         System.out.println("Enter Appointment ID to record outcome: ");
         String appointmentID = sc.next();
@@ -389,36 +412,34 @@ public void viewUpcomingAppointments() {
         }
     }
 
-
+    // For the administrator function
+    public void updateRole(Doctor doctor, int newRole, List<Pharmacist> pharmacists, List<Administrator> administrators) {
+        switch (newRole) {
+            case 2:
+                this.role = "Pharmacist";
+                Pharmacist pharmacist = new Pharmacist(doctor.getuserID(), doctor.getName(), doctor.getGender());
+                pharmacists.add(pharmacist);
+                break;
+            case 3:
+                this.role = "Administrator";
+                Administrator administrator = new Administrator(doctor.getuserID(), doctor.getName(), doctor.getGender());
+                administrators.add(administrator);
+                break;
+            default:
+                System.out.println("Invalid option. Please try again.");
+                return;
+        }
+    }
     
-        // For the administrator function
-        public void updateRole(Doctor doctor, int newRole, List<Pharmacist> pharmacists, List<Administrator> administrators) {
-            switch (newRole) {
-                case 2:
-                    this.role = "Pharmacist";
-                    Pharmacist pharmacist = new Pharmacist(doctor.getuserID(), doctor.getName(), doctor.getGender());
-                    pharmacists.add(pharmacist);
-                    break;
-                case 3:
-                    this.role = "Administrator";
-                    Administrator administrator = new Administrator(doctor.getuserID(), doctor.getName(), doctor.getGender());
-                    administrators.add(administrator);
-                    break;
-                default:
-                    System.out.println("Invalid option. Please try again.");
-                    return;
+    // Find Doctor by ID FOR ADMINISTRATOR 
+    public static Doctor findDoctorByID(String doctorID, List<Doctor> doctors) {
+        for (Doctor doctor : doctors) {
+            if (doctor.getuserID().equals(doctorID)) {
+                return doctor;
             }
         }
-    
-        // Find Doctor by ID FOR ADMINISTRATOR 
-        public static Doctor findDoctorByID(String doctorID, List<Doctor> doctors) {
-            for (Doctor doctor : doctors) {
-                if (doctor.getuserID().equals(doctorID)) {
-                    return doctor;
-                }
-            }
-            return null;
-        }
+        return null;
+    }
 
     @Override
     public void displayMenu() {

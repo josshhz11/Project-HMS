@@ -316,10 +316,14 @@ public class Administrator extends User {
     }
 
     public void approveReplenishmentRequest(Inventory inventory) {
-        inventory.viewReplenishmentRequests();
-        System.out.println("Medication ID to Replenish: ");
-        String medicationID = sc.next();
-        inventory.fulfillReplenishmentRequest(medicationID);
+        boolean empty = inventory.viewReplenishmentRequests();
+        if (empty == false) {
+            System.out.println("Medication ID to Replenish: ");
+            String medicationID = sc.next();
+            inventory.fulfillReplenishmentRequest(medicationID);
+        } else {
+            System.out.println("No Replenishment Requests.");
+        }
     }
 
     // for the administrator function

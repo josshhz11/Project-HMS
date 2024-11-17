@@ -197,6 +197,7 @@ public class Main {
     private boolean handleDoctorOptions(Doctor doctor, boolean loggedIn, int choice, Scanner sc) {
         switch (choice) {
             case 1 -> {
+                doctor.viewAllPatients(patients);
                 System.out.println("Enter patient ID to view medical record: ");
                 String patientID = sc.next();
                 Patient patient = findPatientByID(patientID);
@@ -207,6 +208,7 @@ public class Main {
                 }
             }
             case 2 -> {
+                doctor.viewAllPatients(patients);
                 System.out.println("Enter patient ID to update medical record: ");
                 String patientID = sc.next();
                 Patient patient = findPatientByID(patientID);
