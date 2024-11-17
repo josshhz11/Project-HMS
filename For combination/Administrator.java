@@ -378,7 +378,7 @@ public class Administrator extends User {
                 
                 Administrator Display Menu: 
                 1. View and Manage Hospital Staff
-                2. View All Upcoming Appointments
+                2. View All Appointments 
                 3. View Only Upcoming Confirmed Appointments
                 4. View Only Pending Appointments
                 5. View All Completed Appointments
