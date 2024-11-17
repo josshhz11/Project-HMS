@@ -336,7 +336,7 @@ public class Doctor extends User {
     
         System.out.println("1. Accept\n2. Reject");
         int choice = sc.nextInt();
-        sc.nextLine(); // Clear buffer
+        //sc.nextLine(); // Clear buffer
     
         if (choice == 1) {
             schedulingSystem.respondToPendingAppointment(appointment, true);
