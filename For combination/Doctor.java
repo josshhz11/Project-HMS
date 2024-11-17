@@ -320,7 +320,7 @@ public class Doctor extends User {
         // Check if there are any pending appointments
         boolean hasPendingRequests = schedulingSystem.getPendingAppointmentsForDoctor(this).isEmpty();
         if (hasPendingRequests) {
-            System.out.println("No pending appointment requests found.");
+            //System.out.println("No pending appointment requests found.");
             return; // Exit if no pending requests
         }
     
