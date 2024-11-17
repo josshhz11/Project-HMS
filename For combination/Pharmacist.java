@@ -16,18 +16,32 @@ public class Pharmacist extends User {
     }
 
 
-    public void viewAppointmentOutcomeRecord(List<Patient> patients) {
-        // I did this manually but see if can do it a different, more efficient way.
-        // Printing out all completed appointments
-        for (Patient patient : patients) {
-            for (Appointment appointment : patient.getAppointments()) {
-                if (appointment.getStatus() == "Completed") {
-                    System.out.println(appointment.toString());
-                }
+public void viewAppointmentOutcomeRecord(List<Patient> patients) {
+    System.out.println("\nCompleted Appointments:");
+
+    boolean hasCompletedAppointments = false;
+
+    for (Patient patient : patients) {
+        for (Appointment appointment : patient.getAppointments()) {
+            if (appointment.getStatus().equals("Completed")) {
+                hasCompletedAppointments = true;
+                System.out.println(
+                    "Date: " + appointment.getDateTime().toLocalDate() +
+                    ", Time: " + appointment.getDateTime().toLocalTime() +
+                    ", Patient: " + patient.getName() +
+                    ", Appointment ID: " + appointment.getAppointmentID() +
+                    ", Consultation Notes: " + (appointment.getConsultationNotes() != null ? appointment.getConsultationNotes() : "None") +
+                    ", Medication Status: " + (appointment.getMedicationStatus() != null ? appointment.getMedicationStatus() : "Not Prescribed")
+                );
             }
         }
     }
-    
+
+    if (!hasCompletedAppointments) {
+        System.out.println("No completed appointments found.");
+    }
+}
+
     public void updatePrescriptionStatus(String appointmentID, List<Patient> patients) {
         for (Patient patient : patients) {
             for (Appointment appointment : patient.getAppointments()) {
