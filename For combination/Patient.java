@@ -226,16 +226,40 @@ public void viewScheduledAppointments() {
     System.out.println("--------------------");
 }
 
-// NEED UPDATE THIS BASED ON MEDICINE CODE TOO, STICK W THE NICE FORMATTING FROM OPT 6!!
+public void viewPastAppointmentOutcomeRecords() {
+    System.out.println("\nPast Completed Appointments for " + getName() + " (Patient ID: " + getuserID() + "):");
 
-    public void viewPastAppointmentOutcomeRecords() {
-        System.out.println("Past Appointments:");
-        for (Appointment appointment : appointments) {
-            if (appointment.getStatus().equals("Completed")) {
-                System.out.println(appointment);
-            }
+    // Filter completed appointments
+    List<Appointment> completedAppointments = new ArrayList<>();
+    for (Appointment appointment : getAppointments()) {
+        if (appointment.getStatus().equals("Completed")) {
+            completedAppointments.add(appointment);
         }
     }
+
+    // Handle no completed appointments
+    if (completedAppointments.isEmpty()) {
+        System.out.println("No past completed appointments found.");
+        return;
+    }
+
+    // Display completed appointments
+    System.out.printf("%-15s %-20s %-20s %-20s %-30s%n", 
+                      "Appointment ID", "Date", "Time", "Doctor ID", "Consultation Notes");
+    System.out.println("------------------------------------------------------------------------------------------");
+
+    for (Appointment appointment : completedAppointments) {
+        System.out.printf("%-15s %-20s %-20s %-20s %-30s%n", 
+                          appointment.getAppointmentID(), 
+                          appointment.getDateTime().toLocalDate(), 
+                          appointment.getDateTime().toLocalTime(), 
+                          appointment.getDoctorID(),
+                          (appointment.getConsultationNotes() != null ? appointment.getConsultationNotes() : "No Notes"));
+    }
+
+    System.out.println("------------------------------------------------------------------------------------------");
+}
+
 
     @Override
     public void displayMenu() {
@@ -248,7 +272,7 @@ public void viewScheduledAppointments() {
                 4. Reschedule an Appointment
                 5. Cancel an Appointment
                 6. View Scheduled Appointments
-                7. View Past Appointment Outcome Records (LEFT W THIS TO UPDATE)
+                7. View Past Appointment Outcome Records 
                 8. Logout
                 Choose options (1-8): """);
     }
