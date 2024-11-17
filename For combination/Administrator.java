@@ -265,6 +265,10 @@ public class Administrator extends User {
     public void viewPendingAppointments(SchedulingSystem schedulingSystem) {
         schedulingSystem.displayPendingAppointments();
     }
+    
+    public void displayCompletedAppointments(SchedulingSystem schedulingSystem){
+        schedulingSystem.displayCompletedAppointments();
+    }
 
     // IMPORTANT
     public void viewAndManageMedicationInventory(Inventory inventory) {
@@ -377,9 +381,10 @@ public class Administrator extends User {
                 2. View All Upcoming Appointments
                 3. View Only Upcoming Confirmed Appointments
                 4. View Only Pending Appointments
-                5. View and Manage Medication Inventory
-                6. Approve Replenishment Requests
-                7. Logout
-                Choose options (1-7): """);
+                5. View All Completed Appointments
+                6. View and Manage Medication Inventory
+                7. Approve Replenishment Requests
+                8. Logout
+                Choose options (1-8): """);
     }
 }
