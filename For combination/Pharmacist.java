@@ -15,7 +15,7 @@ public class Pharmacist extends User {
         return userID;
     }
 
-    public void viewAppointmentOutcomeRecord(List<Patient> patients) {
+    public boolean viewAppointmentOutcomeRecord(List<Patient> patients) {
         System.out.println("\nCompleted Appointments:");
     
         boolean hasCompletedAppointments = false;
@@ -26,11 +26,14 @@ public class Pharmacist extends User {
                     hasCompletedAppointments = true;
                     System.out.println(
                         "Date: " + appointment.getDateTime().toLocalDate() +
-                        ", Time: " + appointment.getDateTime().toLocalTime() +
-                        ", Patient: " + patient.getName() +
-                        ", Appointment ID: " + appointment.getAppointmentID() +
-                        ", Consultation Notes: " + (appointment.getConsultationNotes() != null ? appointment.getConsultationNotes() : "None") +
-                        ", Medication Status: " + (appointment.getMedicationStatus() != null ? appointment.getMedicationStatus() : "Not Prescribed")
+                        "\nTime: " + appointment.getDateTime().toLocalTime() +
+                        "\nPatient: " + patient.getName() +
+                        "\nAppointment ID: " + appointment.getAppointmentID() +
+                        "\nConsultation Notes: " + (appointment.getConsultationNotes() != null ? appointment.getConsultationNotes() : "None") +
+                        "\nPrescribed Medication: " + (appointment.getPrescribedMedication() != null && !appointment.getPrescribedMedication().isEmpty()
+                        ? getPrescribedMedicationDetails(appointment.getPrescribedMedication())
+                        : "None") +
+                        "\nMedication Status: " + (appointment.getMedicationStatus() != null ? appointment.getMedicationStatus() : "Not Prescribed")
                     );
                 }
             }
@@ -39,10 +42,39 @@ public class Pharmacist extends User {
         if (!hasCompletedAppointments) {
             System.out.println("No completed appointments found.");
         }
+
+        return hasCompletedAppointments;
+    }
+
+    private static String getPrescribedMedicationDetails(Map<Medication, Integer> prescribedMedication) {
+        StringBuilder medicationDetails = new StringBuilder();
+        for (Map.Entry<Medication, Integer> entry : prescribedMedication.entrySet()) {
+            medicationDetails.append(entry.getKey().getName()) // Assuming Medication has a getName() method
+                             .append(" (Quantity: ")
+                             .append(entry.getValue())
+                             .append("), ");
+        }
+        // Remove the trailing comma and space, if any
+        if (medicationDetails.length() > 0) {
+            medicationDetails.setLength(medicationDetails.length() - 2);
+        }
+        return medicationDetails.toString();
     }
     
     
-    public void updatePrescriptionStatus(String appointmentID, List<Patient> patients, Inventory inventory) {
+    public void updatePrescriptionStatus(List<Patient> patients, Inventory inventory) {
+        boolean hasCompletedAppointments = viewAppointmentOutcomeRecord(patients);
+
+        if (!hasCompletedAppointments) {
+            System.out.println("No completed appointments available.");
+            return; // Exit early if no completed appointments
+        }
+    
+        // Prompt for appointment ID
+        System.out.println("Enter Appointment ID to update status: ");
+        String appointmentID = sc.next();
+        
+        
         Appointment targetAppointment = null;
     
         // Find the target appointment by Appointment ID
