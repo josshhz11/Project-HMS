@@ -498,7 +498,7 @@ public void recordAppointmentOutcome(Inventory inventory) {
                 4. Set Availability for Appointments
                 5. Respond to Appointment Requests
                 6. View Upcoming Appointments
-                7. Record Appointment Outcome (NEED TO UPDATE)
+                7. Record Appointment Outcome 
                 8. Logout
                 Choose options (1-8): """);
     }
