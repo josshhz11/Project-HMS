@@ -15,6 +15,8 @@ public class Appointment {
     private String consultationNotes;
     private static Scanner sc = new Scanner(System.in);
 
+    private static final int CONST_CONSUL = 10;
+    
     public Appointment(String appointmentID, String patientID, String doctorID, LocalDateTime dateTime) {
         this.appointmentID = appointmentID;
         this.patientID = patientID;
@@ -71,8 +73,16 @@ public class Appointment {
                 System.out.println("Quantity: ");
                 int quantity = sc.nextInt();
                 Medication medication = inventory.findMedicationByID(medicationID);
-                this.prescribedMedication.put(medication, quantity);
-                this.medicationStatus = "Pending to Dispense";
+
+                if (medication != null) {
+					double cost = medication.getPrice()*quantity;
+                    this.prescribedMedication.put(medication, quantity);
+                    this.medicationStatus = "Pending to Dispense";
+                    billing.addBillingItem(medication.getName() + quantity, cost);
+				}
+				else {
+					System.out.println("Medication not found");
+				}
                 break;
             case 2:
                 break;
@@ -84,6 +94,10 @@ public class Appointment {
         System.out.println("Consultation Notes for Appointment (if any): ");
         sc.nextLine();
         this.consultationNotes = sc.nextLine();
+
+        //add consultation fee to the billing
+        billing.addBillingItem("Consultation Fee", CONST_CONSUL);
+        billing.displayPrintingSummary();
     }
 
     public void completeDispense() {
