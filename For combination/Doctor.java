@@ -404,17 +404,50 @@ public class Doctor extends User {
     }
 
     
+// UPDATED
+public void recordAppointmentOutcome(Inventory inventory) {
+    System.out.println("\nConfirmed Appointments for Dr. " + getName() + ":");
 
-    //LEFT W THIS NEED UPDATE!!
-    public void recordAppointmentOutcome(Inventory inventory) {
-        System.out.println("Enter Appointment ID to record outcome: ");
-        String appointmentID = sc.next();
-        for (Appointment appointment : schedule) {
-            if (appointment.getAppointmentID() == appointmentID) {
-                appointment.complete(inventory, appointmentID);
-            }
+    // Filter and display confirmed appointments
+    List<Appointment> confirmedAppointments = new ArrayList<>();
+    for (Appointment appointment : schedule) {
+        if (appointment.getStatus().equals("Confirmed")) {
+            confirmedAppointments.add(appointment);
+            System.out.printf("Appointment ID: %s | Date & Time: %s | Patient ID: %s%n",
+                appointment.getAppointmentID(),
+                appointment.getDateTime().toLocalDate() + " " + appointment.getDateTime().toLocalTime(),
+                appointment.getPatientID());
         }
     }
+
+    // Handle no confirmed appointments
+    if (confirmedAppointments.isEmpty()) {
+        System.out.println("No confirmed appointments to record outcome for.");
+        return;
+    }
+
+    // Prompt doctor to choose an appointment
+    System.out.println("\nEnter the Appointment ID to record the outcome:");
+    String appointmentID = sc.next();
+
+    Appointment selectedAppointment = null;
+    for (Appointment appointment : confirmedAppointments) {
+        if (appointment.getAppointmentID().equals(appointmentID)) {
+            selectedAppointment = appointment;
+            break;
+        }
+    }
+
+    if (selectedAppointment == null) {
+        System.out.println("Invalid Appointment ID. Please try again.");
+        return;
+    }
+
+    // Complete the appointment
+    selectedAppointment.complete(inventory, appointmentID);
+    System.out.println("Outcome recorded successfully for Appointment ID: " + appointmentID);
+}
+
 
     // For the administrator function
     public void updateRole(Doctor doctor, int newRole, List<Pharmacist> pharmacists, List<Administrator> administrators) {
