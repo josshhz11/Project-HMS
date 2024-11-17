@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -10,88 +11,92 @@ public class Administrator extends User {
 
     // IMPORTANT
     public void viewAndManageHospitalStaff(List<Doctor> doctors, List<Pharmacist> pharmacists, List<Administrator> administrators, String[] roles) {
-        System.out.println("""
-                Hospital Staff Menu: 
-                1. View Hospital Staff
-                2. Manage Hospital Staff
-                Choose options (1-2): """);
-        int choice1 = sc.nextInt();
-        int choice2, i;
+        try {
+            System.out.println("""
+                    Hospital Staff Menu: 
+                    1. View Hospital Staff
+                    2. Manage Hospital Staff
+                    Choose options (1-2): """);
+            int choice1 = sc.nextInt();
+            int choice2, i;
 
-        switch(choice1) {
-            case 1: // View Hospital Staff
-                System.out.println(""" 
-                        View Hospital Staff:
-                        1. Doctors
-                        2. Pharmacists
-                        3. Administrators
-                        Choose which hospital staff to view (1-3): """);
-                choice2 = sc.nextInt();
+            switch(choice1) {
+                case 1: // View Hospital Staff
+                    System.out.println(""" 
+                            View Hospital Staff:
+                            1. Doctors
+                            2. Pharmacists
+                            3. Administrators
+                            Choose which hospital staff to view (1-3): """);
+                    choice2 = sc.nextInt();
 
-                switch (choice2) {
-                    case 1:
-                        i = 1;
-                        if (doctors.isEmpty()) {
-                            System.out.println("No doctors in the system.");
+                    switch (choice2) {
+                        case 1:
+                            i = 1;
+                            if (doctors.isEmpty()) {
+                                System.out.println("No doctors in the system.");
+                                break;
+                            }
+                            for (Doctor doctor : doctors) {
+                                System.out.println(i++ + ". Doctor ID: " + doctor.getuserID() + ", Name: " + doctor.getName());
+                            }
                             break;
-                        }
-                        for (Doctor doctor : doctors) {
-                            System.out.println(i++ + ". Doctor ID: " + doctor.getuserID() + ", Name: " + doctor.getName());
-                        }
-                        break;
-                    case 2:
-                        i = 1;
-                        if (pharmacists.isEmpty()) {
-                            System.out.println("No pharmacists in the system.");
+                        case 2:
+                            i = 1;
+                            if (pharmacists.isEmpty()) {
+                                System.out.println("No pharmacists in the system.");
+                                break;
+                            }
+                            for (Pharmacist pharmacist : pharmacists) {
+                                System.out.println(i++ + ". Pharmacist ID: " + pharmacist.getuserID() + ", Name: " + pharmacist.getName());
+                            }
                             break;
-                        }
-                        for (Pharmacist pharmacist : pharmacists) {
-                            System.out.println(i++ + ". Pharmacist ID: " + pharmacist.getuserID() + ", Name: " + pharmacist.getName());
-                        }
-                        break;
-                    case 3:
-                        i = 1;
-                        if (administrators.isEmpty()) {
-                            System.out.println("No administrators in the system.");
+                        case 3:
+                            i = 1;
+                            if (administrators.isEmpty()) {
+                                System.out.println("No administrators in the system.");
+                                break;
+                            }
+                            for (Administrator administrator : administrators) {
+                                System.out.println(i++ + ". Administrator ID: " + administrator.getuserID() + ", Name: " + administrator.getName());
+                            }
                             break;
-                        }
-                        for (Administrator administrator : administrators) {
-                            System.out.println(i++ + ". Administrator ID: " + administrator.getuserID() + ", Name: " + administrator.getName());
-                        }
-                        break;
-                    default:
-                        System.out.println("Invalid option. Please try again.");
-                        break;
-                }
-                break;
-            case 2: // Manage Hospital Staff
-                System.out.println(""" 
-                        1. Add Staff
-                        2. Update Staff
-                        3. Remove Staff
-                        Enter action (1-3): """);
-                choice2 = sc.nextInt();
+                        default:
+                            System.out.println("Invalid option. Please try again.");
+                            break;
+                    }
+                    break;
+                case 2: // Manage Hospital Staff
+                    System.out.println(""" 
+                            1. Add Staff
+                            2. Update Staff
+                            3. Remove Staff
+                            Enter action (1-3): """);
+                    choice2 = sc.nextInt();
 
-                switch(choice2) {
-                    case 1: // Add Staff
-                        addStaff(doctors, pharmacists, administrators, roles);
-                        break;
-                    case 2: // Update Staff
-                        updateStaffRole(doctors, pharmacists, administrators, roles);
-                        break;
-                    case 3: // Remove Staff
-                        removeStaff(doctors, pharmacists, administrators);
-                        break;
-                    default:
-                        System.out.println("Invalid action. Please try again.");
-                        break;
-                }
-                break;
-            default:
-                System.out.println("Invalid option. Please try again.");
-                break;
+                    switch(choice2) {
+                        case 1: // Add Staff
+                            addStaff(doctors, pharmacists, administrators, roles);
+                            break;
+                        case 2: // Update Staff
+                            updateStaffRole(doctors, pharmacists, administrators, roles);
+                            break;
+                        case 3: // Remove Staff
+                            removeStaff(doctors, pharmacists, administrators);
+                            break;
+                        default:
+                            System.out.println("Invalid action. Please try again.");
+                            break;
+                    }
+                    break;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+                    break;
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a valid number.");
+            sc.nextLine(); // Clear the invalid input from the scanner buffer
         }
-        
     }
     
     public void addStaff(List<Doctor> doctors, List<Pharmacist> pharmacists, List<Administrator> administrators, String[] roles) {
@@ -263,56 +268,61 @@ public class Administrator extends User {
 
     // IMPORTANT
     public void viewAndManageMedicationInventory(Inventory inventory) {
-        // Can put the entire view and manage options menu within here
-        // Include updateInventory() below
-        System.out.println("""
-                Medication Inventory Menu: 
-                1. View Medication Inventory
-                2. Manage Medication Inventory
-                Choose options (1-2): """);
-        int choice1 = sc.nextInt();
-        int choice2;
+        try {
+            System.out.println("""
+                    Medication Inventory Menu: 
+                    1. View Medication Inventory
+                    2. Manage Medication Inventory
+                    Choose options (1-2): """);
+            int choice1 = sc.nextInt();
+            int choice2;
 
-        switch(choice1) {
-            case 1: // View Medication Inventory
-                inventory.displayInventory(false);
-                break;
-            case 2: // Manage Medication Inventory
-                System.out.println(""" 
-                    1. Add New Medication to Inventory
-                    2. Remove Existing Medication from Inventory
-                    3. Update Existing Inventory Stock
-                    4. Update Low Stock Alert Levels
-                    Enter action (1-4): """);
-                choice2 = sc.nextInt();
+            switch(choice1) {
+                case 1: // View Medication Inventory
+                    inventory.displayInventory(false);
+                    break;
+                case 2: // Manage Medication Inventory
+                    System.out.println(""" 
+                        1. Add New Medication to Inventory
+                        2. Remove Existing Medication from Inventory
+                        3. Update Existing Inventory Stock
+                        4. Update Low Stock Alert Levels
+                        Enter action (1-4): """);
+                    choice2 = sc.nextInt();
 
-                switch (choice2) {
-                    case 1: // Add New Medication to Inventory
-                        System.out.println("Add New Medication to Inventory: ");
-                        inventory.addMedication();
-                        break;
-                    case 2: // Remove Existing Medication from Inventory
-                        System.out.println("Remove Existing Medication from Inventory: ");
-                        inventory.displayInventory(false);
-                        inventory.removeMedication();
-                        break;
-                    case 3: // Update Existing Inventory Stock
-                        System.out.println("Update Existing Inventory Stock: ");
-                        inventory.displayInventory(false);
-                        inventory.updateStock();
-                        break;
-                    case 4: // Update Low Stock Levels
-                        System.out.println("Update Low Stock Levels: ");
-                        inventory.displayInventory(false);
-                        inventory.updateLowStockAlert();
-                    default:
-                        break;
-                }
-                break;
-            default:
-                System.out.println("Invalid Option. Please try again.");
-                break;
+                    switch (choice2) {
+                        case 1: // Add New Medication to Inventory
+                            System.out.println("Add New Medication to Inventory: ");
+                            inventory.addMedication();
+                            break;
+                        case 2: // Remove Existing Medication from Inventory
+                            System.out.println("Remove Existing Medication from Inventory: ");
+                            inventory.displayInventory(false);
+                            inventory.removeMedication();
+                            break;
+                        case 3: // Update Existing Inventory Stock
+                            System.out.println("Update Existing Inventory Stock: ");
+                            inventory.displayInventory(false);
+                            inventory.updateStock();
+                            break;
+                        case 4: // Update Low Stock Levels
+                            System.out.println("Update Low Stock Levels: ");
+                            inventory.displayInventory(false);
+                            inventory.updateLowStockAlert();
+                        default:
+                            break;
+                    }
+                    break;
+                default:
+                    System.out.println("Invalid Option. Please try again.");
+                    break;
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a valid number.");
+            sc.nextLine(); // Clear the invalid input from the scanner buffer
         }
+
+        
     }
 
     public void approveReplenishmentRequest(Inventory inventory) {

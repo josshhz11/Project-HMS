@@ -3,6 +3,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -34,24 +35,30 @@ public class Patient extends User {
     }
 
     public void viewPatientInformation() {
-        System.out.println("""
-                Which information would you like to view?
-                1. Medical Record
-                2. Personal Information
-                Choose options (1-2): """);
-        int option = sc.nextInt();
+        try {
+            System.out.println("""
+                    Which information would you like to view?
+                    1. Medical Record
+                    2. Personal Information
+                    Choose options (1-2): """);
+            int option = sc.nextInt();
 
-        switch (option) {
-            case 1:
-                System.out.println(medicalRecord);
-                break;
-            case 2:
-                viewPersonalInformation();
-                break;
-            default:
-                System.out.println("Invalid option. Please try again.");
-                return;
+            switch (option) {
+                case 1:
+                    System.out.println(medicalRecord);
+                    break;
+                case 2:
+                    viewPersonalInformation();
+                    break;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+                    return;
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a valid number.");
+            sc.nextLine(); // Clear the invalid input from the scanner buffer
         }
+        
     }
 
     public void viewPersonalInformation() {
@@ -66,28 +73,33 @@ public class Patient extends User {
 
     // Update contact information
     public void updateContactInfo() {
-        System.out.println("""
-                Update Contact Info: 
-                1. Email
-                2. Contact Number
-                Choose option (1-2) to update:  """);
-        int option = sc.nextInt();
-        sc.nextLine();
+        try {
+            System.out.println("""
+                    Update Contact Info: 
+                    1. Email
+                    2. Contact Number
+                    Choose option (1-2) to update:  """);
+            int option = sc.nextInt();
 
-        switch (option) {
-            case 1:
-                System.out.print("Enter new email: ");
-                this.email = sc.nextLine();
-                break;
-            case 2:
-                System.out.print("Enter new contact number: ");
-                this.contactNumber = sc.nextLine();
-                break;
-            default:
-                System.out.println("Invalid option. Please try again.");
-                return;
+            switch (option) {
+                case 1:
+                    System.out.println("Enter new email: ");
+                    this.email = sc.next();
+                    break;
+                case 2:
+                    System.out.println("Enter new contact number: ");
+                    this.contactNumber = sc.next();
+                    break;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+                    return;
+            }
+            System.out.println("Contact information updated successfully.");
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a valid number.");
+            sc.nextLine(); // Clear the invalid input from the scanner buffer
         }
-        System.out.println("Contact information updated successfully.");
+        
     }
 
     public void scheduleAppointment(SchedulingSystem schedulingSystem) {
@@ -291,5 +303,3 @@ public void viewPastAppointmentOutcomeRecords() {
         //return sc.nextLine().trim();
     //}
 }
-
-

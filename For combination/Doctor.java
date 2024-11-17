@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 //import java.util.HashMap;
 //import java.util.HashSet;
 import java.util.List;
@@ -84,30 +85,36 @@ public class Doctor extends User {
 
     public void updatePatientMedicalRecord(Patient patient) {
         System.out.println("Updating medical record for Patient ID: " + patient.getuserID());
-        System.out.println("""
-                1. Diagnosis
-                2. Treatment
-                Choose options (1-2) to update: """);
-        int option = sc.nextInt();
+        
+        try {
+            System.out.println("""
+                    1. Diagnosis
+                    2. Treatment
+                    Choose options (1-2) to update: """);
+            int option = sc.nextInt();
 
-        switch (option) {
-            case 1:
-                System.out.println("Update diagnosis: ");
-                sc.nextLine();
-                String newDiagnosis = sc.nextLine();
-                patient.getMedicalRecord().addDiagnosis(newDiagnosis);
-                System.out.println("Diagnosis successfully added for patient " + patient.getName());
-                break;
-            case 2:
-                System.out.println("Update treatment: ");
-                sc.nextLine();
-                String newTreatment = sc.nextLine();
-                patient.getMedicalRecord().addTreatment(newTreatment);
-                System.out.println("Treatment successfully added for patient " + patient.getName());
-                break;
-            default:
-                System.out.println("Invalid option. Please try again.");
-                break;
+            switch (option) {
+                case 1:
+                    System.out.println("Update diagnosis: ");
+                    sc.nextLine();
+                    String newDiagnosis = sc.nextLine();
+                    patient.getMedicalRecord().addDiagnosis(newDiagnosis);
+                    System.out.println("Diagnosis successfully added for patient " + patient.getName());
+                    break;
+                case 2:
+                    System.out.println("Update treatment: ");
+                    sc.nextLine();
+                    String newTreatment = sc.nextLine();
+                    patient.getMedicalRecord().addTreatment(newTreatment);
+                    System.out.println("Treatment successfully added for patient " + patient.getName());
+                    break;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+                    break;
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a valid number.");
+            sc.nextLine(); // Clear the invalid input from the scanner buffer
         }
     }
 

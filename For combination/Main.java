@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.InputMismatchException;
 
 public class Main {
     private static final String USER_DATA_FILE = "user_data.ser";
@@ -30,8 +31,6 @@ public class Main {
     public Inventory inventory = new Inventory();
     private static SchedulingSystem schedulingSystem = new SchedulingSystem();
     private String[] roles = {"Patient", "Doctor", "Pharmacist", "Administrator"};
-
-
 
     public static void main(String[] args) {
         Main mainInstance = Main.getInstance();
@@ -80,17 +79,22 @@ public class Main {
             // Example menu handling
             boolean loggedIn = true;
             while (loggedIn) {
-                currentUser.displayMenu();
-                int choice = sc.nextInt();
+                try {
+                    currentUser.displayMenu();
+                    int choice = sc.nextInt();
 
-                if (currentUser instanceof Patient) {
-                    loggedIn = mainInstance.handlePatientOptions((Patient) currentUser, loggedIn, choice, sc);
-                } else if (currentUser instanceof Doctor) {
-                    loggedIn = mainInstance.handleDoctorOptions((Doctor) currentUser, loggedIn, choice, sc);
-                } else if (currentUser instanceof Pharmacist) {
-                    loggedIn = mainInstance.handlePharmacistOptions((Pharmacist) currentUser, loggedIn, choice, sc);
-                } else if (currentUser instanceof Administrator) {
-                    loggedIn = mainInstance.handleAdminOptions((Administrator) currentUser, loggedIn, choice, sc);
+                    if (currentUser instanceof Patient) {
+                        loggedIn = mainInstance.handlePatientOptions((Patient) currentUser, loggedIn, choice, sc);
+                    } else if (currentUser instanceof Doctor) {
+                        loggedIn = mainInstance.handleDoctorOptions((Doctor) currentUser, loggedIn, choice, sc);
+                    } else if (currentUser instanceof Pharmacist) {
+                        loggedIn = mainInstance.handlePharmacistOptions((Pharmacist) currentUser, loggedIn, choice, sc);
+                    } else if (currentUser instanceof Administrator) {
+                        loggedIn = mainInstance.handleAdminOptions((Administrator) currentUser, loggedIn, choice, sc);
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter a valid number.");
+                    sc.nextLine(); // Clear the invalid input from the scanner buffer
                 }
             }
 
