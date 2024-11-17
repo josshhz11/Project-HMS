@@ -233,10 +233,33 @@ public class Main {
         switch (choice) {
             case 1 -> pharmacist.viewAppointmentOutcomeRecord(patients);
             case 2 -> {
+                // Display completed appointments
+                System.out.println("Completed Appointments:");
+                boolean hasCompletedAppointments = false;
+                for (Patient patient : patients) {
+                    for (Appointment appointment : patient.getAppointments()) {
+                        if (appointment.getStatus().equals("Completed")) {
+                            hasCompletedAppointments = true;
+                            System.out.println(
+                                "Date: " + appointment.getDateTime().toLocalDate() +
+                                ", Time: " + appointment.getDateTime().toLocalTime() +
+                                ", Patient: " + patient.getName() +
+                                ", Appointment ID: " + appointment.getAppointmentID()
+                            );
+                        }
+                    }
+                }
+                if (!hasCompletedAppointments) {
+                    System.out.println("No completed appointments available.");
+                    break; // Exit early if no completed appointments
+                }
+            
+                // Prompt for appointment ID
                 System.out.println("Enter Appointment ID to update status: ");
                 String appointmentID = sc.next();
-                pharmacist.updatePrescriptionStatus(appointmentID, patients);
+                pharmacist.updatePrescriptionStatus(appointmentID, patients, inventory);
             }
+            
             case 3 -> pharmacist.viewInventory(inventory);
             case 4 -> pharmacist.submitReplenishmentRequest(inventory);
             case 5 -> {
@@ -247,6 +270,7 @@ public class Main {
         }
         return loggedIn;
     }
+
 
     // Handle Administrator options
     private boolean handleAdminOptions(Administrator admin, boolean loggedIn, int choice, Scanner sc) {
