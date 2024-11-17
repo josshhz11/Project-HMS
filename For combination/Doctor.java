@@ -298,13 +298,27 @@ public class Doctor extends User {
         return input;
     }
 
-    public void viewAppointmentRequests() {
-        for (Appointment appointment : schedule) {
-            if (appointment.getStatus() == "Pending") {
-                System.out.println(appointment.toString());
-            }
+public void viewAppointmentRequests() {
+    System.out.println("\nPending Appointment Requests:");
+
+    boolean hasPendingRequests = false;
+
+    for (Appointment appointment : schedule) {
+        if (appointment.getStatus().equals("Pending")) {
+            hasPendingRequests = true;
+            System.out.println(
+                "Date: " + appointment.getDateTime().toLocalDate() +
+                ", Time: " + appointment.getDateTime().toLocalTime() +
+                ", Patient: " + appointment.getPatientID() +
+                ", Appointment ID: " + appointment.getAppointmentID()
+            );
         }
     }
+
+    if (!hasPendingRequests) {
+        System.out.println("No pending appointment requests found.");
+    }
+}
 
     private List<Appointment> pendingAppointments = new ArrayList<>();
 
