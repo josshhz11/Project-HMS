@@ -282,7 +282,7 @@ public class Administrator extends User {
                     1. Add New Medication to Inventory
                     2. Remove Existing Medication from Inventory
                     3. Update Existing Inventory Stock
-                    4. Update Low Stock Levels
+                    4. Update Low Stock Alert Levels
                     Enter action (1-4): """);
                 choice2 = sc.nextInt();
 
@@ -366,6 +366,6 @@ public class Administrator extends User {
                 5. View and Manage Medication Inventory
                 6. Approve Replenishment Requests
                 7. Logout
-                Choose options (1-5): """);
+                Choose options (1-7): """);
     }
 }
