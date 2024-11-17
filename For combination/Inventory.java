@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Inventory {
+public class Inventory implements InventoryManagement, Replenish {
     private List<Medication> medications;
     private static Scanner sc = new Scanner(System.in);
 
