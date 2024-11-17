@@ -305,27 +305,6 @@ public class Doctor extends User {
         return input;
     }
 
-public void viewAppointmentRequests() {
-    System.out.println("\nPending Appointment Requests:");
-
-    boolean hasPendingRequests = false;
-
-    for (Appointment appointment : schedule) {
-        if (appointment.getStatus().equals("Pending")) {
-            hasPendingRequests = true;
-            System.out.println(
-                "Date: " + appointment.getDateTime().toLocalDate() +
-                ", Time: " + appointment.getDateTime().toLocalTime() +
-                ", Patient: " + appointment.getPatientID() +
-                ", Appointment ID: " + appointment.getAppointmentID()
-            );
-        }
-    }
-
-    if (!hasPendingRequests) {
-        System.out.println("No pending appointment requests found.");
-    }
-}
 
     private List<Appointment> pendingAppointments = new ArrayList<>();
 
@@ -333,36 +312,41 @@ public void viewAppointmentRequests() {
         pendingAppointments.add(appointment);
     }
 
-    public void respondToAppointmentRequests(SchedulingSystem schedulingSystem) {
-        boolean empty = schedulingSystem.viewPendingAppointmentsForDoctor(this);
 
-        if (empty == false) {
-            System.out.println("Enter the Appointment ID to respond to: ");
-            String appointmentID = sc.nextLine();
-        
-            Appointment appointment = schedulingSystem.getPendingAppointmentById(appointmentID);
-            if (appointment == null) {
-                System.out.println("Invalid Appointment ID.");
-                return;
-            }
-        
-            System.out.println("1. Accept\n2. Reject");
-            int choice = sc.nextInt();
-            sc.nextLine(); // Clear buffer
-        
-            if (choice == 1) {
-                schedulingSystem.respondToPendingAppointment(appointment, true);
-            } else if (choice == 2) {
-                schedulingSystem.respondToPendingAppointment(appointment, false);
-            } else {
-                System.out.println("Invalid choice.");
-            }
-        } else {
-            System.out.println("No Pending Appointments.");
+    public void respondToAppointmentRequests(SchedulingSystem schedulingSystem) {
+        // Display pending appointments for the doctor
+        schedulingSystem.viewPendingAppointmentsForDoctor(this);
+    
+        // Check if there are any pending appointments
+        boolean hasPendingRequests = schedulingSystem.getPendingAppointmentsForDoctor(this).isEmpty();
+        if (hasPendingRequests) {
+            System.out.println("No pending appointment requests found.");
+            return; // Exit if no pending requests
         }
     
-        
+        // Ask for response only if there are pending appointments
+        System.out.println("Enter the Appointment ID to respond to: ");
+        String appointmentID = sc.nextLine();
+    
+        Appointment appointment = schedulingSystem.getPendingAppointmentById(appointmentID);
+        if (appointment == null) {
+            System.out.println("Invalid Appointment ID.");
+            return;
+        }
+    
+        System.out.println("1. Accept\n2. Reject");
+        int choice = sc.nextInt();
+        sc.nextLine(); // Clear buffer
+    
+        if (choice == 1) {
+            schedulingSystem.respondToPendingAppointment(appointment, true);
+        } else if (choice == 2) {
+            schedulingSystem.respondToPendingAppointment(appointment, false);
+        } else {
+            System.out.println("Invalid choice.");
+        }
     }
+    
 
     // Doctor: Add an appointment
     public void addAppointment(Appointment appointment) {
