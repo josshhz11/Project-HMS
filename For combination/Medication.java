@@ -1,6 +1,8 @@
+import java.io.Serializable;
 import java.util.List;
 
-public class Medication {
+public class Medication implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String medicationID;
     private String name;
     private int quantity;
