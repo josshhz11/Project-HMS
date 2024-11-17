@@ -53,6 +53,11 @@ public class Appointment implements Serializable{
     public Map<Medication, Integer> getPrescribedMedication() {
         return this.prescribedMedication;
     }
+
+    public String getConsultationNotes(){
+        return consultationNotes;
+    }
+    
     public void confirm() {
         if (!status.equals("Pending")) {
             System.out.println("Only pending appointments can be confirmed.");
