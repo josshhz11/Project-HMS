@@ -471,7 +471,6 @@ public void recordAppointmentOutcome(Inventory inventory) {
 
     // Complete the appointment
     selectedAppointment.complete(inventory, appointmentID);
-    System.out.println("Outcome recorded successfully for Appointment ID: " + appointmentID);
 }
 
 

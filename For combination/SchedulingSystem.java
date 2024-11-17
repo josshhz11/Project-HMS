@@ -111,15 +111,15 @@ public class SchedulingSystem {
     }
     
     
-        // Check for conflicts in the doctor's schedule
-        LocalDateTime slotEnd = slot.plusMinutes(30); // Assuming 30-minute slots
-        if (doctor.hasConflict(slot, slotEnd)) {
-            System.out.println("Conflict detected. Unable to book the slot: " + slot);
-            return null;
-        }
+    // Check for conflicts in the doctor's schedule
+    LocalDateTime slotEnd = slot.plusMinutes(30); // Assuming 30-minute slots
+    if (doctor.hasConflict(slot, slotEnd)) {
+        System.out.println("Conflict detected. Unable to book the slot: " + slot);
+        return null;
+    }
     
-        // Check availability in the centralized scheduling system
-        Map<LocalDateTime, Boolean> availability = doctorAvailability.get(doctor);
+    // Check availability in the centralized scheduling system
+    Map<LocalDateTime, Boolean> availability = doctorAvailability.get(doctor);
         if (availability != null && availability.getOrDefault(slot, true)) {
             // Generate unique appointment ID
             String appointmentID = generateAppointmentID();
@@ -178,109 +178,109 @@ public class SchedulingSystem {
 
 
     // SchedulingSystem: Check if a slot is available for a specific doctor
-public boolean isSlotAvailable(Doctor doctor, LocalDateTime slot) {
-    if (doctorAvailability == null) {
-        System.out.println("Doctor availability is not initialized.");
-        return false;
-    }
+    public boolean isSlotAvailable(Doctor doctor, LocalDateTime slot) {
+        if (doctorAvailability == null) {
+            System.out.println("Doctor availability is not initialized.");
+            return false;
+        }
 
-    Map<LocalDateTime, Boolean> availability = doctorAvailability.get(doctor);
-    if (availability == null) {
-        System.out.println("No availability information found for Dr. " + doctor.getName());
-        return false;
-    }
+        Map<LocalDateTime, Boolean> availability = doctorAvailability.get(doctor);
+        if (availability == null) {
+            System.out.println("No availability information found for Dr. " + doctor.getName());
+            return false;
+        }
 
-    return availability.getOrDefault(slot, false);
-}
+        return availability.getOrDefault(slot, false);
+    }
 
 
 
 
     public boolean displayAvailableSlotsForDoctor(Doctor doctor) {
-    System.out.println("""
-        Choose a time range for available appointments:
-        1: This week's available appointments
-        2: This month's available appointments (next 30 days)
-        """);
+        System.out.println("""
+            Choose a time range for available appointments:
+            1: This week's available appointments
+            2: This month's available appointments (next 30 days)
+            """);
 
-    int choice = getIntInput(); // Helper method to handle input validation
-    LocalDateTime now = LocalDateTime.now(); // Current date and time
-    LocalDate endDate; // Define the end date based on the choice
+        int choice = getIntInput(); // Helper method to handle input validation
+        LocalDateTime now = LocalDateTime.now(); // Current date and time
+        LocalDate endDate; // Define the end date based on the choice
 
-    switch (choice) {
-        case 1 -> endDate = now.toLocalDate().plusDays(7); // End of the current week
-        case 2 -> endDate = now.toLocalDate().plusDays(30); // Next 30 days
-        default -> {
-            System.out.println("Invalid choice. Returning to the main menu.");
+        switch (choice) {
+            case 1 -> endDate = now.toLocalDate().plusDays(7); // End of the current week
+            case 2 -> endDate = now.toLocalDate().plusDays(30); // Next 30 days
+            default -> {
+                System.out.println("Invalid choice. Returning to the main menu.");
+                return false;
+            }
+        }
+
+        Map<LocalDateTime, Boolean> availability = doctorAvailability.get(doctor);
+        if (availability == null || availability.isEmpty()) {
+            System.out.println("No available slots for Dr. " + doctor.getName());
             return false;
         }
-    }
 
-    Map<LocalDateTime, Boolean> availability = doctorAvailability.get(doctor);
-    if (availability == null || availability.isEmpty()) {
-        System.out.println("No available slots for Dr. " + doctor.getName());
-        return false;
-    }
+        boolean hasSlots = false;
+        Map<LocalDate, List<LocalTime>> formattedAvailability = new TreeMap<>();
 
-    boolean hasSlots = false;
-    Map<LocalDate, List<LocalTime>> formattedAvailability = new TreeMap<>();
-
-    // Organize slots by date for cleaner display
-    for (Map.Entry<LocalDateTime, Boolean> entry : availability.entrySet()) {
-        LocalDateTime slot = entry.getKey();
-        if (entry.getValue() && slot.isAfter(now) && slot.toLocalDate().isBefore(endDate.plusDays(1))) {
-            hasSlots = true;
-            LocalDate date = slot.toLocalDate();
-            LocalTime time = slot.toLocalTime();
-            formattedAvailability.computeIfAbsent(date, k -> new ArrayList<>()).add(time);
+        // Organize slots by date for cleaner display
+        for (Map.Entry<LocalDateTime, Boolean> entry : availability.entrySet()) {
+            LocalDateTime slot = entry.getKey();
+            if (entry.getValue() && slot.isAfter(now) && slot.toLocalDate().isBefore(endDate.plusDays(1))) {
+                hasSlots = true;
+                LocalDate date = slot.toLocalDate();
+                LocalTime time = slot.toLocalTime();
+                formattedAvailability.computeIfAbsent(date, k -> new ArrayList<>()).add(time);
+            }
         }
-    }
 
-    if (!hasSlots) {
-        System.out.println("No available slots for Dr. " + doctor.getName());
-        return false;
-    }
-
-    // Sort the times for each date
-    for (List<LocalTime> times : formattedAvailability.values()) {
-        times.sort(Comparator.naturalOrder());
-    }
-
-    // Display formatted availability
-    System.out.println("Available slots for Dr. " + doctor.getName() + ":");
-    for (Map.Entry<LocalDate, List<LocalTime>> entry : formattedAvailability.entrySet()) {
-        System.out.println("Date: " + entry.getKey());
-        System.out.print("  Times: ");
-        for (LocalTime time : entry.getValue()) {
-            System.out.print(time + " ");
+        if (!hasSlots) {
+            System.out.println("No available slots for Dr. " + doctor.getName());
+            return false;
         }
-        System.out.println(); // New line after each date
-    }
 
-    return true; // Slots are available
-}
+        // Sort the times for each date
+        for (List<LocalTime> times : formattedAvailability.values()) {
+            times.sort(Comparator.naturalOrder());
+        }
+
+        // Display formatted availability
+        System.out.println("Available slots for Dr. " + doctor.getName() + ":");
+        for (Map.Entry<LocalDate, List<LocalTime>> entry : formattedAvailability.entrySet()) {
+            System.out.println("Date: " + entry.getKey());
+            System.out.print("  Times: ");
+            for (LocalTime time : entry.getValue()) {
+                System.out.print(time + " ");
+            }
+            System.out.println(); // New line after each date
+        }
+
+        return true; // Slots are available
+    }
 
     // Declare Scanner globally at the top of your class
-private static Scanner sc = new Scanner(System.in);
+    private static Scanner sc = new Scanner(System.in);
 
-// Helper method for input validation
-private int getIntInput() {
-    int input = -1; // Default to an invalid number
-    boolean valid = false;
+    // Helper method for input validation
+    private int getIntInput() {
+        int input = -1; // Default to an invalid number
+        boolean valid = false;
 
-    while (!valid) {
-        System.out.print("Enter your choice: ");
-        if (sc.hasNextInt()) {
-            input = sc.nextInt();
-            sc.nextLine(); // Clear the buffer
-            valid = true; // Valid integer input
-        } else {
-            System.out.println("Invalid input. Please enter a valid number.");
-            sc.next(); // Clear the invalid input
+        while (!valid) {
+            System.out.print("Enter your choice: ");
+            if (sc.hasNextInt()) {
+                input = sc.nextInt();
+                sc.nextLine(); // Clear the buffer
+                valid = true; // Valid integer input
+            } else {
+                System.out.println("Invalid input. Please enter a valid number.");
+                sc.next(); // Clear the invalid input
+            }
         }
+        return input;
     }
-    return input;
-}
 
 
 
@@ -450,6 +450,4 @@ private int getIntInput() {
                 patient != null ? patient.getName() : "Unknown");
         }
     }
-    
-    
 }

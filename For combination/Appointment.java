@@ -83,8 +83,7 @@ public class Appointment implements Serializable{
             System.out.println("Only confirmed appointments can be completed.");
             return;
         }
-    
-        this.status = "Completed";
+
         System.out.println("""
                 Prescribe Medication for Appointment (if any): 
                 1. Yes
@@ -94,11 +93,16 @@ public class Appointment implements Serializable{
     
         switch (option) {
             case 1:
+                inventory.displayInventory(false);
                 System.out.println("Medication ID: ");
                 String medicationID = sc.next();
                 System.out.println("Quantity: ");
                 int quantity = sc.nextInt();
                 Medication medication = inventory.findMedicationByID(medicationID);
+                if (medication == null) {
+                    System.out.println("Medication Not Found. Please Try Again.");
+                    return;
+                }
                 this.prescribedMedication.put(medication, quantity);
                 this.medicationStatus = "Pending to Dispense";
                 break;
@@ -112,6 +116,8 @@ public class Appointment implements Serializable{
         System.out.println("Consultation Notes for Appointment (if any): ");
         sc.nextLine();
         this.consultationNotes = sc.nextLine();
+        this.status = "Completed";
+        System.out.println("Outcome recorded successfully for Appointment ID: " + appointmentID);
     }
     
 
@@ -144,5 +150,4 @@ public class Appointment implements Serializable{
             + (consultationNotes != null ? ", Consultation Notes=" + consultationNotes : "")
             + "]";
     }
-    
 }
