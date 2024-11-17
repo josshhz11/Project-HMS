@@ -120,8 +120,7 @@ public class Doctor extends User {
             
             Select an option:
             1. Customize availability (block additional times)
-            2. Use default availability
-            """);
+            2. Use default availability """);
 
         int choice = getIntInput();
         if (choice == 1) {
@@ -156,7 +155,6 @@ public class Doctor extends User {
 
         return false; // No conflict
     }
-
 
     private void handleCustomBlockedTimes() {
         System.out.println("Enter the number of custom blocks:");
@@ -311,28 +309,34 @@ public class Doctor extends User {
     }
 
     public void respondToAppointmentRequests(SchedulingSystem schedulingSystem) {
-        schedulingSystem.viewPendingAppointmentsForDoctor(this);
-    
-        System.out.println("Enter the Appointment ID to respond to: ");
-        String appointmentID = sc.nextLine();
-    
-        Appointment appointment = schedulingSystem.getPendingAppointmentById(appointmentID);
-        if (appointment == null) {
-            System.out.println("Invalid Appointment ID.");
-            return;
-        }
-    
-        System.out.println("1. Accept\n2. Reject");
-        int choice = sc.nextInt();
-        sc.nextLine(); // Clear buffer
-    
-        if (choice == 1) {
-            schedulingSystem.respondToPendingAppointment(appointment, true);
-        } else if (choice == 2) {
-            schedulingSystem.respondToPendingAppointment(appointment, false);
+        boolean empty = schedulingSystem.viewPendingAppointmentsForDoctor(this);
+
+        if (empty == false) {
+            System.out.println("Enter the Appointment ID to respond to: ");
+            String appointmentID = sc.nextLine();
+        
+            Appointment appointment = schedulingSystem.getPendingAppointmentById(appointmentID);
+            if (appointment == null) {
+                System.out.println("Invalid Appointment ID.");
+                return;
+            }
+        
+            System.out.println("1. Accept\n2. Reject");
+            int choice = sc.nextInt();
+            sc.nextLine(); // Clear buffer
+        
+            if (choice == 1) {
+                schedulingSystem.respondToPendingAppointment(appointment, true);
+            } else if (choice == 2) {
+                schedulingSystem.respondToPendingAppointment(appointment, false);
+            } else {
+                System.out.println("Invalid choice.");
+            }
         } else {
-            System.out.println("Invalid choice.");
+            System.out.println("No Pending Appointments.");
         }
+    
+        
     }
 
     // Doctor: Add an appointment
@@ -385,7 +389,7 @@ public class Doctor extends User {
         if (upcomingAppointments.isEmpty()) {
             System.out.println("No upcoming appointments.");
         } else {
-            System.out.println("--- Appointments ---");
+            System.out.println("------ Appointments ------");
             for (Appointment appointment : upcomingAppointments) {
                 System.out.println(
                     "Date: " + appointment.getDateTime().toLocalDate() + 
@@ -396,7 +400,7 @@ public class Doctor extends User {
             }
         }
 
-        System.out.println("--------------------");
+        System.out.println("--------------------------");
     }
 
     

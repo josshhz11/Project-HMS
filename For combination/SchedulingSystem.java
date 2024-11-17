@@ -53,13 +53,16 @@ public class SchedulingSystem {
         return null;
     }
 
-    public void viewPendingAppointmentsForDoctor(Doctor doctor) {
+    public boolean viewPendingAppointmentsForDoctor(Doctor doctor) {
+        boolean empty = true;
         System.out.println("Pending Appointments for Dr. " + doctor.getName() + ":");
         for (Appointment appointment : pendingAppointments) {
             if (appointment.getDoctorID().equals(doctor.getDoctorID())) {
                 System.out.println(appointment);
+                empty = false;
             }
         }
+        return empty;
     }
 
     public void respondToPendingAppointment(Appointment appointment, boolean isAccepted) {
@@ -139,10 +142,10 @@ public class SchedulingSystem {
         Doctor doctor = getDoctorById(appointment.getDoctorID());
         Patient patient = getPatientById(appointment.getPatientID());
 
-        if (doctor == null || patient == null) {
-            System.out.println("Doctor or patient not found. Cannot confirm appointment.");
-            return;
-        }
+        // if (doctor == null || patient == null) {
+        //    System.out.println("Doctor or patient not found. Cannot confirm appointment.");
+        //    return;
+        // }
 
         appointment.confirm();
         appointments.add(appointment);
