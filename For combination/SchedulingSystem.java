@@ -117,7 +117,7 @@ public class SchedulingSystem {
 
     public Appointment bookSlot(Patient patient, Doctor doctor, LocalDateTime slot, String comments) {
         LocalDateTime now = LocalDateTime.now();
-        int bookingDaysRange = 7; // Change this to allow bookings for the next 'n' days
+        int bookingDaysRange = 30; // Change this to allow bookings for the next 'n' days
         LocalDateTime bookingEnd = now.plusDays(bookingDaysRange).with(LocalTime.of(18, 0));
     
         // Check if the slot is in the past
