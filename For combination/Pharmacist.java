@@ -15,63 +15,93 @@ public class Pharmacist extends User {
         return userID;
     }
 
-
-public void viewAppointmentOutcomeRecord(List<Patient> patients) {
-    System.out.println("\nCompleted Appointments:");
-
-    boolean hasCompletedAppointments = false;
-
-    for (Patient patient : patients) {
-        for (Appointment appointment : patient.getAppointments()) {
-            if (appointment.getStatus().equals("Completed")) {
-                hasCompletedAppointments = true;
-                System.out.println(
-                    "Date: " + appointment.getDateTime().toLocalDate() +
-                    ", Time: " + appointment.getDateTime().toLocalTime() +
-                    ", Patient: " + patient.getName() +
-                    ", Appointment ID: " + appointment.getAppointmentID() +
-                    ", Consultation Notes: " + (appointment.getConsultationNotes() != null ? appointment.getConsultationNotes() : "None") +
-                    ", Medication Status: " + (appointment.getMedicationStatus() != null ? appointment.getMedicationStatus() : "Not Prescribed")
-                );
-            }
-        }
-    }
-
-    if (!hasCompletedAppointments) {
-        System.out.println("No completed appointments found.");
-    }
-}
-
-    public void updatePrescriptionStatus(String appointmentID, List<Patient> patients, Inventory inventory) {
+    public void viewAppointmentOutcomeRecord(List<Patient> patients) {
+        System.out.println("\nCompleted Appointments:");
+    
+        boolean hasCompletedAppointments = false;
+    
         for (Patient patient : patients) {
             for (Appointment appointment : patient.getAppointments()) {
-                if (appointment.getAppointmentID() == appointmentID) {
-                    if (appointment.getMedicationStatus() == "Dispense Complete") {
-                        System.out.println("Medication already dispensed.");
-                        return;
-                    } else {
-                        Map<Medication, Integer> medications = appointment.getPrescribedMedication();
-                        
-                        if (medications.isEmpty()) {
-                            System.out.println("No medications prescribed for this appointment.");
-                            return;
-                        }
-
-                        for (Map.Entry<Medication, Integer> entry: medications.entrySet()) {
-                            Medication medication = entry.getKey();
-                            int quantity = entry.getValue();
-
-                            if (quantity > medication.getQuantity()) {
-                                System.out.println("Insufficient Medication " + medication.getName() + " in Inventory");
-                            } else {
-                                System.out.println("Dispensing Medication " + medication.getName());
-                                medication.updateQuantity(medication.getQuantity() - quantity);
-                            }
-                        }
-
-                    }
+                if (appointment.getStatus().equals("Completed")) {
+                    hasCompletedAppointments = true;
+                    System.out.println(
+                        "Date: " + appointment.getDateTime().toLocalDate() +
+                        ", Time: " + appointment.getDateTime().toLocalTime() +
+                        ", Patient: " + patient.getName() +
+                        ", Appointment ID: " + appointment.getAppointmentID() +
+                        ", Consultation Notes: " + (appointment.getConsultationNotes() != null ? appointment.getConsultationNotes() : "None") +
+                        ", Medication Status: " + (appointment.getMedicationStatus() != null ? appointment.getMedicationStatus() : "Not Prescribed")
+                    );
                 }
             }
+        }
+    
+        if (!hasCompletedAppointments) {
+            System.out.println("No completed appointments found.");
+        }
+    }
+    
+    
+    public void updatePrescriptionStatus(String appointmentID, List<Patient> patients, Inventory inventory) {
+        Appointment targetAppointment = null;
+    
+        // Find the target appointment by Appointment ID
+        for (Patient patient : patients) {
+            for (Appointment appointment : patient.getAppointments()) {
+                if (appointment.getAppointmentID().equals(appointmentID)) {
+                    targetAppointment = appointment;
+                    break;
+                }
+            }
+            if (targetAppointment != null) {
+                break;
+            }
+        }
+    
+        if (targetAppointment == null) {
+            System.out.println("Appointment not found.");
+            return;
+        }
+    
+        // Check the medication status
+        if ("Dispense Complete".equals(targetAppointment.getMedicationStatus())) 
+        {
+            System.out.println("Medication already dispensed.");
+        } else if ("Pending to Dispense".equals(targetAppointment.getMedicationStatus())) 
+        {
+            System.out.println("Pending medication prescription found.");
+            System.out.println("Do you want to dispense medications? (1. Yes / 2. No)");
+            int choice = sc.nextInt();
+    
+            if (choice == 1) {
+                Map<Medication, Integer> medications = targetAppointment.getPrescribedMedication();
+    
+                if (medications.isEmpty()) {
+                    System.out.println("No medications prescribed for this appointment.");
+                    return;
+                }
+    
+                for (Map.Entry<Medication, Integer> entry : medications.entrySet()) {
+                    Medication medication = entry.getKey();
+                    int quantity = entry.getValue();
+    
+                    if (quantity > medication.getQuantity()) {
+                        System.out.println("Insufficient Medication: " + medication.getName() + " in Inventory.");
+                        return;
+                    } else {
+                        System.out.println("Dispensing Medication: " + medication.getName() + " (Quantity: " + quantity + ")");
+                        medication.updateQuantity(medication.getQuantity() - quantity);
+                    }
+                }
+    
+                // Mark medication status as dispensed
+                targetAppointment.completeDispense();
+                System.out.println("Medication dispensed successfully. Status updated to 'Dispense Complete'.");
+            } else {
+                System.out.println("Dispensing canceled.");
+            }
+        } else {
+            System.out.println("No pending medication prescriptions for this appointment.");
         }
     }
 
@@ -136,3 +166,4 @@ public void viewAppointmentOutcomeRecord(List<Patient> patients) {
 
     }
 }
+
