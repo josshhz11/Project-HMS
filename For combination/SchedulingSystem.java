@@ -53,6 +53,49 @@ public class SchedulingSystem {
         return null;
     }
 
+    public void viewScheduledAppointmentsForPatient(Patient patient) {
+        System.out.println("\nAll Appointments for Patient: " + patient.getName() + ", Patient ID: " + patient.getuserID());
+    
+        // List to store all appointments for the patient
+        List<Appointment> patientAppointments = new ArrayList<>();
+    
+        // Add confirmed and cancelled appointments from the central appointments list
+        for (Appointment appointment : appointments) {
+            if (appointment.getPatientID().equals(patient.getuserID())) {
+                patientAppointments.add(appointment);
+            }
+        }
+    
+        // Add pending appointments from the pendingAppointments list
+        for (Appointment appointment : pendingAppointments) {
+            if (appointment.getPatientID().equals(patient.getuserID())) {
+                patientAppointments.add(appointment);
+            }
+        }
+    
+        // Sort appointments by date and time
+        patientAppointments.sort(Comparator.comparing(Appointment::getDateTime));
+    
+        if (patientAppointments.isEmpty()) {
+            System.out.println("This patient has no appointments.");
+        } else {
+            System.out.println("--- Appointments ---");
+            for (Appointment appointment : patientAppointments) {
+                Doctor doctor = getDoctorById(appointment.getDoctorID());
+                System.out.printf(
+                    "Date: %s, Time: %s, Doctor: Dr. %s, Appointment ID: %s, Status: %s%n",
+                    appointment.getDateTime().toLocalDate(),
+                    appointment.getDateTime().toLocalTime(),
+                    doctor != null ? doctor.getName() : "Unknown",
+                    appointment.getAppointmentID(),
+                    appointment.getStatus()
+                );
+            }
+            System.out.println("--------------------");
+        }
+    }
+    
+
 
     public void viewPendingAppointmentsForDoctor(Doctor doctor) {
         System.out.println("\nPending Appointments for Dr. " + doctor.getName() + ", Doctor ID: " + doctor.getDoctorID());
@@ -326,31 +369,33 @@ public class SchedulingSystem {
     }
 
     public void cancelAppointment(Appointment appointment) {
-        if (appointment == null) {
-            System.out.println("No appointment provided for cancellation.");
-            return;
-        }
-    
-        Doctor doctor = getDoctorById(appointment.getDoctorID());
-        if (doctor != null) {
-            Map<LocalDateTime, Boolean> availability = doctorAvailability.get(doctor);
-            if (availability != null) {
-                availability.put(appointment.getDateTime(), true); // Free the slot
-            }
-            doctor.cancelAppointment(appointment); // Update doctor's schedule
-        }
-    
-        Patient patient = getPatientById(appointment.getPatientID());
-        if (patient != null) {
-            patient.getAppointments().remove(appointment); // Remove from patient's appointments
-        }
-    
-        appointments.remove(appointment); // Remove from global list
-        appointment.cancel(); // Update appointment status
-    
-        System.out.println("Appointment canceled successfully.");
+    if (appointment == null) {
+        System.out.println("No appointment provided for cancellation.");
+        return;
     }
-    
+
+    // Update availability for the doctor
+    Doctor doctor = this.getDoctorById(appointment.getDoctorID());
+    if (doctor != null) {
+        Map<LocalDateTime, Boolean> availability = this.doctorAvailability.get(doctor);
+        if (availability != null) {
+            availability.put(appointment.getDateTime(), true); // Mark the slot as available
+        }
+        doctor.cancelAppointment(appointment); // Notify the doctor
+    }
+
+    // Notify the patient
+    Patient patient = this.getPatientById(appointment.getPatientID());
+    if (patient != null) {
+        System.out.println("Notifying patient of cancellation...");
+        // Optionally, add notification logic here
+    }
+
+    // Update the appointment status to "Cancelled"
+    appointment.cancel();
+    System.out.println("Appointment status updated to 'Cancelled'.");
+}
+
 
 
     public Appointment rescheduleAppointment(Appointment oldAppointment, Doctor newDoctor, LocalDateTime newSlot, String comments) {
