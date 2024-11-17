@@ -397,7 +397,7 @@ public class SchedulingSystem {
         return patientAppointments.isEmpty() ? null : patientAppointments.get(0);
     }
 
-    // for administrator
+    // FOR ADMINISTRATOR
     public void displayUpcomingConfirmedAppointments() {
         System.out.println("\nUpcoming Confirmed Appointments:");
     
@@ -480,4 +480,46 @@ public class SchedulingSystem {
                 patient != null ? patient.getName() : "Unknown");
         }
     }
+
+    public void displayCompletedAppointments() {
+    System.out.println("\nCompleted Appointments:");
+
+    // Filter completed appointments
+    List<Appointment> completedAppointments = appointments.stream()
+        .filter(appointment -> "Completed".equalsIgnoreCase(appointment.getStatus()))
+        .sorted(Comparator.comparing(Appointment::getDateTime))
+        .toList();
+
+    if (completedAppointments.isEmpty()) {
+        System.out.println("No completed appointments found.");
+        return;
+    }
+
+    // Display formatted details
+    for (Appointment appointment : completedAppointments) {
+        System.out.printf(
+            "Appointment ID: %s | Date: %s | Time: %s | Patient ID: %s | Doctor ID: %s%n",
+            appointment.getAppointmentID(),
+            appointment.getDateTime().toLocalDate(),
+            appointment.getDateTime().toLocalTime(),
+            appointment.getPatientID(),
+            appointment.getDoctorID()
+        );
+
+        // Display prescribed medications
+        if (appointment.getPrescribedMedication() != null && !appointment.getPrescribedMedication().isEmpty()) {
+            System.out.println("  Prescribed Medications:");
+            for (Map.Entry<Medication, Integer> entry : appointment.getPrescribedMedication().entrySet()) {
+                System.out.printf("    - Medication: %s | Quantity: %d%n", 
+                    entry.getKey().getName(), 
+                    entry.getValue());
+            }
+        } else {
+            System.out.println("  No medications prescribed.");
+        }
+    }
+
+    System.out.println("---------------------------");
+}
+
 }
