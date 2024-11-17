@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Patient extends User {
@@ -307,21 +308,42 @@ public void viewPastAppointmentOutcomeRecords() {
     }
 
     // Display completed appointments
-    System.out.printf("%-15s %-20s %-20s %-20s %-30s%n", 
-                      "Appointment ID", "Date", "Time", "Doctor ID", "Consultation Notes");
-    System.out.println("------------------------------------------------------------------------------------------");
+    System.out.printf("%-15s %-20s %-20s %-20s %-30s %-50s%n", 
+    "Appointment ID", "Date", "Time", "Doctor ID", "Consultation Notes", "Prescribed Medications");
+    System.out.println("-------------------------------------------------------------------------------------------------------------");
 
     for (Appointment appointment : completedAppointments) {
-        System.out.printf("%-15s %-20s %-20s %-20s %-30s%n", 
-                          appointment.getAppointmentID(), 
-                          appointment.getDateTime().toLocalDate(), 
-                          appointment.getDateTime().toLocalTime(), 
-                          appointment.getDoctorID(),
-                          (appointment.getConsultationNotes() != null ? appointment.getConsultationNotes() : "No Notes"));
+    String prescribedMedications = appointment.getPrescribedMedication() != null && !appointment.getPrescribedMedication().isEmpty()
+    ? getPrescribedMedicationDetails(appointment.getPrescribedMedication())
+    : "None";
+
+    System.out.printf("%-15s %-20s %-20s %-20s %-30s %-50s%n", 
+        appointment.getAppointmentID(), 
+        appointment.getDateTime().toLocalDate(), 
+        appointment.getDateTime().toLocalTime(), 
+        appointment.getDoctorID(), 
+        (appointment.getConsultationNotes() != null ? appointment.getConsultationNotes() : "No Notes"),
+        prescribedMedications);
     }
 
-    System.out.println("------------------------------------------------------------------------------------------");
+    System.out.println("-------------------------------------------------------------------------------------------------------------");
 }
+
+    // Method to format prescribed medication details
+    private static String getPrescribedMedicationDetails(Map<Medication, Integer> prescribedMedication) {
+        StringBuilder medicationDetails = new StringBuilder();
+        for (Map.Entry<Medication, Integer> entry : prescribedMedication.entrySet()) {
+            medicationDetails.append(entry.getKey().getName()) // Assuming Medication has a getName() method
+                            .append(" (Quantity: ")
+                            .append(entry.getValue())
+                            .append("), ");
+        }
+        // Remove the trailing comma and space, if any
+        if (medicationDetails.length() > 0) {
+            medicationDetails.setLength(medicationDetails.length() - 2);
+        }
+        return medicationDetails.toString();
+    }
 
 
     @Override
