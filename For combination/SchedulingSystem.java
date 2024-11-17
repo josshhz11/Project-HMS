@@ -426,34 +426,54 @@ public class SchedulingSystem {
         }
     }
 
-    public void displayAllAppointments() {
-        System.out.println("\nAll Appointments (Pending and Confirmed):");
-    
-        // Combine pending and confirmed appointments, then sort
-        List<Appointment> allAppointments = new ArrayList<>();
-        allAppointments.addAll(appointments);
-        allAppointments.addAll(pendingAppointments);
-    
-        allAppointments.sort(Comparator.comparing(Appointment::getDateTime));
-    
-        if (allAppointments.isEmpty()) {
-            System.out.println("No appointments found.");
-            return;
-        }
-    
-        // Display formatted output
-        for (Appointment appointment : allAppointments) {
-            Doctor doctor = getDoctorById(appointment.getDoctorID());
-            Patient patient = getPatientById(appointment.getPatientID());
-    
-            System.out.printf("Date & Time: %s | Appointment ID: %s | Status: %s | Doctor: Dr. %s | Patient: %s%n",
-                appointment.getDateTime().toLocalDate() + " " + appointment.getDateTime().toLocalTime(),
-                appointment.getAppointmentID(),
-                appointment.getStatus(),
-                doctor != null ? doctor.getName() : "Unknown",
-                patient != null ? patient.getName() : "Unknown");
+public void displayAllAppointments() {
+    System.out.println("\nAll Appointments (Pending, Confirmed, and Completed):");
+
+    // Combine all appointments (pending, confirmed, and completed) into a single list
+    List<Appointment> allAppointments = new ArrayList<>();
+    allAppointments.addAll(appointments); // Confirmed and completed appointments
+    allAppointments.addAll(pendingAppointments); // Pending appointments
+
+    // Sort appointments by date and time
+    allAppointments.sort(Comparator.comparing(Appointment::getDateTime));
+
+    if (allAppointments.isEmpty()) {
+        System.out.println("No appointments found.");
+        return;
+    }
+
+    // Display formatted output
+    for (Appointment appointment : allAppointments) {
+        Doctor doctor = getDoctorById(appointment.getDoctorID());
+        Patient patient = getPatientById(appointment.getPatientID());
+
+        System.out.printf(
+            "Date & Time: %s | Appointment ID: %s | Status: %s | Doctor: Dr. %s | Patient: %s%n",
+            appointment.getDateTime().toLocalDate() + " " + appointment.getDateTime().toLocalTime(),
+            appointment.getAppointmentID(),
+            appointment.getStatus(),
+            doctor != null ? doctor.getName() : "Unknown",
+            patient != null ? patient.getName() : "Unknown"
+        );
+
+        // If the appointment is completed, display prescribed medications
+        if ("Completed".equalsIgnoreCase(appointment.getStatus())) {
+            if (appointment.getPrescribedMedication() != null && !appointment.getPrescribedMedication().isEmpty()) {
+                System.out.println("  Prescribed Medications:");
+                for (Map.Entry<Medication, Integer> entry : appointment.getPrescribedMedication().entrySet()) {
+                    System.out.printf("    - Medication: %s | Quantity: %d%n",
+                        entry.getKey().getName(),
+                        entry.getValue());
+                }
+            } else {
+                System.out.println("  No medications prescribed.");
+            }
         }
     }
+
+    System.out.println("---------------------------");
+}
+
     
     public void displayPendingAppointments() {
         System.out.println("All Appointments Pending Doctor Approval:");
