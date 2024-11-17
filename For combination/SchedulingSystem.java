@@ -53,16 +53,46 @@ public class SchedulingSystem {
         return null;
     }
 
-    public boolean viewPendingAppointmentsForDoctor(Doctor doctor) {
-        boolean empty = true;
-        System.out.println("Pending Appointments for Dr. " + doctor.getName() + ":");
+
+    public void viewPendingAppointmentsForDoctor(Doctor doctor) {
+        System.out.println("\nPending Appointments for Dr. " + doctor.getName() + ", Doctor ID: " + doctor.getDoctorID());
+    
+        // Filter and format pending appointments
+        List<Appointment> doctorPendingAppointments = new ArrayList<>();
         for (Appointment appointment : pendingAppointments) {
             if (appointment.getDoctorID().equals(doctor.getDoctorID())) {
-                System.out.println(appointment);
-                empty = false;
+                doctorPendingAppointments.add(appointment);
             }
         }
-        return empty;
+    
+        // Sort appointments by date and time
+        doctorPendingAppointments.sort(Comparator.comparing(Appointment::getDateTime));
+    
+        if (doctorPendingAppointments.isEmpty()) {
+            System.out.println("No pending appointment requests found.");
+        } else {
+            System.out.println("--- Pending Appointments ---");
+            for (Appointment appointment : doctorPendingAppointments) {
+                System.out.printf(
+                    "Date: %s, Time: %s, Patient: %s, Appointment ID: %s%n",
+                    appointment.getDateTime().toLocalDate(),
+                    appointment.getDateTime().toLocalTime(),
+                    appointment.getPatientID(),
+                    appointment.getAppointmentID()
+                );
+            }
+            System.out.println("----------------------------");
+        }
+    }
+
+    public List<Appointment> getPendingAppointmentsForDoctor(Doctor doctor) {
+        List<Appointment> doctorPendingAppointments = new ArrayList<>();
+        for (Appointment appointment : pendingAppointments) {
+            if (appointment.getDoctorID().equals(doctor.getDoctorID())) {
+                doctorPendingAppointments.add(appointment);
+            }
+        }
+        return doctorPendingAppointments;
     }
 
     public void respondToPendingAppointment(Appointment appointment, boolean isAccepted) {
