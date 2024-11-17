@@ -223,13 +223,17 @@ public class Doctor extends User {
 
         List<ScheduledEvent> events = new ArrayList<>();
 
+
         // Add upcoming appointments to events
         for (Appointment appointment : schedule) {
-            LocalDateTime start = appointment.getDateTime();
-            LocalDateTime end = start.plusMinutes(30); // Assume appointments are 30 minutes long
-            events.add(new ScheduledEvent(start, end, "Appointment with Patient: " + appointment.getPatientID() +
+            if (!appointment.getStatus().equals("Completed") && !appointment.getStatus().equals("Cancelled")) {
+                LocalDateTime start = appointment.getDateTime();
+                LocalDateTime end = start.plusMinutes(30); // Assume appointments are 30 minutes long
+                events.add(new ScheduledEvent(start, end, "Appointment with Patient: " + appointment.getPatientID() +
                     ", Appointment ID: " + appointment.getAppointmentID()));
-        }
+                }
+            }
+
 
         // Add blocked slots to events
         for (Map.Entry<LocalDate, List<TimeRange>> entry : blockedSlots.entrySet()) {
@@ -370,38 +374,39 @@ public class Doctor extends User {
     }
 
 
-    public void viewUpcomingAppointments() {
-        System.out.println("\nUpcoming Appointments for Dr. " + name + ", Doctor ID: " + doctorID);
+public void viewUpcomingAppointments() {
+    System.out.println("\nUpcoming Appointments for Dr. " + name + ", Doctor ID: " + doctorID);
 
-        LocalDateTime now = LocalDateTime.now(); // Current time
-        List<Appointment> upcomingAppointments = new ArrayList<>();
+    LocalDateTime now = LocalDateTime.now(); // Current time
+    List<Appointment> upcomingAppointments = new ArrayList<>();
 
-        // Filter for future appointments for this doctor
-        for (Appointment appointment : schedule) {
-            if (appointment.getDateTime().isAfter(now)) {
-                upcomingAppointments.add(appointment);
-            }
+    // Filter for future confirmed appointments for this doctor
+    for (Appointment appointment : schedule) {
+        if (appointment.getDateTime().isAfter(now) && appointment.getStatus().equals("Confirmed")) {
+            upcomingAppointments.add(appointment);
         }
-
-        // Sort appointments by date and time
-        upcomingAppointments.sort(Comparator.comparing(Appointment::getDateTime));
-
-        if (upcomingAppointments.isEmpty()) {
-            System.out.println("No upcoming appointments.");
-        } else {
-            System.out.println("------ Appointments ------");
-            for (Appointment appointment : upcomingAppointments) {
-                System.out.println(
-                    "Date: " + appointment.getDateTime().toLocalDate() + 
-                    ", Time: " + appointment.getDateTime().toLocalTime() +
-                    ", Patient: " + appointment.getPatientID() +
-                    ", Appointment ID: " + appointment.getAppointmentID()
-                );
-            }
-        }
-
-        System.out.println("--------------------------");
     }
+
+    // Sort appointments by date and time
+    upcomingAppointments.sort(Comparator.comparing(Appointment::getDateTime));
+
+    if (upcomingAppointments.isEmpty()) {
+        System.out.println("No upcoming appointments.");
+    } else {
+        System.out.println("--- Appointments ---");
+        for (Appointment appointment : upcomingAppointments) {
+            System.out.println(
+                "Date: " + appointment.getDateTime().toLocalDate() + 
+                ", Time: " + appointment.getDateTime().toLocalTime() +
+                ", Patient: " + appointment.getPatientID() +
+                ", Appointment ID: " + appointment.getAppointmentID()
+            );
+        }
+    }
+
+    System.out.println("--------------------");
+}
+
 
     
 // UPDATED
